@@ -1,0 +1,362 @@
+
+:root {
+  --color-primary: #6B1D2F;      /* Deep burgundy */
+  --color-primary-dark: #4E1421; /* Dark burgundy */
+  --color-secondary: #D4AF37;   /* Muted gold */
+  --color-bg-cream: #FDFBF7;    /* Beige cream */
+  --color-text-dark: #1E293B;   /* Slate 800 */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  background-color: var(--color-bg-cream);
+  color: var(--color-text-dark);
+  overflow-x: hidden;
+}
+
+.font-serif {
+  font-family: 'Playfair Display', serif;
+}
+
+.text-burgundy {
+  color: var(--color-primary);
+}
+
+.bg-burgundy {
+  background-color: var(--color-primary);
+}
+
+.bg-cream {
+  background-color: var(--color-bg-cream);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F1F1;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-dark);
+}
+
+/* --- Infinite Scroll Marquee --- */
+.marquee-container {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  width: 100%;
+  position: relative;
+  padding: 1rem 0;
+}
+
+.marquee-track-ltr {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+  animation: scroll-ltr 30s linear infinite;
+}
+
+.marquee-track-rtl {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+  animation: scroll-rtl 30s linear infinite;
+}
+
+.marquee-container:hover .marquee-track-ltr,
+.marquee-container:hover .marquee-track-rtl {
+  animation-play-state: paused;
+}
+
+@keyframes scroll-ltr {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-50% - 0.75rem));
+  }
+}
+
+@keyframes scroll-rtl {
+  0% {
+    transform: translateX(calc(-50% - 0.75rem));
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* --- 3D Flip Card Animation --- */
+.flip-card {
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.25);
+  transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner,
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+/* --- Scroll Reveal Animations --- */
+.reveal {
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform, opacity;
+}
+
+/* Reveal Variations */
+.reveal-fade {
+  transform: translateY(0);
+}
+
+.reveal-slide-up {
+  transform: translateY(40px);
+}
+
+.reveal-slide-down {
+  transform: translateY(-40px);
+}
+
+.reveal-slide-left {
+  transform: translateX(-40px);
+}
+
+.reveal-slide-right {
+  transform: translateX(40px);
+}
+
+.reveal-scale {
+  transform: scale(0.95);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translate(0) scale(1);
+}
+
+/* Delays for children stagger loading */
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
+.delay-500 { transition-delay: 500ms; }
+.delay-600 { transition-delay: 600ms; }
+.delay-700 { transition-delay: 700ms; }
+.delay-800 { transition-delay: 800ms; }
+
+/* Custom slide-out scroll animation for Why Trust Coimbatore section */
+.why-trust-item {
+  transition: max-height 0.6s ease, opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), margin-top 0.6s ease;
+  overflow: hidden;
+  will-change: max-height, opacity, transform;
+}
+
+.why-trust-item.collapsed {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-30px) scale(0.95);
+  margin-top: 0;
+  pointer-events: none;
+}
+
+.why-trust-item.expanded {
+  max-height: 200px;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  margin-top: 1.5rem;
+  pointer-events: auto;
+}
+
+/* Glassmorphism details */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-white-box {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.25);
+}
+
+.glass-dark {
+  background: rgba(107, 29, 47, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Card Float Animation */
+@keyframes cardFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.service-card-float {
+  animation: cardFloat 6s ease-in-out infinite;
+}
+
+.service-card-float:nth-child(even) {
+  animation-delay: 1.5s;
+}
+
+/* --- Sticky Card Stacking Animation --- */
+.sticky-card {
+  position: sticky;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.sticky-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+}
+
+/* --- SVG Roadmap Path Animation --- */
+@keyframes dashDraw {
+  from {
+    stroke-dashoffset: 200;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.roadmap-path-animate {
+  stroke-dasharray: 10 8;
+  animation: dashDraw 20s linear infinite;
+}
+
+/* --- Leaflet Live Map Custom Marker & Popup Styles --- */
+.custom-leaflet-pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-leaflet-pin .pin-inner {
+  background-color: #612124;
+  border: 2px solid #c5a880;
+  color: #c5a880;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(97, 33, 36, 0.4);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+}
+
+.custom-leaflet-pin:hover .pin-inner,
+.custom-leaflet-pin.active-pin .pin-inner {
+  background-color: #c5a880;
+  color: #612124;
+  border-color: #612124;
+  transform: scale(1.15);
+  box-shadow: 0 0 20px rgba(197, 168, 128, 0.8);
+}
+
+.leaflet-popup-content-wrapper {
+  background: rgba(97, 33, 36, 0.95) !important;
+  backdrop-filter: blur(10px);
+  color: #ffffff !important;
+  border: 1px solid #c5a880 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
+  padding: 4px !important;
+}
+
+.leaflet-popup-tip {
+  background: #612124 !important;
+  border: 1px solid #c5a880 !important;
+}
+
+/* Carousel transitions */
+.carousel-slide {
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out, z-index 1.2s step-end;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.carousel-slide.active {
+  opacity: 1;
+  z-index: 10;
+  transition: opacity 1.2s ease-in-out, z-index 1.2s step-start;
+}
+
+/* --- 3D Card Flip --- */
+.flip-card {
+  perspective: 1000px;
+  height: 320px;
+}
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 14px;
+}
+.flip-card-back {
+  transform: rotateY(180deg);
+}
