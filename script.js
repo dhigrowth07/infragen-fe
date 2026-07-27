@@ -101,6 +101,73 @@ document.addEventListener('DOMContentLoaded', () => {
   revealElements.forEach(el => revealObserver.observe(el));
 
   // ==========================================
+  // 2B. END-TO-END PROCESS PROGRESSIVE DRAW CONTROLLER
+  // ==========================================
+  const processSection = document.getElementById('process');
+  const drawLine = document.getElementById('serpentine-main-path') || document.querySelector('.serpentine-draw-line');
+  const pathTip = document.getElementById('serpentine-path-tip');
+  const processNodes = document.querySelectorAll('.process-step-node');
+
+  if (processSection && drawLine) {
+    const totalLength = drawLine.getTotalLength ? drawLine.getTotalLength() : 2146;
+    drawLine.style.strokeDasharray = totalLength;
+    drawLine.style.strokeDashoffset = totalLength;
+
+    // Relative progress thresholds along path for Steps 1-8
+    const stepThresholds = [0.037, 0.154, 0.270, 0.387, 0.613, 0.730, 0.846, 0.963];
+    let animationStarted = false;
+
+    function runSerpentineAnimation() {
+      const startTime = performance.now();
+      const duration = 5500; // 5.5 seconds total draw time
+
+      function animateStep(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const distance = totalLength * progress;
+
+        // Update SVG stroke-dashoffset synchronously with progress
+        drawLine.style.strokeDashoffset = totalLength * (1 - progress);
+
+        // Update Moving Path Tip position & rotation angle around U-turn curve
+        if (pathTip && drawLine.getPointAtLength) {
+          const pt = drawLine.getPointAtLength(distance);
+          const ptNext = drawLine.getPointAtLength(Math.min(distance + 2, totalLength));
+          const angle = Math.atan2(ptNext.y - pt.y, ptNext.x - pt.x) * (180 / Math.PI);
+          
+          pathTip.setAttribute('transform', `translate(${pt.x}, ${pt.y}) rotate(${angle})`);
+        }
+
+        // Reveal step simultaneously when line tip touches its threshold
+        processNodes.forEach((node, index) => {
+          if (progress >= stepThresholds[index]) {
+            node.classList.add('step-visible');
+          }
+        });
+
+        if (progress < 1) {
+          requestAnimationFrame(animateStep);
+        }
+      }
+
+      requestAnimationFrame(animateStep);
+    }
+
+    const processObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !animationStarted) {
+          animationStarted = true;
+          processSection.classList.add('process-active');
+          runSerpentineAnimation();
+          processObserver.unobserve(processSection);
+        }
+      });
+    }, { threshold: 0.25 });
+
+    processObserver.observe(processSection);
+  }
+
+  // ==========================================
   // 3. WHY TRUST US - ACCORDION SCROLL LINKED REVEAL
   // ==========================================
   const whyTrustSection = document.getElementById('why-trust-section');
@@ -297,26 +364,37 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // 6. MOBILE MENU TOGGLE
+  // 6. SIDE DRAWER TOGGLE (3-LINE MENU OVERLAY)
   // ==========================================
-  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
+  const openDrawerBtn = document.getElementById('open-side-drawer');
+  const closeDrawerBtn = document.getElementById('close-side-drawer');
+  const sideDrawer = document.getElementById('side-drawer');
+  const drawerOverlay = document.getElementById('side-drawer-overlay');
+  const drawerLinks = document.querySelectorAll('.drawer-link');
 
-  if (mobileMenuBtn && mobileMenu) {
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-    });
-
-    // Close menu when a link is clicked
-    mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.add('hidden');
-      });
-    });
+  function openDrawer() {
+    if (sideDrawer && drawerOverlay) {
+      sideDrawer.classList.remove('translate-x-full');
+      drawerOverlay.classList.remove('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = 'hidden';
+    }
   }
 
+  function closeDrawer() {
+    if (sideDrawer && drawerOverlay) {
+      sideDrawer.classList.add('translate-x-full');
+      drawerOverlay.classList.add('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (openDrawerBtn) openDrawerBtn.addEventListener('click', openDrawer);
+  if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeDrawer);
+  if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawer);
+  drawerLinks.forEach(link => link.addEventListener('click', closeDrawer));
+
   // ==========================================
-  // DYNAMIC NAVBAR SCROLL BEHAVIOR
+  // DYNAMIC NAVBAR SCROLL BEHAVIOR (Solid in Hero -> Glassy Blur Past Hero)
   // ==========================================
   const mainHeader = document.getElementById('main-header');
   const heroSection = document.getElementById('home');
@@ -324,14 +402,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (mainHeader && heroSection) {
     function updateHeaderStyle() {
       const heroBottom = heroSection.getBoundingClientRect().bottom;
-      // When scrolling through hero video section: solid white background
+      // Stays solid white while inside Hero section
       if (heroBottom > 80) {
-        mainHeader.classList.remove('bg-white/85', 'backdrop-blur-md', 'border-white/40');
-        mainHeader.classList.add('bg-white', 'border-gray-100');
+        mainHeader.classList.remove('bg-white/80', 'backdrop-blur-md', 'shadow-md');
+        mainHeader.classList.add('bg-white', 'shadow-sm');
       } else {
-        // When scrolled past hero into About/Services: glassy blur effect
-        mainHeader.classList.remove('bg-white', 'border-gray-100');
-        mainHeader.classList.add('bg-white/85', 'backdrop-blur-md', 'border-white/40');
+        // Morph into Glassy Blur Effect past Hero section
+        mainHeader.classList.remove('bg-white', 'shadow-sm');
+        mainHeader.classList.add('bg-white/80', 'backdrop-blur-md', 'shadow-md');
       }
     }
 
@@ -350,3 +428,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+

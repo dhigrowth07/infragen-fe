@@ -290,6 +290,94 @@ body {
   animation: dashDraw 20s linear infinite;
 }
 
+@keyframes serpentineFlow {
+  0% {
+    stroke-dashoffset: 800;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.serpentine-path-animate {
+  stroke-dasharray: 30 20;
+  animation: serpentineFlow 2.5s linear infinite;
+}
+
+/* --- Progressive Serpentine Path Draw Animation --- */
+@keyframes drawSerpentinePath {
+  0% {
+    stroke-dashoffset: 2150;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.serpentine-draw-line {
+  stroke-dasharray: 2150;
+  stroke-dashoffset: 2150;
+}
+
+#process.process-active .serpentine-draw-line {
+  animation: drawSerpentinePath 5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+.process-step-node {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.3);
+  transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.process-step-node.step-visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.process-step-node.step-visible .node-pulse-ring {
+  animation: stepPulse 1.5s ease-out infinite;
+}
+
+@keyframes stepPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(197, 168, 128, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(197, 168, 128, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(197, 168, 128, 0);
+  }
+}
+
+/* --- Compact Service Card Height & Remove Blank Gap --- */
+.service-card-float {
+  height: auto !important;
+  min-height: 295px;
+}
+
+.service-card-float .relative.h-\[160px\] {
+  height: 135px !important;
+}
+
+.service-card-float .p-5 {
+  padding: 1rem !important;
+}
+
+.service-card-float .mt-auto {
+  margin-top: 0.75rem !important;
+  padding-top: 0.75rem !important;
+}
+
+/* --- Navbar Active & Hover Touch Color rgb(197, 168, 128) --- */
+.nav-link:hover,
+.nav-link.active,
+.nav-link:focus,
+.nav-link:active {
+  color: rgb(197, 168, 128) !important;
+  border-color: rgb(197, 168, 128) !important;
+}
+
 /* --- Leaflet Live Map Custom Marker & Popup Styles --- */
 .custom-leaflet-pin {
   display: flex;
@@ -373,5 +461,67 @@ body {
   box-shadow: 0 25px 45px -12px rgba(97, 33, 36, 0.18);
 }
 
+/* --- End-to-End Real Estate Process Animations --- */
+.process-step-card {
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform, box-shadow, border-color;
+}
 
+.process-step-card.active-step {
+  border-color: #c5a880 !important;
+  box-shadow: 0 20px 40px -10px rgba(97, 33, 36, 0.25), 0 0 0 2px rgba(197, 168, 128, 0.4) !important;
+  transform: translateY(-6px) scale(1.02);
+  background-color: #ffffff;
+}
+
+.process-step-card.active-step .step-badge {
+  background-color: #612124 !important;
+  color: #c5a880 !important;
+  box-shadow: 0 0 15px rgba(197, 168, 128, 0.6) !important;
+  animation: pulseBadge 2s infinite alternate ease-in-out;
+}
+
+@keyframes pulseBadge {
+  0% {
+    box-shadow: 0 0 0 0 rgba(197, 168, 128, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 0 8px rgba(197, 168, 128, 0);
+  }
+}
+
+.process-step-card:hover .fa-solid {
+  animation: iconBounce 0.6s ease;
+}
+
+@keyframes iconBounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-4px) scale(1.15); }
+}
+
+#process-preview-img {
+  transition: opacity 0.4s ease-in-out, transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#process-preview-img.fade-out {
+  opacity: 0.2;
+  transform: scale(0.98);
+}
+
+/* ==========================================
+   END-TO-END PROCESS ROADMAP PATH ANIMATION
+   ========================================== */
+.roadmap-path-animate {
+  stroke-dasharray: 10 10;
+  animation: flowRoadmapPath 25s linear infinite;
+}
+
+@keyframes flowRoadmapPath {
+  from {
+    stroke-dashoffset: 200;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
 
