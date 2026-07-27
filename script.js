@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function showSlide(index) {
     slides.forEach((slide) => {
       slide.classList.remove('active');
-      // Pause video if it's not the active slide
       const video = slide.querySelector('video');
       if (video) {
         video.pause();
@@ -31,9 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (activeVideo) {
       activeVideo.currentTime = 0;
       activeVideo.play().catch(e => console.log('Autoplay video failed or blocked:', e));
-      stopAutoplay(); // Stop autoplay on the video slide
+      stopAutoplay();
     } else {
-      startAutoplay(); // Resume autoplay for image slides
+      startAutoplay();
     }
   }
 
@@ -70,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (slides.length > 0) {
     showSlide(0);
 
-    // Auto-advance when slide video ends playing once
     slides.forEach((slide) => {
       const video = slide.querySelector('video');
       if (video) {
@@ -284,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================
-  // 5.6 BUILT ON EXPERIENCE AUTOMATIC IMAGE CAROUSEL
+  // 5.6 BUILT ON EXPERIENCE AUTOMATIC IMAGE CAROUSEL (1 SECOND FAST CYCLE)
   // ==========================================
   const trustImages = document.querySelectorAll('.trust-carousel-img');
   if (trustImages.length > 0) {
@@ -295,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
       trustIndex = (trustIndex + 1) % trustImages.length;
       trustImages[trustIndex].classList.remove('opacity-0');
       trustImages[trustIndex].classList.add('opacity-100');
-    }, 3500);
+    }, 1000); // 1 second rapid change
   }
 
   // ==========================================
@@ -316,103 +314,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-
-  // ==========================================
-  // 7. OFFICIAL GOOGLE MAP INTEGRATION & LOCATION SELECTION
-  // ==========================================
-  const googleMapIframe = document.getElementById('coimbatore-google-map');
-  const locationCards = document.querySelectorAll('.location-card');
-  const activeIndicator = document.getElementById('active-location-indicator');
-
-  const mapQueries = {
-    'pattanam': {
-      name: 'Pattanam',
-      query: 'Pattanam,+Coimbatore,+Tamil+Nadu',
-      zoom: 14,
-      tag: 'Gated Villa Plots Corridor'
-    },
-    'sathy': {
-      name: 'Sathy Road',
-      query: 'Sathy+Road,+Coimbatore,+Tamil+Nadu',
-      zoom: 14,
-      tag: 'IT & Commercial Hub'
-    },
-    'sulur': {
-      name: 'Sulur',
-      query: 'Sulur,+Coimbatore,+Tamil+Nadu',
-      zoom: 14,
-      tag: 'Industrial & Suburb Zone'
-    },
-    'avinashi': {
-      name: 'Avinashi Road',
-      query: 'Avinashi+Road,+Coimbatore,+Tamil+Nadu',
-      zoom: 14,
-      tag: 'Luxury High-Street Corridor'
-    },
-    'neelambur': {
-      name: 'Neelambur',
-      query: 'Neelambur,+Coimbatore,+Tamil+Nadu',
-      zoom: 14,
-      tag: 'Airport Highway Hub'
-    },
-    'trichy': {
-      name: 'Trichy Road',
-      query: 'Trichy+Road,+Coimbatore,+Tamil+Nadu',
-      zoom: 14,
-      tag: 'Established Residential Zone'
-    },
-    'kalapatti': {
-      name: 'Kalapatti',
-      query: 'Kalapatti,+Coimbatore,+Tamil+Nadu',
-      zoom: 14,
-      tag: 'CHIL SEZ Tech Ecosystem'
-    },
-    'coimbatore': {
-      name: 'Coimbatore City Center',
-      query: 'Coimbatore,+Tamil+Nadu',
-      zoom: 13,
-      tag: 'Central Business District'
-    }
-  };
-
-  function updateGoogleMap(locKey) {
-    const locData = mapQueries[locKey];
-    if (!locData || !googleMapIframe) return;
-
-    // Smooth opacity transition
-    googleMapIframe.style.opacity = '0.3';
-
-    // Update Google Maps embed iframe src
-    const newSrc = `https://maps.google.com/maps?q=${locData.query}&t=&z=${locData.zoom}&ie=UTF8&iwloc=&output=embed`;
-    googleMapIframe.src = newSrc;
-
-    setTimeout(() => {
-      googleMapIframe.style.opacity = '1';
-    }, 400);
-
-    // Update active styles on location cards
-    locationCards.forEach(card => {
-      if (card.getAttribute('data-loc') === locKey) {
-        card.classList.add('border-[#c5a880]', 'shadow-lg', 'bg-[#fffdf9]', 'scale-[1.02]');
-        card.classList.remove('border-[#eee6d6]');
-      } else {
-        card.classList.remove('border-[#c5a880]', 'shadow-lg', 'bg-[#fffdf9]', 'scale-[1.02]');
-        card.classList.add('border-[#eee6d6]');
-      }
-    });
-
-    // Update indicator text
-    if (activeIndicator) {
-      activeIndicator.innerHTML = `<span class="text-[#c5a880] font-bold">📍 Google Map: ${locData.name}</span> — ${locData.tag}`;
-    }
-  }
-
-  locationCards.forEach(card => {
-    const locKey = card.getAttribute('data-loc');
-    card.addEventListener('click', () => {
-      updateGoogleMap(locKey);
-    });
-  });
 
   // ==========================================
   // DYNAMIC NAVBAR SCROLL BEHAVIOR
