@@ -1,82 +1,83 @@
 document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
-  // 1. HERO CAROUSEL CONTROLLER
+  // 1. HERO 7-IMAGE CARD CAROUSEL & VIDEO MODAL CONTROLLER
   // ==========================================
-  const slides = document.querySelectorAll('.carousel-slide');
-  const prevBtn = document.getElementById('hero-prev');
-  const nextBtn = document.getElementById('hero-next');
-  let currentIndex = 0;
-  let slideInterval;
-  const slideDuration = 6000; // 6 seconds per slide
+  const heroCardSlides = document.querySelectorAll('.hero-card-slide');
+  const dotsContainer = document.getElementById('hero-carousel-dots');
+  let currentCardIndex = 0;
 
-  function showSlide(index) {
-    slides.forEach((slide) => {
-      slide.classList.remove('active');
-      const video = slide.querySelector('video');
-      if (video) {
-        video.pause();
-      }
-    });
-
-    // Handle index wrap around
-    if (index >= slides.length) currentIndex = 0;
-    else if (index < 0) currentIndex = slides.length - 1;
-    else currentIndex = index;
-
-    slides[currentIndex].classList.add('active');
-
-    // Play video if the active slide contains one
-    const activeVideo = slides[currentIndex].querySelector('video');
-    if (activeVideo) {
-      activeVideo.currentTime = 0;
-      activeVideo.play().catch(e => console.log('Autoplay video failed or blocked:', e));
-      stopAutoplay();
-    } else {
-      startAutoplay();
+  if (heroCardSlides.length > 0) {
+    // Populate Dots
+    if (dotsContainer) {
+      dotsContainer.innerHTML = '';
+      heroCardSlides.forEach((_, idx) => {
+        const dot = document.createElement('button');
+        dot.className = `w-2 h-2 rounded-full transition-all duration-300 ${idx === 0 ? 'w-6 bg-[#c5a880]' : 'bg-white/50'}`;
+        dot.setAttribute('aria-label', `Go to slide ${idx + 1}`);
+        dot.addEventListener('click', () => setHeroCardSlide(idx));
+        dotsContainer.appendChild(dot);
+      });
     }
-  }
 
-  function nextSlide() {
-    showSlide(currentIndex + 1);
-  }
+    function setHeroCardSlide(index) {
+      heroCardSlides.forEach((slide, idx) => {
+        if (idx === index) {
+          slide.classList.add('active');
+          slide.style.opacity = '1';
+        } else {
+          slide.classList.remove('active');
+          slide.style.opacity = '0';
+        }
+      });
 
-  function prevSlide() {
-    showSlide(currentIndex - 1);
-  }
-
-  function startAutoplay() {
-    stopAutoplay();
-    slideInterval = setInterval(nextSlide, slideDuration);
-  }
-
-  function stopAutoplay() {
-    if (slideInterval) {
-      clearInterval(slideInterval);
-    }
-  }
-
-  if (prevBtn && nextBtn) {
-    prevBtn.addEventListener('click', () => {
-      prevSlide();
-    });
-
-    nextBtn.addEventListener('click', () => {
-      nextSlide();
-    });
-  }
-
-  // Initialize Carousel
-  if (slides.length > 0) {
-    showSlide(0);
-
-    slides.forEach((slide) => {
-      const video = slide.querySelector('video');
-      if (video) {
-        video.removeAttribute('loop');
-        video.addEventListener('ended', () => {
-          nextSlide();
+      if (dotsContainer) {
+        const dots = dotsContainer.querySelectorAll('button');
+        dots.forEach((dot, idx) => {
+          if (idx === index) {
+            dot.className = 'w-6 h-2 rounded-full bg-[#c5a880] transition-all duration-300';
+          } else {
+            dot.className = 'w-2 h-2 rounded-full bg-white/50 transition-all duration-300';
+          }
         });
       }
+      currentCardIndex = index;
+    }
+
+    // Auto rotate every 2.0 seconds for a pleasant, smooth pace
+    setInterval(() => {
+      const nextIndex = (currentCardIndex + 1) % heroCardSlides.length;
+      setHeroCardSlide(nextIndex);
+    }, 2000);
+  }
+
+  // Video Popup Modal Controller
+  const openVideoBtn = document.getElementById('open-video-modal');
+  const closeVideoBtn = document.getElementById('close-video-modal');
+  const videoModal = document.getElementById('hero-video-modal');
+  const modalVideoPlayer = document.getElementById('modal-video-player');
+
+  function openVideoModal() {
+    if (videoModal && modalVideoPlayer) {
+      videoModal.classList.remove('opacity-0', 'pointer-events-none');
+      modalVideoPlayer.currentTime = 0;
+      modalVideoPlayer.play().catch(e => console.log('Video play error:', e));
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeVideoModal() {
+    if (videoModal && modalVideoPlayer) {
+      videoModal.classList.add('opacity-0', 'pointer-events-none');
+      modalVideoPlayer.pause();
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (openVideoBtn) openVideoBtn.addEventListener('click', openVideoModal);
+  if (closeVideoBtn) closeVideoBtn.addEventListener('click', closeVideoModal);
+  if (videoModal) {
+    videoModal.addEventListener('click', (e) => {
+      if (e.target === videoModal) closeVideoModal();
     });
   }
 
@@ -84,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. SCROLL REVEAL (Intersection Observer)
   // ==========================================
   const revealElements = document.querySelectorAll('.reveal');
-  
+
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -119,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function runSerpentineAnimation() {
       const startTime = performance.now();
-      const duration = 5500; // 5.5 seconds total draw time
+      const duration = 8000; // 8.0 seconds relaxed smooth draw time (decreased arrow speed)
 
       function animateStep(now) {
         const elapsed = now - startTime;
@@ -134,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const pt = drawLine.getPointAtLength(distance);
           const ptNext = drawLine.getPointAtLength(Math.min(distance + 2, totalLength));
           const angle = Math.atan2(ptNext.y - pt.y, ptNext.x - pt.x) * (180 / Math.PI);
-          
+
           pathTip.setAttribute('transform', `translate(${pt.x}, ${pt.y}) rotate(${angle})`);
         }
 
@@ -168,46 +169,27 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // 3. WHY TRUST US - ACCORDION SCROLL LINKED REVEAL
+  // 3. WHY CHOOSE US - HORIZONTAL SCROLL CAROUSEL TRACK
   // ==========================================
-  const whyTrustSection = document.getElementById('why-trust-section');
-  const whyTrustItems = document.querySelectorAll('.why-trust-item');
+  const scrollTrack = document.getElementById('why-choose-scroll-track');
+  const prevBtn = document.getElementById('why-choose-prev-btn');
+  const nextBtn = document.getElementById('why-choose-next-btn');
 
-  if (whyTrustSection && whyTrustItems.length > 0) {
-    // Initial state: hide other items (index > 0)
-    whyTrustItems.forEach((item, index) => {
-      if (index > 0) {
-        item.classList.add('collapsed');
-      } else {
-        item.classList.add('expanded'); // first one is always visible
-      }
+  if (scrollTrack && prevBtn && nextBtn) {
+    const cardWidth = 380; // approximate width of card + gap
+
+    prevBtn.addEventListener('click', () => {
+      scrollTrack.scrollBy({
+        left: -cardWidth,
+        behavior: 'smooth'
+      });
     });
 
-    window.addEventListener('scroll', () => {
-      const rect = whyTrustSection.getBoundingClientRect();
-      const viewHeight = window.innerHeight;
-
-      // When why-trust-section is within scroll view
-      if (rect.top < viewHeight * 0.7 && rect.bottom > 200) {
-        whyTrustItems.forEach((item, index) => {
-          if (index > 0) {
-            setTimeout(() => {
-              item.classList.remove('collapsed');
-              item.classList.add('expanded');
-            }, (index - 1) * 150);
-          }
-        });
-      } else {
-        // Collapse items back when scrolled out (scrolling backward or forward past)
-        if (rect.top > viewHeight || rect.bottom < 150) {
-          whyTrustItems.forEach((item, index) => {
-            if (index > 0) {
-              item.classList.remove('expanded');
-              item.classList.add('collapsed');
-            }
-          });
-        }
-      }
+    nextBtn.addEventListener('click', () => {
+      scrollTrack.scrollBy({
+        left: cardWidth,
+        behavior: 'smooth'
+      });
     });
   }
 
@@ -247,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================
-  // 5. INQUIRY FORM SUCCESS HANDLER
+  // 5. INQUIRY FORM MAIL & CONTACT HANDLER
   // ==========================================
   const inquiryForm = document.getElementById('inquiry-form');
   const successToast = document.getElementById('success-toast');
@@ -255,37 +237,50 @@ document.addEventListener('DOMContentLoaded', () => {
   if (inquiryForm) {
     inquiryForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      
-      // Get form values (can be used for further integration)
-      const name = document.getElementById('inquiry-name').value;
-      const email = document.getElementById('inquiry-email').value;
-      const phone = document.getElementById('inquiry-phone').value;
-      
-      // Simulate form submission success
+
+      const name = document.getElementById('inquiry-name') ? document.getElementById('inquiry-name').value : '';
+      const email = document.getElementById('inquiry-email') ? document.getElementById('inquiry-email').value : '';
+      const phone = document.getElementById('inquiry-phone') ? document.getElementById('inquiry-phone').value : '';
+      const messageEl = document.getElementById('inquiry-message') || document.getElementById('inquiry-msg');
+      const customMsg = messageEl ? messageEl.value : '';
+
+      const constantToEmail = 'srissa2006@gmail.com';
+      const defaultMessage = "Hii! I'm interested can I know about more details";
+      const finalMessage = customMsg && customMsg.trim() !== '' ? customMsg : defaultMessage;
+
+      const subject = encodeURIComponent(`Property Inquiry from ${name || 'Client'} - Vizhi Infragen`);
+      const body = encodeURIComponent(`${finalMessage}\n\n---\nClient Contact Details:\nName: ${name}\nEmail: ${email}\nPhone: ${phone}`);
+
+      const mailtoUrl = `mailto:${constantToEmail}?subject=${subject}&body=${body}`;
+
       const submitBtn = inquiryForm.querySelector('button[type="submit"]');
-      const originalText = submitBtn.innerHTML;
-      
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Sending...`;
-      
+      const originalText = submitBtn ? submitBtn.innerHTML : '';
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Opening Mail...`;
+      }
+
+      // Open user's default email application with prefilled fields
+      window.location.href = mailtoUrl;
+
       setTimeout(() => {
-        // Show custom success toast
         if (successToast) {
           successToast.classList.remove('translate-y-24', 'opacity-0');
           successToast.classList.add('translate-y-0', 'opacity-100');
-          
-          // Hide toast after 4 seconds
+
           setTimeout(() => {
             successToast.classList.remove('translate-y-0', 'opacity-100');
             successToast.classList.add('translate-y-24', 'opacity-0');
           }, 4000);
         }
-        
-        // Reset form
+
         inquiryForm.reset();
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
-      }, 1500);
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
+      }, 1000);
     });
   }
 
@@ -394,24 +389,28 @@ document.addEventListener('DOMContentLoaded', () => {
   drawerLinks.forEach(link => link.addEventListener('click', closeDrawer));
 
   // ==========================================
-  // DYNAMIC NAVBAR SCROLL BEHAVIOR (Solid in Hero -> Glassy Blur Past Hero)
+  // DYNAMIC NAVBAR OVERLAY (Transparent on Video -> Solid White on Cursor Hover or Scroll)
   // ==========================================
   const mainHeader = document.getElementById('main-header');
-  const heroSection = document.getElementById('home');
 
-  if (mainHeader && heroSection) {
+  if (mainHeader) {
     function updateHeaderStyle() {
-      const heroBottom = heroSection.getBoundingClientRect().bottom;
-      // Stays solid white while inside Hero section
-      if (heroBottom > 80) {
-        mainHeader.classList.remove('bg-white/80', 'backdrop-blur-md', 'shadow-md');
-        mainHeader.classList.add('bg-white', 'shadow-sm');
+      // Turns solid white immediately when user scrolls inside hero section (> 20px)
+      if (window.scrollY > 20) {
+        mainHeader.classList.add('is-scrolled');
       } else {
-        // Morph into Glassy Blur Effect past Hero section
-        mainHeader.classList.remove('bg-white', 'shadow-sm');
-        mainHeader.classList.add('bg-white/80', 'backdrop-blur-md', 'shadow-md');
+        mainHeader.classList.remove('is-scrolled');
       }
     }
+
+    // Explicit cursor hover state handler (turns solid white when hovering navbar over video)
+    mainHeader.addEventListener('mouseenter', () => {
+      mainHeader.classList.add('is-hovered');
+    });
+
+    mainHeader.addEventListener('mouseleave', () => {
+      mainHeader.classList.remove('is-hovered');
+    });
 
     window.addEventListener('scroll', updateHeaderStyle);
     updateHeaderStyle(); // Initial execution
