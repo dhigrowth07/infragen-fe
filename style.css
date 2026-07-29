@@ -35,6 +35,55 @@ body {
   background-color: var(--color-bg-cream);
 }
 
+/* Hero Content Floating Down and Up Animations */
+@keyframes floatDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Carousel Zoom In / Zoom Out (Ken Burns Effect) */
+@keyframes zoomInOut {
+  0%   { transform: scale(1.00); }
+  50%  { transform: scale(1.15); }
+  100% { transform: scale(1.00); }
+}
+
+.carousel-zoom-img {
+  animation: zoomInOut 8s ease-in-out infinite !important;
+  transform-origin: center center !important;
+  will-change: transform;
+}
+
+/* When slide is not active (opacity-0), pause the zoom to keep it clean */
+.hero-slide.opacity-0 img {
+  animation-play-state: paused;
+}
+
+.animate-float-down {
+  animation: floatDown 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-float-up {
+  animation: floatUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
@@ -536,65 +585,67 @@ body {
 
 /* ==========================================
    TRANSPARENT NAVBAR OVER VIDEO -> WHITE ON HOVER OR SCROLL
-   ========================================== --> */
+/* Constant Solid Luxury Brown Header Styling (#381e23) */
 #main-header {
-  background-color: transparent;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  background-color: #381e23 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
-/* White background when user hovers cursor over navbar or when scrolled past video */
-#main-header:hover,
-#main-header.is-hovered,
-#main-header.is-scrolled {
-  background-color: #ffffff !important;
-  border-bottom-color: rgba(229, 231, 235, 0.8) !important;
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08) !important;
+/* Footer Logo Styling (Crisp white PNG on dark #121212 background) */
+.footer-logo-img {
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
+  transition: filter 0.35s ease, transform 0.3s ease;
 }
 
-/* Nav Link colors in transparent vs white hover states */
-#main-header .nav-link-text {
-  color: #ffffff;
-  transition: color 0.3s ease, border-color 0.3s ease;
+.footer-logo-img:hover {
+  filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.6));
+  transform: scale(1.03);
 }
 
-#main-header:hover .nav-link-text,
-#main-header.is-hovered .nav-link-text,
-#main-header.is-scrolled .nav-link-text {
-  color: #334155 !important;
+/* ==========================================
+   SERVICES CONTINUOUS INFINITE MOVING & FLOATING MARQUEE
+   ========================================== */
+@keyframes infiniteHorizontalMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
-#main-header .nav-link-text.active-nav-link {
-  color: #c5a880 !important;
-  border-bottom-color: #c5a880 !important;
+.infinite-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: infiniteHorizontalMarquee 40s linear infinite;
+  will-change: transform;
 }
 
-#main-header .nav-link-text:hover,
-#main-header:hover .nav-link-text:hover,
-#main-header.is-scrolled .nav-link-text:hover {
-  color: #c5a880 !important;
+.infinite-marquee-track:hover {
+  animation-play-state: paused;
 }
 
-/* Social icons styling in transparent vs white hover states */
-#main-header .nav-social-btn {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  transition: all 0.3s ease;
+@keyframes autoFloatBob {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-16px);
+  }
 }
 
-#main-header:hover .nav-social-btn,
-#main-header.is-hovered .nav-social-btn,
-#main-header.is-scrolled .nav-social-btn {
-  background-color: #f5f5f4 !important;
-  color: #612124 !important;
-  border-color: rgba(229, 231, 235, 0.8) !important;
+.floating-bob-card {
+  animation: autoFloatBob 3.6s ease-in-out infinite;
 }
 
-#main-header .nav-social-btn:hover,
-#main-header:hover .nav-social-btn:hover,
-#main-header.is-scrolled .nav-social-btn:hover {
-  background-color: #612124 !important;
-  color: #ffffff !important;
+.service-float-card {
+  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
 }
+
+.service-float-card:hover {
+  transform: translateY(-18px) scale(1.03) !important;
+  box-shadow: 0 24px 36px -10px rgba(97, 33, 36, 0.18) !important;
+}
+
+
 

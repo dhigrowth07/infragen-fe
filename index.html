@@ -24,6 +24,9 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <!-- Favicon -->
+  <link rel="icon" href="vizhi-infragen-realtors-logo.png" type="image/png">
+
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="style.css">
 
@@ -85,7 +88,7 @@
       
       <!-- Company Logo in Center -->
       <div class="p-3 bg-stone-50 rounded-2xl border border-stone-200/80 shadow-md inline-block mb-2">
-        <img src="vizhi-infragen-realtors-logo0.png" alt="Vizhi Infragen Realtors Logo" class="w-32 h-20 object-contain mx-auto" />
+        <img src="vizhi-infragen-realtors-logo.png" alt="Vizhi Infragen Realtors Logo" class="w-36 h-20 object-contain mx-auto" />
       </div>
 
       <!-- Navigation Links List inside Drawer -->
@@ -147,55 +150,54 @@
   </div>
 
   <!-- ==========================================
-       HEADER / NAVBAR (Transparent Overlay on Video -> Solid White on Hover / Scroll)
+       TOP NAVBAR (Fixed Brighter Brown Header - Stays Visible Across All Sections with Zero Gap)
        ========================================== -->
-  <header id="main-header"
-    class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
-    <div class="w-full max-w-none px-6 sm:px-10 lg:px-16">
-      <div class="flex justify-between items-center h-20">
+  <header id="main-header" class="fixed top-0 left-0 w-full z-[100] bg-[#381e23] border-b border-white/10 shadow-2xl transition-colors duration-300">
+    <div class="max-w-[1650px] mx-auto px-4 sm:px-8 lg:px-12">
+      <div class="flex justify-between items-center h-20 sm:h-24">
 
-        <!-- Logo (Left Corner) -->
-        <a href="#home" class="flex items-center gap-3 hover:scale-[1.03] transition-transform duration-300 group">
-          <img class="w-[95px] h-[65px] object-contain drop-shadow-md" src="vizhi-infragen-realtors-logo0.png"
-            alt="Vizhi Infragen Realtors Logo" />
+        <!-- Left: White Transparent Logo -->
+        <a href="#home" class="flex items-center gap-3 hover:scale-[1.02] transition-transform duration-300 group">
+          <img class="w-[135px] h-[75px] sm:w-[160px] sm:h-[82px] object-contain drop-shadow-md nav-logo-img" src="vizhi-infragen-realtors-logo-white.png" alt="Vizhi Infragen Realtors Logo" />
         </a>
 
-        <!-- Navigation Menu (Center: Home, About, Services, Blog, Contact - Inter Font) -->
-        <nav class="hidden md:flex space-x-8 items-center h-full">
-          <a href="#home"
-            class="nav-link nav-link-text active-nav-link border-b-[2.5px] pb-1 font-['Inter',_sans-serif] text-[15px] leading-6 font-bold tracking-[0.4px] transition-all">Home</a>
-          <a href="about.html"
-            class="nav-link nav-link-text border-solid border-transparent border-b-[2.5px] pb-1 font-['Inter',_sans-serif] text-[15px] leading-6 font-bold tracking-[0.4px] transition-all">About</a>
-          <a href="#services"
-            class="nav-link nav-link-text border-solid border-transparent border-b-[2.5px] pb-1 font-['Inter',_sans-serif] text-[15px] leading-6 font-bold tracking-[0.4px] transition-all">Services</a>
-          <a href="#"
-            class="nav-link nav-link-text border-solid border-transparent border-b-[2.5px] pb-1 font-['Inter',_sans-serif] text-[15px] leading-6 font-bold tracking-[0.4px] transition-all">Blog</a>
-          <a href="#contact"
-            class="nav-link nav-link-text border-solid border-transparent border-b-[2.5px] pb-1 font-['Inter',_sans-serif] text-[15px] leading-6 font-bold tracking-[0.4px] transition-all">Contact</a>
+        <!-- Center: Navigation Menu with Vertical Line Dividers (Home | About Us | Properties v | Services v | Blog | Contact Us) -->
+        <nav class="hidden md:flex items-center h-full">
+          <a href="#home" class="text-[#c5a880] font-bold text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6 border-r border-white/20 hover:text-white">
+            Home
+          </a>
+          <a href="#about" class="text-white hover:text-[#c5a880] font-medium text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6 border-r border-white/20">
+            About Us
+          </a>
+          <!-- Properties with Dropdown Icon -->
+          <a href="#properties" class="text-white hover:text-[#c5a880] font-medium text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6 border-r border-white/20 flex items-center gap-1.5">
+            <span>Properties</span>
+            <i class="fa-solid fa-chevron-down text-[10px] lg:text-[11px] opacity-75"></i>
+          </a>
+          <!-- Services with Dropdown Icon -->
+          <a href="#services" class="text-white hover:text-[#c5a880] font-medium text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6 border-r border-white/20 flex items-center gap-1.5">
+            <span>Services</span>
+            <i class="fa-solid fa-chevron-down text-[10px] lg:text-[11px] opacity-75"></i>
+          </a>
+          <a href="#" class="text-white hover:text-[#c5a880] font-medium text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6 border-r border-white/20">
+            Blog
+          </a>
+          <a href="#contact" class="text-white hover:text-[#c5a880] font-medium text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6">
+            Contact Us
+          </a>
         </nav>
 
-        <!-- Right Side Corner: Social Media Icons (WhatsApp, Instagram, Facebook) -->
-        <div class="flex items-center gap-2.5">
-          <a href="https://wa.me/917305587479" target="_blank" rel="noopener noreferrer"
-            class="nav-social-btn w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm hover:scale-110"
-            aria-label="WhatsApp">
-            <i class="fa-brands fa-whatsapp text-lg"></i>
+        <!-- Right: 3 Social Icons in Pure White Color (WhatsApp, Instagram, Facebook) -->
+        <div class="flex items-center space-x-3 sm:space-x-4">
+          <a href="https://wa.me/917305587479?text=Hii!%20I'm%20interested%20Can%20i%20know%20about%20more%20details" target="_blank" rel="noopener noreferrer" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 text-white hover:bg-[#c5a880] hover:text-[#381e23] flex items-center justify-center text-base sm:text-lg transition-all duration-300" aria-label="WhatsApp">
+            <i class="fa-brands fa-whatsapp"></i>
           </a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
-            class="nav-social-btn w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm hover:scale-110"
-            aria-label="Instagram">
-            <i class="fa-brands fa-instagram text-lg"></i>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 text-white hover:bg-[#c5a880] hover:text-[#381e23] flex items-center justify-center text-base sm:text-lg transition-all duration-300" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
           </a>
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
-            class="nav-social-btn w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm hover:scale-110"
-            aria-label="Facebook">
-            <i class="fa-brands fa-facebook-f text-base"></i>
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 text-white hover:bg-[#c5a880] hover:text-[#381e23] flex items-center justify-center text-base sm:text-lg transition-all duration-300" aria-label="Facebook">
+            <i class="fa-brands fa-facebook-f"></i>
           </a>
-
-          <!-- Mobile Drawer Button -->
-          <button id="open-side-drawer" class="md:hidden ml-2 w-10 h-10 rounded-full nav-social-btn flex items-center justify-center">
-            <i class="fa-solid fa-bars text-xl"></i>
-          </button>
         </div>
 
       </div>
@@ -203,29 +205,190 @@
   </header>
 
   <!-- ==========================================
-       HERO SECTION (Clean Full-Width Background Video)
+       HERO & NAVBAR GRAND WRAPPER (Slightly Brighter Luxury Brown Theme)
        ========================================== -->
-  <section id="home" class="relative w-full h-[580px] sm:h-[640px] lg:h-[700px] overflow-hidden bg-black group/hero">
+  <div class="relative bg-[#381e23] text-white overflow-hidden pt-20 sm:pt-24">
 
-    <!-- Background Video (Autoplay, Loop, Muted) -->
-    <div class="absolute inset-0 w-full h-full overflow-hidden z-0">
-      <video autoplay loop muted playsinline class="w-full h-full object-cover brightness-[0.95] scale-105">
-        <source src="videos/watermark-removed-I_attached_photos_and_video.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
+    <!-- ==========================================
+         HERO SECTION WITH BOTH SIDES FOLDED ARCH CORNERS (100% Full Width Edge-to-Edge, Zero Gap)
+         ========================================== -->
+    <section id="home" class="relative w-full p-0 m-0">
+      
+      <div class="relative w-full min-h-[560px] sm:min-h-[620px] lg:min-h-[660px]">
+
+        <!-- Full-Width Hero Container Card with Folded Curved Arch Corners on Both Left & Right Top Sides -->
+        <div class="relative w-full min-h-[560px] sm:min-h-[620px] lg:min-h-[660px] rounded-tl-[36px] sm:rounded-tl-[60px] rounded-tr-[36px] sm:rounded-tr-[60px] rounded-bl-none rounded-br-none overflow-hidden shadow-2xl group/hero">
+
+          <style>
+            @keyframes zoomInOut {
+              0%   { transform: scale(1.00); }
+              50%  { transform: scale(1.15); }
+              100% { transform: scale(1.00); }
+            }
+            .carousel-zoom-img {
+              animation: zoomInOut 8s ease-in-out infinite !important;
+              transform-origin: center center !important;
+              will-change: transform;
+            }
+          </style>
+
+          <!-- 5 Premium Luxury Villa Carousel Slides -->
+          <div id="hero-carousel-track" class="absolute inset-0 w-full h-full">
+            
+            <!-- Slide 1: Modern Two-Storey White Villa with Carport -->
+            <div class="hero-slide absolute inset-0 w-full h-full opacity-100 transition-opacity duration-1000 ease-in-out z-10 overflow-hidden">
+              <img src="assets/images/carousel-villa-1.jpg" alt="Modern White Villa with Carport - Vizhi Infragen Realtors" class="carousel-zoom-img w-full h-full object-cover object-center" style="animation: zoomInOut 8s ease-in-out infinite; transform-origin: center center;" />
+            </div>
+
+            <!-- Slide 2: Villa with Pool, Garden & Mountains -->
+            <div class="hero-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000 ease-in-out z-0 overflow-hidden">
+              <img src="assets/images/carousel-villa-2.jpg" alt="Luxury Villa with Pool and Mountain View" class="carousel-zoom-img w-full h-full object-cover object-center" />
+            </div>
+
+            <!-- Slide 3: Modern Glass Villa at Twilight -->
+            <div class="hero-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000 ease-in-out z-0 overflow-hidden">
+              <img src="assets/images/carousel-villa-3.jpg" alt="Modern Glass Luxury Villa at Twilight" class="carousel-zoom-img w-full h-full object-cover object-center" />
+            </div>
+
+            <!-- Slide 4: White Villa with Pool - Daytime -->
+            <div class="hero-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000 ease-in-out z-0 overflow-hidden">
+              <img src="assets/images/carousel-villa-4.jpg" alt="Contemporary White Villa with Swimming Pool" class="carousel-zoom-img w-full h-full object-cover object-center" />
+            </div>
+
+            <!-- Slide 5: Garden Villa with Pool -->
+            <div class="hero-slide absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000 ease-in-out z-0 overflow-hidden">
+              <img src="assets/images/carousel-villa-5.jpg" alt="Elegant Garden Villa with Swimming Pool" class="carousel-zoom-img w-full h-full object-cover object-center" />
+            </div>
+
+          </div>
+
+          <!-- Subtle Gradient Overlay for Contrast -->
+          <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/25 pointer-events-none z-10"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/25 pointer-events-none z-10"></div>
+
+          <!-- Hero Content Layer: Floating Animations for Subtitle, H1, Description & Contact Us Button -->
+          <div class="relative z-20 w-full h-full flex flex-col justify-between p-8 sm:p-14 lg:p-20 min-h-[560px] sm:min-h-[620px] lg:min-h-[660px]">
+            
+            <!-- Main Content Area: Left Hero Text Stack & Centered Video Play Icon -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center my-auto">
+              
+              <!-- Left Hero Text Column -->
+              <div class="lg:col-span-8 space-y-5 text-left">
+                
+                <!-- Pure Text Sub-title above H1 (NO PILL BORDER, Floating from Top to Bottom) -->
+                <span class="text-[#c5a880] font-['Inter',sans-serif] text-sm sm:text-base font-bold tracking-[0.2em] uppercase block animate-float-down">
+                  Welcome to vizhi infragen
+                </span>
+
+                <!-- Main H1 Header (Floating from Top to Bottom) -->
+                <h1 class="text-[32px] sm:text-[40px] font-extrabold text-white leading-[40px] sm:leading-[48px] font-['Outfit',sans-serif] tracking-tight text-drop-shadow max-w-3xl animate-float-down [animation-delay:200ms]">
+                  Trusted Real Estate Company &amp; NRI Property Management Company in Coimbatore
+                </h1>
+
+                <!-- Sub-description below H1 (Floating from Top to Bottom) -->
+                <p class="text-white/90 font-['Inter',sans-serif] text-base sm:text-lg font-normal max-w-2xl leading-relaxed animate-float-down [animation-delay:400ms]">
+                  Your Reliable Partner for Land, Property &amp; Asset Management in Coimbatore
+                </p>
+
+                <!-- Action Button: Contact Us (Floating from Bottom to Top) -->
+                <div class="pt-3 animate-float-up [animation-delay:600ms]">
+                  <a href="https://wa.me/917305587479?text=Hii!%20I'm%20interested%20Can%20i%20know%20about%20more%20details" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 bg-white/10 hover:bg-[#c5a880] text-white hover:text-[#231518] font-bold px-8 py-4 rounded-xl text-base transition-all duration-300 border-2 border-[#c5a880] shadow-xl backdrop-blur-md transform hover:-translate-y-1">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>Contact Us</span>
+                    <i class="fa-solid fa-arrow-right text-sm"></i>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Right Center Interactive Video Play Icon -->
+              <div class="lg:col-span-4 flex justify-center items-center py-4">
+                <button onclick="openVideoModal()" class="group relative flex items-center justify-center w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-white/25 hover:bg-white/40 backdrop-blur-md border-2 border-white/80 shadow-2xl transition-all duration-500 transform hover:scale-110 cursor-pointer z-30" aria-label="Play Property Video">
+                  <!-- Animated Pulse Ripple Ring -->
+                  <span class="absolute inset-0 rounded-full border-2 border-white/60 animate-ping opacity-75 pointer-events-none"></span>
+                  <span class="absolute -inset-2 rounded-full border border-white/40 animate-pulse pointer-events-none"></span>
+                  
+                  <!-- Play Icon Triangle -->
+                  <div class="w-12 h-12 rounded-full bg-white text-[#612124] flex items-center justify-center pl-1 shadow-lg group-hover:scale-110 transition-transform pointer-events-none">
+                    <i class="fa-solid fa-play text-xl text-[#612124]"></i>
+                  </div>
+                </button>
+              </div>
+
+            </div>
+
+            <!-- Bottom Carousel Controls & Indicators -->
+            <div class="flex justify-between items-center pt-4 border-t border-white/10">
+              <!-- Indicators Dots -->
+              <div class="flex items-center space-x-2.5">
+                <button class="hero-dot w-9 h-2.5 rounded-full bg-[#c5a880] transition-all" data-slide="0" aria-label="Slide 1"></button>
+                <button class="hero-dot w-2.5 h-2.5 rounded-full bg-white/40 hover:bg-white/80 transition-all" data-slide="1" aria-label="Slide 2"></button>
+                <button class="hero-dot w-2.5 h-2.5 rounded-full bg-white/40 hover:bg-white/80 transition-all" data-slide="2" aria-label="Slide 3"></button>
+                <button class="hero-dot w-2.5 h-2.5 rounded-full bg-white/40 hover:bg-white/80 transition-all" data-slide="3" aria-label="Slide 4"></button>
+                <button class="hero-dot w-2.5 h-2.5 rounded-full bg-white/40 hover:bg-white/80 transition-all" data-slide="4" aria-label="Slide 5"></button>
+              </div>
+
+              <!-- Slide Arrow Buttons -->
+              <div class="flex items-center space-x-3">
+                <button id="hero-prev" class="w-10 h-10 rounded-full bg-black/40 hover:bg-[#c5a880] hover:text-[#231518] text-white flex items-center justify-center transition-all border border-white/20 cursor-pointer" aria-label="Previous Slide">
+                  <i class="fa-solid fa-chevron-left text-sm"></i>
+                </button>
+                <button id="hero-next" class="w-10 h-10 rounded-full bg-black/40 hover:bg-[#c5a880] hover:text-[#231518] text-white flex items-center justify-center transition-all border border-white/20 cursor-pointer" aria-label="Next Slide">
+                  <i class="fa-solid fa-chevron-right text-sm"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ==========================================
+         4 STATS COUNTER BAR (rgb(197, 168, 128) Background with NORMAL WEIGHT Numbers)
+         ========================================== -->
+     <div id="stats-counter-bar" class="w-full bg-[#c5a880] m-0 py-10 sm:py-12 border-t border-b border-[#b39569] shadow-inner">
+      <div class="max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-16">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x-0 md:divide-x divide-black/15">
+          
+          <!-- Stat 1 -->
+          <div class="flex flex-col items-center p-2">
+            <span class="stat-counter text-4xl sm:text-5xl lg:text-6xl font-normal text-black font-['Outfit',sans-serif] tracking-tight" data-target="5" data-suffix="+">0+</span>
+            <span class="text-xs sm:text-sm font-semibold text-black uppercase tracking-[0.18em] mt-3 font-['Inter',sans-serif]">YEARS OF EXPERIENCE</span>
+          </div>
+
+          <!-- Stat 2 -->
+          <div class="flex flex-col items-center p-2">
+            <span class="stat-counter text-4xl sm:text-5xl lg:text-6xl font-normal text-black font-['Outfit',sans-serif] tracking-tight" data-target="127" data-suffix="+">0+</span>
+            <span class="text-xs sm:text-sm font-semibold text-black uppercase tracking-[0.18em] mt-3 font-['Inter',sans-serif]">HAPPY CLIENTS</span>
+          </div>
+
+          <!-- Stat 3 -->
+          <div class="flex flex-col items-center p-2">
+            <span class="stat-counter text-4xl sm:text-5xl lg:text-6xl font-normal text-black font-['Outfit',sans-serif] tracking-tight" data-target="105" data-suffix="+">0+</span>
+            <span class="text-xs sm:text-sm font-semibold text-black uppercase tracking-[0.18em] mt-3 font-['Inter',sans-serif]">PROJECTS COMPLETED</span>
+          </div>
+
+          <!-- Stat 4 -->
+          <div class="flex flex-col items-center p-2">
+            <span class="stat-counter text-4xl sm:text-5xl lg:text-6xl font-normal text-black font-['Outfit',sans-serif] tracking-tight" data-target="100" data-suffix="%">0%</span>
+            <span class="text-xs sm:text-sm font-semibold text-black uppercase tracking-[0.18em] mt-3 font-['Inter',sans-serif]">TRANSPARENCY</span>
+          </div>
+
+        </div>
+      </div>
     </div>
 
-    <!-- Subtle Vignette Shade for Video Polish -->
-    <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 pointer-events-none z-10"></div>
-
-  </section>
+  </div>
 
   <!-- Video Popup Modal -->
   <div id="hero-video-modal"
-    class="fixed inset-0 bg-black/80 backdrop-blur-md z-[150] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-    <div class="relative w-full max-w-4xl bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/20">
-      <button id="close-video-modal"
-        class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/60 text-white hover:bg-[#612124] flex items-center justify-center transition-all cursor-pointer border border-white/20"
+    class="fixed inset-0 bg-black/85 backdrop-blur-md z-[200] hidden opacity-0 pointer-events-none items-center justify-center p-4 transition-opacity duration-300" onclick="closeVideoModal()">
+    <div class="relative w-full max-w-4xl bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/20" onclick="event.stopPropagation()">
+      <button onclick="closeVideoModal()"
+        class="absolute top-4 right-4 z-30 w-10 h-10 rounded-full bg-black/70 text-white hover:bg-[#612124] flex items-center justify-center transition-all cursor-pointer border border-white/20"
         aria-label="Close Video">
         <i class="fa-solid fa-xmark text-lg"></i>
       </button>
@@ -258,19 +421,24 @@
       <!-- Main 2-Column Content Grid: Image with Legacy Badge (Left) & Narrative Story + Stats + Button (Right) -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
 
-        <!-- Left Column: Portrait Image with Overlapping Dark Burgundy Square "6+ YEARS OF LEGACY" Badge -->
+        <!-- Left Column: Portrait Image with 3D Backside Layer & Overlapping "6+ YEARS OF LEGACY" Badge -->
         <div class="lg:col-span-5 relative flex justify-center lg:justify-end reveal reveal-slide-right">
-          <div class="relative w-full max-w-[380px] sm:max-w-[420px] aspect-[4/5] overflow-visible group">
+          <div class="relative w-full max-w-[380px] sm:max-w-[420px] aspect-[4/5] overflow-visible group [perspective:1000px]">
             
-            <!-- Architectural Main Image Container (Modern Glass Facade Building matching screenshot) -->
-            <div class="w-full h-full overflow-hidden shadow-2xl border-4 border-white bg-stone-900 relative">
+            <!-- 3D Backside Layer Accent Frames with Gold Gradient Glow -->
+            <div class="absolute -inset-4 sm:-inset-6 bg-gradient-to-tr from-[#612124]/40 via-[#c5a880]/30 to-[#612124]/10 rounded-[28px] transform -rotate-6 scale-105 border-2 border-[#c5a880]/50 shadow-2xl backdrop-blur-sm group-hover:-rotate-3 group-hover:scale-110 transition-all duration-700 pointer-events-none z-0"></div>
+            <div class="absolute -inset-2 sm:-inset-3 bg-[#612124]/30 rounded-[24px] transform rotate-3 shadow-xl border border-white/40 group-hover:rotate-1 transition-all duration-700 pointer-events-none z-0"></div>
+            <div class="absolute -top-8 -left-8 w-24 h-24 rounded-full bg-[#c5a880]/20 blur-xl pointer-events-none"></div>
+
+            <!-- Architectural Main Image Container (Modern Glass Facade Building with 3D Shadow Depth) -->
+            <div class="w-full h-full overflow-hidden shadow-[0_25px_60px_-15px_rgba(97,33,36,0.35)] border-4 border-white bg-stone-900 relative rounded-xl z-10 transform transition-transform duration-700 group-hover:-translate-y-2">
               <img src="assets/images/hero-3.jpg" alt="Vizhi Infragen Modern Architecture & Property Legacy"
                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
             </div>
 
             <!-- Overlapping Dark Burgundy Square Badge: "6+ YEARS OF LEGACY" -->
-            <div class="absolute -bottom-6 -right-3 sm:-right-8 bg-[#612124] text-white p-6 sm:p-7 shadow-2xl border border-white/20 z-20 min-w-[170px] sm:min-w-[190px]">
+            <div class="absolute -bottom-6 -right-3 sm:-right-8 bg-[#612124] text-white p-6 sm:p-7 shadow-2xl border border-white/20 z-20 min-w-[170px] sm:min-w-[190px] rounded-sm">
               <span class="text-4xl sm:text-5xl font-black text-[#c5a880] font-['Outfit',_sans-serif] leading-none block mb-1.5">
                 6+
               </span>
@@ -285,33 +453,9 @@
         <!-- Right Column: Narrative Story, 4 Stats (without top/bottom lines), & Square Outlined "READ OUR STORY" Button -->
         <div class="lg:col-span-7 flex flex-col items-start justify-center gap-6 reveal reveal-slide-left pt-6 lg:pt-0">
           
-          <p class="text-[#555555] font-['Inter',_sans-serif] text-base sm:text-lg leading-relaxed sm:leading-8 font-normal">
+          <p class="text-[#555555] font-['Outfit',_sans-serif] text-base sm:text-lg leading-relaxed sm:leading-8 font-normal">
             <strong class="text-[#612124] font-semibold">Vizhi Infragen Realtors LLP</strong> is a trusted real estate and property management company in Coimbatore. With over 6 years of experience, we help individuals, investors, businesses, and NRI clients buy, sell, manage, and develop properties. Our local expertise, transparent approach, and reliable guidance ensure confident real estate decisions.
           </p>
-
-          <!-- 4 Stats Grid (Lines removed as requested) -->
-          <div class="py-2 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 w-full my-1">
-            <!-- Stat 1 -->
-            <div class="flex flex-col">
-              <span class="text-3xl sm:text-4xl font-extrabold text-[#c5a880] font-['Outfit',_sans-serif]">5+</span>
-              <span class="text-[11px] font-bold tracking-wider text-[#555555] uppercase font-['Inter',_sans-serif] mt-1">YEARS OF EXPERIENCE</span>
-            </div>
-            <!-- Stat 2 -->
-            <div class="flex flex-col">
-              <span class="text-3xl sm:text-4xl font-extrabold text-[#c5a880] font-['Outfit',_sans-serif]">127+</span>
-              <span class="text-[11px] font-bold tracking-wider text-[#555555] uppercase font-['Inter',_sans-serif] mt-1">HAPPY CLIENTS</span>
-            </div>
-            <!-- Stat 3 -->
-            <div class="flex flex-col">
-              <span class="text-3xl sm:text-4xl font-extrabold text-[#c5a880] font-['Outfit',_sans-serif]">105+</span>
-              <span class="text-[11px] font-bold tracking-wider text-[#555555] uppercase font-['Inter',_sans-serif] mt-1">PROJECTS COMPLETED</span>
-            </div>
-            <!-- Stat 4 -->
-            <div class="flex flex-col">
-              <span class="text-3xl sm:text-4xl font-extrabold text-[#c5a880] font-['Outfit',_sans-serif]">100%</span>
-              <span class="text-[11px] font-bold tracking-wider text-[#555555] uppercase font-['Inter',_sans-serif] mt-1">TRANSPARENCY</span>
-            </div>
-          </div>
 
           <!-- Action Button: READ OUR STORY (Square border structure matching screenshot) -->
           <div class="pt-2">
@@ -367,7 +511,7 @@
         <!-- Far-Left Center Vizhi Infragen Logo (Start Point) -->
         <div class="absolute flex items-center justify-center z-20 hover:scale-105 transition-transform duration-300"
           style="left:20px; top:290px; transform:translate(0, -50%); width:140px; height:140px;">
-          <img src="vizhi-infragen-realtors-logo0.png" alt="Vizhi Infragen Realtors Logo" class="w-32 h-20 object-contain" />
+          <img src="vizhi-infragen-realtors-logo.png" alt="Vizhi Infragen Realtors Logo" class="w-36 h-20 object-contain" />
         </div>
 
         <!-- ════ TOP ROW: STEPS 1 TO 4 (Left to Right along Y=180px line - Images UP, Titles DOWN) ════ -->
@@ -608,14 +752,14 @@
         </p>
       </div>
 
-      <!-- Properties Grid: Exactly 3 Above, 3 Below -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full max-w-6xl mx-auto relative">
+      <!-- Properties Grid: Exactly 3 Above, 3 Below with Perfect Pixel Alignment -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full max-w-6xl mx-auto items-stretch relative">
 
         <!-- Property Card 1 (Top Row 1) -->
-        <div class="property-card bg-[#f6f4f0] rounded-none border border-stone-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#c5a880]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
-          <div>
-            <!-- Image Box -->
-            <div class="relative h-56 sm:h-64 w-full overflow-hidden bg-stone-900">
+        <div class="property-card bg-[#f6f4f0] rounded-none border border-stone-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#c5a880]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full group">
+          <div class="flex flex-col flex-1">
+            <!-- Image Box (Strictly Aligned) -->
+            <div class="relative h-60 sm:h-64 w-full shrink-0 overflow-hidden bg-stone-900">
               <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 src="assets/images/plot-layout-1.jpg" alt="The Greenspace Elite Plots" />
               <!-- Top Left Badge: DTCP APPROVED -->
@@ -624,34 +768,33 @@
               </span>
             </div>
 
-            <!-- Card Content Body -->
-            <div class="p-6 sm:p-7 flex flex-col gap-2 text-left">
-              <h3 class="text-2xl font-extrabold text-[#1f2937] font-['Outfit',_sans-serif] tracking-tight group-hover:text-[#612124] transition-colors">
-                Greenspace Elite
-              </h3>
-              <div class="text-[11px] font-bold text-[#c5a880] uppercase tracking-[0.18em] flex items-center gap-1 font-['Inter',_sans-serif]">
-                <i class="fas fa-location-dot text-[10px]"></i> PATTANAM, COIMBATORE
+            <!-- Card Content Body (Strictly Aligned) -->
+            <div class="p-6 sm:p-7 flex flex-col justify-between flex-1 text-left">
+              <div>
+                <h3 class="text-2xl font-extrabold text-[#1f2937] font-['Outfit',_sans-serif] tracking-tight group-hover:text-[#612124] transition-colors leading-tight min-h-[32px] flex items-center">
+                  Greenspace Elite
+                </h3>
+                <div class="text-[11px] font-bold text-[#c5a880] uppercase tracking-[0.18em] flex items-center gap-1.5 font-['Inter',_sans-serif] mt-2 mb-2">
+                  <i class="fas fa-location-dot text-[10px]"></i> PATTANAM, COIMBATORE
+                </div>
+                <p class="text-sm text-stone-600 font-normal leading-relaxed min-h-[44px]">
+                  DTCP &amp; RERA Approved Gated Layout Plots
+                </p>
               </div>
-              <p class="text-sm text-stone-600 font-normal leading-relaxed mt-1">
-                DTCP &amp; RERA Approved Gated Layout Plots
-              </p>
             </div>
           </div>
 
-          <!-- Card Footer -->
-          <div class="px-6 sm:px-7 pb-6 pt-2 flex items-center justify-between font-['Inter',_sans-serif]">
-            <span class="text-[11px] font-bold text-[#555555] tracking-[0.2em] uppercase">PLOTS</span>
-            <a href="#contact" class="text-[11px] font-bold text-[#c5a880] group-hover:text-[#612124] tracking-[0.2em] uppercase flex items-center gap-1 transition-all">
-              EXPLORE <span class="group-hover:translate-x-1 transition-transform inline-block">→</span>
-            </a>
+          <!-- Card Footer (Category Only - Individual Read More removed as requested) -->
+          <div class="px-6 sm:px-7 pb-6 pt-3 border-t border-stone-200/60 flex items-center justify-between font-['Inter',_sans-serif] mt-auto">
+            <span class="text-[11px] font-bold text-[#612124] tracking-[0.2em] uppercase">PLOTS &amp; SITES</span>
           </div>
         </div>
 
         <!-- Property Card 2 (Top Row 2) -->
-        <div class="property-card bg-[#f6f4f0] rounded-none border border-stone-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#c5a880]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
-          <div>
-            <!-- Image Box -->
-            <div class="relative h-56 sm:h-64 w-full overflow-hidden bg-stone-900">
+        <div class="property-card bg-[#f6f4f0] rounded-none border border-stone-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#c5a880]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full group">
+          <div class="flex flex-col flex-1">
+            <!-- Image Box (Strictly Aligned) -->
+            <div class="relative h-60 sm:h-64 w-full shrink-0 overflow-hidden bg-stone-900">
               <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 src="assets/images/plot-layout-2.jpg" alt="Heritage Western County Land" />
               <!-- Top Left Badge: RERA APPROVED -->
@@ -660,34 +803,33 @@
               </span>
             </div>
 
-            <!-- Card Content Body -->
-            <div class="p-6 sm:p-7 flex flex-col gap-2 text-left">
-              <h3 class="text-2xl font-extrabold text-[#1f2937] font-['Outfit',_sans-serif] tracking-tight group-hover:text-[#612124] transition-colors">
-                Western County
-              </h3>
-              <div class="text-[11px] font-bold text-[#c5a880] uppercase tracking-[0.18em] flex items-center gap-1 font-['Inter',_sans-serif]">
-                <i class="fas fa-location-dot text-[10px]"></i> KALAPATTI, COIMBATORE
+            <!-- Card Content Body (Strictly Aligned) -->
+            <div class="p-6 sm:p-7 flex flex-col justify-between flex-1 text-left">
+              <div>
+                <h3 class="text-2xl font-extrabold text-[#1f2937] font-['Outfit',_sans-serif] tracking-tight group-hover:text-[#612124] transition-colors leading-tight min-h-[32px] flex items-center">
+                  Western County
+                </h3>
+                <div class="text-[11px] font-bold text-[#c5a880] uppercase tracking-[0.18em] flex items-center gap-1.5 font-['Inter',_sans-serif] mt-2 mb-2">
+                  <i class="fas fa-location-dot text-[10px]"></i> KALAPATTI, COIMBATORE
+                </div>
+                <p class="text-sm text-stone-600 font-normal leading-relaxed min-h-[44px]">
+                  Premium Gated Residential Community Plots
+                </p>
               </div>
-              <p class="text-sm text-stone-600 font-normal leading-relaxed mt-1">
-                Premium Gated Residential Community Plots
-              </p>
             </div>
           </div>
 
-          <!-- Card Footer -->
-          <div class="px-6 sm:px-7 pb-6 pt-2 flex items-center justify-between font-['Inter',_sans-serif]">
-            <span class="text-[11px] font-bold text-[#555555] tracking-[0.2em] uppercase">PLOTS</span>
-            <a href="#contact" class="text-[11px] font-bold text-[#c5a880] group-hover:text-[#612124] tracking-[0.2em] uppercase flex items-center gap-1 transition-all">
-              EXPLORE <span class="group-hover:translate-x-1 transition-transform inline-block">→</span>
-            </a>
+          <!-- Card Footer (Category Only - Individual Read More removed as requested) -->
+          <div class="px-6 sm:px-7 pb-6 pt-3 border-t border-stone-200/60 flex items-center justify-between font-['Inter',_sans-serif] mt-auto">
+            <span class="text-[11px] font-bold text-[#612124] tracking-[0.2em] uppercase">PLOTS &amp; SITES</span>
           </div>
         </div>
 
         <!-- Property Card 3 (Top Row 3) -->
-        <div class="property-card bg-[#f6f4f0] rounded-none border border-stone-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#c5a880]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
-          <div>
-            <!-- Image Box -->
-            <div class="relative h-56 sm:h-64 w-full overflow-hidden bg-stone-900">
+        <div class="property-card bg-[#f6f4f0] rounded-none border border-stone-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#c5a880]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full group">
+          <div class="flex flex-col flex-1">
+            <!-- Image Box (Strictly Aligned) -->
+            <div class="relative h-60 sm:h-64 w-full shrink-0 overflow-hidden bg-stone-900">
               <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 src="assets/images/plot-layout-3.jpg" alt="Urbania Commercial Landmark" />
               <!-- Top Left Badge: COMMERCIAL -->
@@ -696,34 +838,33 @@
               </span>
             </div>
 
-            <!-- Card Content Body -->
-            <div class="p-6 sm:p-7 flex flex-col gap-2 text-left">
-              <h3 class="text-2xl font-extrabold text-[#1f2937] font-['Outfit',_sans-serif] tracking-tight group-hover:text-[#612124] transition-colors">
-                Urbania Landmark
-              </h3>
-              <div class="text-[11px] font-bold text-[#c5a880] uppercase tracking-[0.18em] flex items-center gap-1 font-['Inter',_sans-serif]">
-                <i class="fas fa-location-dot text-[10px]"></i> NEELAMBUR, COIMBATORE
+            <!-- Card Content Body (Strictly Aligned) -->
+            <div class="p-6 sm:p-7 flex flex-col justify-between flex-1 text-left">
+              <div>
+                <h3 class="text-2xl font-extrabold text-[#1f2937] font-['Outfit',_sans-serif] tracking-tight group-hover:text-[#612124] transition-colors leading-tight min-h-[32px] flex items-center">
+                  Urbania Landmark
+                </h3>
+                <div class="text-[11px] font-bold text-[#c5a880] uppercase tracking-[0.18em] flex items-center gap-1.5 font-['Inter',_sans-serif] mt-2 mb-2">
+                  <i class="fas fa-location-dot text-[10px]"></i> NEELAMBUR, COIMBATORE
+                </div>
+                <p class="text-sm text-stone-600 font-normal leading-relaxed min-h-[44px]">
+                  NH Frontage Commercial &amp; HQ Sites
+                </p>
               </div>
-              <p class="text-sm text-stone-600 font-normal leading-relaxed mt-1">
-                NH Frontage Commercial &amp; HQ Sites
-              </p>
             </div>
           </div>
 
-          <!-- Card Footer -->
-          <div class="px-6 sm:px-7 pb-6 pt-2 flex items-center justify-between font-['Inter',_sans-serif]">
-            <span class="text-[11px] font-bold text-[#555555] tracking-[0.2em] uppercase">COMMERCIAL</span>
-            <a href="#contact" class="text-[11px] font-bold text-[#c5a880] group-hover:text-[#612124] tracking-[0.2em] uppercase flex items-center gap-1 transition-all">
-              EXPLORE <span class="group-hover:translate-x-1 transition-transform inline-block">→</span>
-            </a>
+          <!-- Card Footer (Category Only - Individual Read More removed as requested) -->
+          <div class="px-6 sm:px-7 pb-6 pt-3 border-t border-stone-200/60 flex items-center justify-between font-['Inter',_sans-serif] mt-auto">
+            <span class="text-[11px] font-bold text-[#612124] tracking-[0.2em] uppercase">COMMERCIAL SITES</span>
           </div>
         </div>
 
         <!-- Property Card 4 (Bottom Row 1) -->
-        <div class="property-card bg-[#f6f4f0] rounded-none border border-stone-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#c5a880]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
-          <div>
-            <!-- Image Box -->
-            <div class="relative h-56 sm:h-64 w-full overflow-hidden bg-stone-900">
+        <div class="property-card bg-[#f6f4f0] rounded-none border border-stone-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#c5a880]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full group">
+          <div class="flex flex-col flex-1">
+            <!-- Image Box (Strictly Aligned) -->
+            <div class="relative h-60 sm:h-64 w-full shrink-0 overflow-hidden bg-stone-900">
               <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 src="assets/images/land-development.jpg" alt="Saravanampatti Tech Plots" />
               <!-- Top Left Badge: IT ZONE -->
@@ -732,34 +873,33 @@
               </span>
             </div>
 
-            <!-- Card Content Body -->
-            <div class="p-6 sm:p-7 flex flex-col gap-2 text-left">
-              <h3 class="text-2xl font-extrabold text-[#1f2937] font-['Outfit',_sans-serif] tracking-tight group-hover:text-[#612124] transition-colors">
-                Tech View Plots
-              </h3>
-              <div class="text-[11px] font-bold text-[#c5a880] uppercase tracking-[0.18em] flex items-center gap-1 font-['Inter',_sans-serif]">
-                <i class="fas fa-location-dot text-[10px]"></i> SATHY ROAD, COIMBATORE
+            <!-- Card Content Body (Strictly Aligned) -->
+            <div class="p-6 sm:p-7 flex flex-col justify-between flex-1 text-left">
+              <div>
+                <h3 class="text-2xl font-extrabold text-[#1f2937] font-['Outfit',_sans-serif] tracking-tight group-hover:text-[#612124] transition-colors leading-tight min-h-[32px] flex items-center">
+                  Tech View Plots
+                </h3>
+                <div class="text-[11px] font-bold text-[#c5a880] uppercase tracking-[0.18em] flex items-center gap-1.5 font-['Inter',_sans-serif] mt-2 mb-2">
+                  <i class="fas fa-location-dot text-[10px]"></i> SATHY ROAD, COIMBATORE
+                </div>
+                <p class="text-sm text-stone-600 font-normal leading-relaxed min-h-[44px]">
+                  IT Corridor Approved Layout Sites
+                </p>
               </div>
-              <p class="text-sm text-stone-600 font-normal leading-relaxed mt-1">
-                IT Corridor Approved Layout Sites
-              </p>
             </div>
           </div>
 
-          <!-- Card Footer -->
-          <div class="px-6 sm:px-7 pb-6 pt-2 flex items-center justify-between font-['Inter',_sans-serif]">
-            <span class="text-[11px] font-bold text-[#555555] tracking-[0.2em] uppercase">PLOTS</span>
-            <a href="#contact" class="text-[11px] font-bold text-[#c5a880] group-hover:text-[#612124] tracking-[0.2em] uppercase flex items-center gap-1 transition-all">
-              EXPLORE <span class="group-hover:translate-x-1 transition-transform inline-block">→</span>
-            </a>
+          <!-- Card Footer (Category Only - Individual Read More removed as requested) -->
+          <div class="px-6 sm:px-7 pb-6 pt-3 border-t border-stone-200/60 flex items-center justify-between font-['Inter',_sans-serif] mt-auto">
+            <span class="text-[11px] font-bold text-[#612124] tracking-[0.2em] uppercase">PLOTS &amp; SITES</span>
           </div>
         </div>
 
         <!-- Property Card 5 (Bottom Row 2) -->
-        <div class="property-card bg-[#f6f4f0] rounded-none border border-stone-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#c5a880]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
-          <div>
-            <!-- Image Box -->
-            <div class="relative h-56 sm:h-64 w-full overflow-hidden bg-stone-900">
+        <div class="property-card bg-[#f6f4f0] rounded-none border border-stone-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#c5a880]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full group">
+          <div class="flex flex-col flex-1">
+            <!-- Image Box (Strictly Aligned) -->
+            <div class="relative h-60 sm:h-64 w-full shrink-0 overflow-hidden bg-stone-900">
               <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 src="assets/images/hero-3.jpg" alt="Avinashi Road Villa Land" />
               <!-- Top Left Badge: EXCLUSIVE -->
@@ -768,34 +908,33 @@
               </span>
             </div>
 
-            <!-- Card Content Body -->
-            <div class="p-6 sm:p-7 flex flex-col gap-2 text-left">
-              <h3 class="text-2xl font-extrabold text-[#1f2937] font-['Outfit',_sans-serif] tracking-tight group-hover:text-[#612124] transition-colors">
-                Avinashi Villa Land
-              </h3>
-              <div class="text-[11px] font-bold text-[#c5a880] uppercase tracking-[0.18em] flex items-center gap-1 font-['Inter',_sans-serif]">
-                <i class="fas fa-location-dot text-[10px]"></i> AVINASHI ROAD, COIMBATORE
+            <!-- Card Content Body (Strictly Aligned) -->
+            <div class="p-6 sm:p-7 flex flex-col justify-between flex-1 text-left">
+              <div>
+                <h3 class="text-2xl font-extrabold text-[#1f2937] font-['Outfit',_sans-serif] tracking-tight group-hover:text-[#612124] transition-colors leading-tight min-h-[32px] flex items-center">
+                  Avinashi Villa Land
+                </h3>
+                <div class="text-[11px] font-bold text-[#c5a880] uppercase tracking-[0.18em] flex items-center gap-1.5 font-['Inter',_sans-serif] mt-2 mb-2">
+                  <i class="fas fa-location-dot text-[10px]"></i> AVINASHI ROAD, COIMBATORE
+                </div>
+                <p class="text-sm text-stone-600 font-normal leading-relaxed min-h-[44px]">
+                  Exclusive Luxury Villa Plots
+                </p>
               </div>
-              <p class="text-sm text-stone-600 font-normal leading-relaxed mt-1">
-                Exclusive Luxury Villa Plots
-              </p>
             </div>
           </div>
 
-          <!-- Card Footer -->
-          <div class="px-6 sm:px-7 pb-6 pt-2 flex items-center justify-between font-['Inter',_sans-serif]">
-            <span class="text-[11px] font-bold text-[#555555] tracking-[0.2em] uppercase">VILLAS</span>
-            <a href="#contact" class="text-[11px] font-bold text-[#c5a880] group-hover:text-[#612124] tracking-[0.2em] uppercase flex items-center gap-1 transition-all">
-              EXPLORE <span class="group-hover:translate-x-1 transition-transform inline-block">→</span>
-            </a>
+          <!-- Card Footer (Category Only - Individual Read More removed as requested) -->
+          <div class="px-6 sm:px-7 pb-6 pt-3 border-t border-stone-200/60 flex items-center justify-between font-['Inter',_sans-serif] mt-auto">
+            <span class="text-[11px] font-bold text-[#612124] tracking-[0.2em] uppercase">VILLAS &amp; HOMES</span>
           </div>
         </div>
 
         <!-- Property Card 6 (Bottom Row 3) -->
-        <div class="property-card bg-[#f6f4f0] rounded-none border border-stone-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#c5a880]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
-          <div>
-            <!-- Image Box -->
-            <div class="relative h-56 sm:h-64 w-full overflow-hidden bg-stone-900">
+        <div class="property-card bg-[#f6f4f0] rounded-none border border-stone-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#c5a880]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full group">
+          <div class="flex flex-col flex-1">
+            <!-- Image Box (Strictly Aligned) -->
+            <div class="relative h-60 sm:h-64 w-full shrink-0 overflow-hidden bg-stone-900">
               <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 src="assets/images/hero-2.jpg" alt="Sulur Growth Corridor Plots" />
               <!-- Top Left Badge: PRIME LOCATION -->
@@ -804,36 +943,35 @@
               </span>
             </div>
 
-            <!-- Card Content Body -->
-            <div class="p-6 sm:p-7 flex flex-col gap-2 text-left">
-              <h3 class="text-2xl font-extrabold text-[#1f2937] font-['Outfit',_sans-serif] tracking-tight group-hover:text-[#612124] transition-colors">
-                Sulur Growth Corridor
-              </h3>
-              <div class="text-[11px] font-bold text-[#c5a880] uppercase tracking-[0.18em] flex items-center gap-1 font-['Inter',_sans-serif]">
-                <i class="fas fa-location-dot text-[10px]"></i> SULUR, COIMBATORE
+            <!-- Card Content Body (Strictly Aligned) -->
+            <div class="p-6 sm:p-7 flex flex-col justify-between flex-1 text-left">
+              <div>
+                <h3 class="text-2xl font-extrabold text-[#1f2937] font-['Outfit',_sans-serif] tracking-tight group-hover:text-[#612124] transition-colors leading-tight min-h-[32px] flex items-center">
+                  Sulur Growth Corridor
+                </h3>
+                <div class="text-[11px] font-bold text-[#c5a880] uppercase tracking-[0.18em] flex items-center gap-1.5 font-['Inter',_sans-serif] mt-2 mb-2">
+                  <i class="fas fa-location-dot text-[10px]"></i> SULUR, COIMBATORE
+                </div>
+                <p class="text-sm text-stone-600 font-normal leading-relaxed min-h-[44px]">
+                  Verified DTCP Approved Investment Land
+                </p>
               </div>
-              <p class="text-sm text-stone-600 font-normal leading-relaxed mt-1">
-                Verified DTCP Approved Investment Land
-              </p>
             </div>
           </div>
 
-          <!-- Card Footer -->
-          <div class="px-6 sm:px-7 pb-6 pt-2 flex items-center justify-between font-['Inter',_sans-serif]">
-            <span class="text-[11px] font-bold text-[#555555] tracking-[0.2em] uppercase">PLOTS</span>
-            <a href="#contact" class="text-[11px] font-bold text-[#c5a880] group-hover:text-[#612124] tracking-[0.2em] uppercase flex items-center gap-1 transition-all">
-              EXPLORE <span class="group-hover:translate-x-1 transition-transform inline-block">→</span>
-            </a>
+          <!-- Card Footer (Category Only - Individual Read More removed as requested) -->
+          <div class="px-6 sm:px-7 pb-6 pt-3 border-t border-stone-200/60 flex items-center justify-between font-['Inter',_sans-serif] mt-auto">
+            <span class="text-[11px] font-bold text-[#612124] tracking-[0.2em] uppercase">PLOTS &amp; SITES</span>
           </div>
         </div>
 
       </div>
 
-      <!-- Action Bottom Button: EXPLORE NOW with Square Border Structure -->
-      <div class="mt-4 reveal reveal-slide-up">
+      <!-- Action Bottom Button: Single Common READ MORE Button at Section End -->
+      <div class="mt-4 reveal reveal-slide-up text-center">
         <a href="#contact"
           class="inline-block border-2 border-[#612124] text-[#612124] hover:bg-[#612124] hover:text-white px-9 py-4 rounded-none font-bold text-xs tracking-[0.25em] transition-all duration-300 uppercase shadow-sm hover:shadow-md hover:-translate-y-0.5 font-['Inter',_sans-serif]">
-          EXPLORE NOW
+          READ MORE
         </a>
       </div>
 
@@ -841,185 +979,153 @@
   </section>
 
   <!-- ==========================================
-       WHY CHOOSE US SECTION (Dark Theme Background Image & White Glassy Cards Track)
+       SHOWCASE / WHY CHOOSE US SECTION (Matching Reference Image 5 Design)
        ========================================== -->
-  <section id="why-trust-section" class="py-24 sm:py-28 relative overflow-hidden bg-cover bg-center bg-no-repeat bg-fixed border-t border-b border-white/10"
-    style="background-image: linear-gradient(180deg, rgba(17, 10, 12, 0.92) 0%, rgba(32, 14, 18, 0.95) 100%), url('assets/images/hero-1.jpg');">
+  <section id="why-trust-section" class="py-24 sm:py-32 relative overflow-hidden bg-cover bg-center bg-no-repeat bg-fixed text-white"
+    style="background-image: linear-gradient(180deg, rgba(23, 13, 16, 0.93) 0%, rgba(35, 18, 22, 0.96) 100%), url('assets/images/hero-1.jpg');">
     
-    <!-- Ambient dark theme lighting effects -->
-    <div class="absolute top-1/4 left-10 w-96 h-96 bg-[#c5a880]/10 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute bottom-1/4 right-10 w-96 h-96 bg-[#8A1F36]/20 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- Ambient dark lighting glows -->
+    <div class="absolute top-1/4 left-10 w-96 h-96 bg-[#D4AF37]/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-1/4 right-10 w-96 h-96 bg-[#612124]/30 rounded-full blur-3xl pointer-events-none"></div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="max-w-[1550px] mx-auto px-6 sm:px-10 lg:px-16 relative z-10">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
 
-      <!-- Section Title Header -->
-      <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16 reveal reveal-slide-up">
-        <span class="text-[#c5a880] font-['Inter',_sans-serif] text-xs sm:text-sm font-bold uppercase tracking-[0.25em] mb-4 block">
-          WHY CHOOSE VIZHI INFRAGEN
-        </span>
-        <h2 class="text-3xl sm:text-5xl font-['Outfit',_sans-serif] text-white font-extrabold tracking-tight leading-tight mb-4">
-          Why Choose Vizhi Infragen
-        </h2>
-        
-      </div>
-
-      <!-- Horizontal Cards Scroll Track (Scrollbar Hidden via no-scrollbar) -->
-      <div id="why-choose-scroll-track" class="flex gap-6 sm:gap-8 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar py-4 px-2 -mx-2">
-
-        <!-- Horizontal Card 1 -->
-        <div class="min-w-[290px] sm:min-w-[350px] lg:min-w-[380px] max-w-[400px] flex-shrink-0 snap-start bg-white/95 backdrop-blur-md rounded-2xl border border-white/80 p-7 sm:p-8 shadow-xl hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
-          <div>
-            <!-- Icon Circle -->
-            <div class="w-14 h-14 rounded-full bg-[#612124]/10 text-[#612124] group-hover:bg-[#612124] group-hover:text-[#c5a880] flex items-center justify-center text-2xl transition-all duration-300 shadow-inner mb-6">
-              <i class="fa-solid fa-handshake"></i>
+        <!-- Left Column (Matching Image 5 Left Layout) -->
+        <div class="lg:col-span-5 space-y-6 text-left relative z-10">
+          
+          <!-- Circle Step Badge 02 (Matching Image 5) -->
+          <div class="flex items-center space-x-4">
+            <div class="w-14 h-14 rounded-full bg-white/10 border border-white/25 backdrop-blur-md flex items-center justify-center font-extrabold text-xl text-[#c5a880] font-['Outfit',sans-serif] shadow-lg">
+              02
             </div>
-
-            <!-- Title & Sandal Line -->
-            <h3 class="text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] tracking-tight mb-2 group-hover:text-[#8A1F36] transition-colors">
-              Your Trusted Real Estate Ally
-            </h3>
-            <div class="h-[2.5px] w-12 bg-[#c5a880] group-hover:w-full transition-all duration-500 mb-4"></div>
-
-            <!-- Description -->
-            <p class="text-[#555555] font-['Inter',_sans-serif] text-sm sm:text-base leading-relaxed font-normal">
-              Your goals are our top priority. Your real estate journey is our dedicated mission across Coimbatore.
-            </p>
+            <div class="w-1.5 h-1.5 rounded-full bg-[#c5a880]"></div>
+            <span class="text-xs font-bold uppercase tracking-[0.25em] text-stone-300 font-['Inter',sans-serif]">Vizhi Residence &amp; Projects</span>
           </div>
 
-          <!-- Bottom Watermark Icon -->
-          <div class="absolute -bottom-4 -right-4 text-[#612124]/[0.05] group-hover:text-[#c5a880]/15 text-7xl transition-colors pointer-events-none">
-            <i class="fa-solid fa-handshake"></i>
+          <!-- Large Background Watermark Text -->
+          <div class="relative">
+            <span class="absolute -top-10 left-0 text-6xl sm:text-8xl font-black text-white/[0.04] uppercase font-['Outfit',sans-serif] pointer-events-none select-none tracking-widest">
+              PROJECTS
+            </span>
+
+            <h2 class="text-3xl sm:text-5xl font-extrabold text-white leading-tight font-['Outfit',sans-serif] tracking-tight relative z-10">
+              Discover Modern Living At Vizhi Residence.
+            </h2>
           </div>
+
+          <p class="text-stone-300 font-medium text-base sm:text-lg leading-relaxed font-['Inter',sans-serif] max-w-xl">
+            Residence takes advantage of abundant sunlight by incorporating premium architecture, DTCP land approvals, NRI property management, and sustainable solar energy into its development.
+          </p>
+
+          <div class="pt-2">
+            <a href="#services" class="inline-flex items-center gap-3 bg-[#c5a880] hover:bg-[#b59870] text-[#231518] font-bold px-8 py-4 rounded-xl text-base transition-all duration-300 shadow-xl transform hover:-translate-y-1 hover:shadow-2xl">
+              <span>Explore More</span>
+              <i class="fa-solid fa-arrow-right text-sm"></i>
+            </a>
+          </div>
+
         </div>
 
-        <!-- Horizontal Card 2 -->
-        <div class="min-w-[290px] sm:min-w-[350px] lg:min-w-[380px] max-w-[400px] flex-shrink-0 snap-start bg-white/95 backdrop-blur-md rounded-2xl border border-white/80 p-7 sm:p-8 shadow-xl hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
-          <div>
-            <!-- Icon Circle -->
-            <div class="w-14 h-14 rounded-full bg-[#612124]/10 text-[#612124] group-hover:bg-[#612124] group-hover:text-[#c5a880] flex items-center justify-center text-2xl transition-all duration-300 shadow-inner mb-6">
-              <i class="fa-solid fa-shield-halved"></i>
+        <!-- Right Column: Horizontal Cards Scroll Track (Matching Image 5 Cut-Corner Card Style) -->
+        <div class="lg:col-span-7 relative">
+          
+          <div id="projects-horizontal-track" class="flex space-x-6 sm:space-x-8 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-8 pt-4 px-2 no-scrollbar">
+
+            <!-- Card 1: Vizhi Luxury Residence (Arch Cut Corner Top-Right) -->
+            <div class="min-w-[280px] sm:min-w-[340px] max-w-[360px] flex-shrink-0 snap-start group relative rounded-[24px] rounded-tr-[70px] overflow-hidden bg-stone-900 border border-white/20 shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div class="h-80 sm:h-96 w-full relative overflow-hidden">
+                <img src="assets/images/hero-3.jpg" alt="Vizhi Modern Luxury Residence" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div class="absolute inset-0 bg-gradient-to-t from-[#231518]/90 via-[#231518]/30 to-transparent"></div>
+                
+                <!-- Bottom Content inside Card -->
+                <div class="absolute bottom-0 inset-x-0 p-6 flex items-end justify-between">
+                  <div class="text-left space-y-1">
+                    <span class="text-[11px] font-bold uppercase tracking-widest text-[#c5a880] font-['Inter',sans-serif]">VILLA RESIDENCE</span>
+                    <h3 class="text-xl font-extrabold text-white font-['Outfit',sans-serif]">Kalapatti Grand Enclave</h3>
+                  </div>
+
+                  <!-- Floating Yellow Circle Arrow Button (Matching Image 5) -->
+                  <a href="#contact" class="w-11 h-11 rounded-full bg-[#c5a880] hover:bg-white text-[#231518] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform shrink-0">
+                    <i class="fa-solid fa-arrow-right text-sm"></i>
+                  </a>
+                </div>
+              </div>
             </div>
 
-            <!-- Title & Sandal Line -->
-            <h3 class="text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] tracking-tight mb-2 group-hover:text-[#8A1F36] transition-colors">
-              Transparent Dealings &amp; Clear Titles
-            </h3>
-            <div class="h-[2.5px] w-12 bg-[#c5a880] group-hover:w-full transition-all duration-500 mb-4"></div>
+            <!-- Card 2: Modern Glass Facade Estate (Arch Cut Corner Top-Right) -->
+            <div class="min-w-[280px] sm:min-w-[340px] max-w-[360px] flex-shrink-0 snap-start group relative rounded-[24px] rounded-tr-[70px] overflow-hidden bg-stone-900 border border-white/20 shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div class="h-80 sm:h-96 w-full relative overflow-hidden">
+                <img src="assets/images/hero-4.jpg" alt="Vizhi Contemporary Villa" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div class="absolute inset-0 bg-gradient-to-t from-[#231518]/90 via-[#231518]/30 to-transparent"></div>
+                
+                <!-- Bottom Content inside Card -->
+                <div class="absolute bottom-0 inset-x-0 p-6 flex items-end justify-between">
+                  <div class="text-left space-y-1">
+                    <span class="text-[11px] font-bold uppercase tracking-widest text-[#c5a880] font-['Inter',sans-serif]">GATED COMMUNITY</span>
+                    <h3 class="text-xl font-extrabold text-white font-['Outfit',sans-serif]">Western County Villa</h3>
+                  </div>
 
-            <!-- Description -->
-            <p class="text-[#555555] font-['Inter',_sans-serif] text-sm sm:text-base leading-relaxed font-normal">
-              100% verified DTCP and RERA documentation, legal title verification, and zero hidden surprises.
-            </p>
-          </div>
-
-          <!-- Bottom Watermark Icon -->
-          <div class="absolute -bottom-4 -right-4 text-[#612124]/[0.05] group-hover:text-[#c5a880]/15 text-7xl transition-colors pointer-events-none">
-            <i class="fa-solid fa-shield-halved"></i>
-          </div>
-        </div>
-
-        <!-- Horizontal Card 3 -->
-        <div class="min-w-[290px] sm:min-w-[350px] lg:min-w-[380px] max-w-[400px] flex-shrink-0 snap-start bg-white/95 backdrop-blur-md rounded-2xl border border-white/80 p-7 sm:p-8 shadow-xl hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
-          <div>
-            <!-- Icon Circle -->
-            <div class="w-14 h-14 rounded-full bg-[#612124]/10 text-[#612124] group-hover:bg-[#612124] group-hover:text-[#c5a880] flex items-center justify-center text-2xl transition-all duration-300 shadow-inner mb-6">
-              <i class="fa-solid fa-city"></i>
+                  <!-- Floating Yellow Circle Arrow Button -->
+                  <a href="#contact" class="w-11 h-11 rounded-full bg-[#c5a880] hover:bg-white text-[#231518] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform shrink-0">
+                    <i class="fa-solid fa-arrow-right text-sm"></i>
+                  </a>
+                </div>
+              </div>
             </div>
 
-            <!-- Title & Sandal Line -->
-            <h3 class="text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] tracking-tight mb-2 group-hover:text-[#8A1F36] transition-colors">
-              End-to-End Property Management
-            </h3>
-            <div class="h-[2.5px] w-12 bg-[#c5a880] group-hover:w-full transition-all duration-500 mb-4"></div>
+            <!-- Card 3: Sunlit Residential Complex (Arch Cut Corner Top-Right) -->
+            <div class="min-w-[280px] sm:min-w-[340px] max-w-[360px] flex-shrink-0 snap-start group relative rounded-[24px] rounded-tr-[70px] overflow-hidden bg-stone-900 border border-white/20 shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div class="h-80 sm:h-96 w-full relative overflow-hidden">
+                <img src="assets/images/hero-5.jpg" alt="Vizhi Sunlit Residence" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div class="absolute inset-0 bg-gradient-to-t from-[#231518]/90 via-[#231518]/30 to-transparent"></div>
+                
+                <!-- Bottom Content inside Card -->
+                <div class="absolute bottom-0 inset-x-0 p-6 flex items-end justify-between">
+                  <div class="text-left space-y-1">
+                    <span class="text-[11px] font-bold uppercase tracking-widest text-[#c5a880] font-['Inter',sans-serif]">COMMERCIAL HQ</span>
+                    <h3 class="text-xl font-extrabold text-white font-['Outfit',sans-serif]">Urbania Frontage Landmark</h3>
+                  </div>
 
-            <!-- Description -->
-            <p class="text-[#555555] font-['Inter',_sans-serif] text-sm sm:text-base leading-relaxed font-normal">
-              Complete tenant coordination, regular inspections, site maintenance, and secure NRI rent management.
-            </p>
-          </div>
-
-          <!-- Bottom Watermark Icon -->
-          <div class="absolute -bottom-4 -right-4 text-[#612124]/[0.05] group-hover:text-[#c5a880]/15 text-7xl transition-colors pointer-events-none">
-            <i class="fa-solid fa-city"></i>
-          </div>
-        </div>
-
-        <!-- Horizontal Card 4 -->
-        <div class="min-w-[290px] sm:min-w-[350px] lg:min-w-[380px] max-w-[400px] flex-shrink-0 snap-start bg-white/95 backdrop-blur-md rounded-2xl border border-white/80 p-7 sm:p-8 shadow-xl hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
-          <div>
-            <!-- Icon Circle -->
-            <div class="w-14 h-14 rounded-full bg-[#612124]/10 text-[#612124] group-hover:bg-[#612124] group-hover:text-[#c5a880] flex items-center justify-center text-2xl transition-all duration-300 shadow-inner mb-6">
-              <i class="fa-solid fa-chart-pie"></i>
+                  <!-- Floating Yellow Circle Arrow Button -->
+                  <a href="#contact" class="w-11 h-11 rounded-full bg-[#c5a880] hover:bg-white text-[#231518] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform shrink-0">
+                    <i class="fa-solid fa-arrow-right text-sm"></i>
+                  </a>
+                </div>
+              </div>
             </div>
 
-            <!-- Title & Sandal Line -->
-            <h3 class="text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] tracking-tight mb-2 group-hover:text-[#8A1F36] transition-colors">
-              Data-Driven Market Valuation
-            </h3>
-            <div class="h-[2.5px] w-12 bg-[#c5a880] group-hover:w-full transition-all duration-500 mb-4"></div>
+            <!-- Card 4: Daylight Land Plots (Arch Cut Corner Top-Right) -->
+            <div class="min-w-[280px] sm:min-w-[340px] max-w-[360px] flex-shrink-0 snap-start group relative rounded-[24px] rounded-tr-[70px] overflow-hidden bg-stone-900 border border-white/20 shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div class="h-80 sm:h-96 w-full relative overflow-hidden">
+                <img src="assets/images/land-development.jpg" alt="Vizhi Approved Plots" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div class="absolute inset-0 bg-gradient-to-t from-[#231518]/90 via-[#231518]/30 to-transparent"></div>
+                
+                <!-- Bottom Content inside Card -->
+                <div class="absolute bottom-0 inset-x-0 p-6 flex items-end justify-between">
+                  <div class="text-left space-y-1">
+                    <span class="text-[11px] font-bold uppercase tracking-widest text-[#c5a880] font-['Inter',sans-serif]">DTCP PLOTS</span>
+                    <h3 class="text-xl font-extrabold text-white font-['Outfit',sans-serif]">Saravanampatti Tech Corridor</h3>
+                  </div>
 
-            <!-- Description -->
-            <p class="text-[#555555] font-['Inter',_sans-serif] text-sm sm:text-base leading-relaxed font-normal">
-              Realistic property valuations backed by micro-market intelligence, eliminating artificial middleman markups.
-            </p>
-          </div>
-
-          <!-- Bottom Watermark Icon -->
-          <div class="absolute -bottom-4 -right-4 text-[#612124]/[0.05] group-hover:text-[#c5a880]/15 text-7xl transition-colors pointer-events-none">
-            <i class="fa-solid fa-chart-pie"></i>
-          </div>
-        </div>
-
-        <!-- Horizontal Card 5 -->
-        <div class="min-w-[290px] sm:min-w-[350px] lg:min-w-[380px] max-w-[400px] flex-shrink-0 snap-start bg-white/95 backdrop-blur-md rounded-2xl border border-white/80 p-7 sm:p-8 shadow-xl hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
-          <div>
-            <!-- Icon Circle -->
-            <div class="w-14 h-14 rounded-full bg-[#612124]/10 text-[#612124] group-hover:bg-[#612124] group-hover:text-[#c5a880] flex items-center justify-center text-2xl transition-all duration-300 shadow-inner mb-6">
-              <i class="fa-solid fa-location-dot"></i>
+                  <!-- Floating Yellow Circle Arrow Button -->
+                  <a href="#contact" class="w-11 h-11 rounded-full bg-[#c5a880] hover:bg-white text-[#231518] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform shrink-0">
+                    <i class="fa-solid fa-arrow-right text-sm"></i>
+                  </a>
+                </div>
+              </div>
             </div>
 
-            <!-- Title & Sandal Line -->
-            <h3 class="text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] tracking-tight mb-2 group-hover:text-[#8A1F36] transition-colors">
-              Local Coimbatore Presence
-            </h3>
-            <div class="h-[2.5px] w-12 bg-[#c5a880] group-hover:w-full transition-all duration-500 mb-4"></div>
-
-            <!-- Description -->
-            <p class="text-[#555555] font-['Inter',_sans-serif] text-sm sm:text-base leading-relaxed font-normal">
-              Deep ground network across Saravanampatti, Kalapatti, Avinashi Road &amp; prime Coimbatore growth corridors.
-            </p>
           </div>
 
-          <!-- Bottom Watermark Icon -->
-          <div class="absolute -bottom-4 -right-4 text-[#612124]/[0.05] group-hover:text-[#c5a880]/15 text-7xl transition-colors pointer-events-none">
-            <i class="fa-solid fa-location-dot"></i>
-          </div>
-        </div>
-
-        <!-- Horizontal Card 6 -->
-        <div class="min-w-[290px] sm:min-w-[350px] lg:min-w-[380px] max-w-[400px] flex-shrink-0 snap-start bg-white/95 backdrop-blur-md rounded-2xl border border-white/80 p-7 sm:p-8 shadow-xl hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group">
-          <div>
-            <!-- Icon Circle -->
-            <div class="w-14 h-14 rounded-full bg-[#612124]/10 text-[#612124] group-hover:bg-[#612124] group-hover:text-[#c5a880] flex items-center justify-center text-2xl transition-all duration-300 shadow-inner mb-6">
-              <i class="fa-solid fa-trophy"></i>
-            </div>
-
-            <!-- Title & Sandal Line -->
-            <h3 class="text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] tracking-tight mb-2 group-hover:text-[#8A1F36] transition-colors">
-              On-Time Construction &amp; Handover
-            </h3>
-            <div class="h-[2.5px] w-12 bg-[#c5a880] group-hover:w-full transition-all duration-500 mb-4"></div>
-
-            <!-- Description -->
-            <p class="text-[#555555] font-['Inter',_sans-serif] text-sm sm:text-base leading-relaxed font-normal">
-              Superior quality architectural construction with strict adherence to budget and on-time delivery guarantees.
-            </p>
+          <!-- Bottom Progress Bar Indicators (Matching Image 5) -->
+          <div class="flex items-center justify-center space-x-3 mt-6">
+            <div class="w-12 h-1 bg-[#c5a880] rounded-full"></div>
+            <div class="w-8 h-1 bg-white/20 rounded-full"></div>
+            <div class="w-8 h-1 bg-white/20 rounded-full"></div>
           </div>
 
-          <!-- Bottom Watermark Icon -->
-          <div class="absolute -bottom-4 -right-4 text-[#612124]/[0.05] group-hover:text-[#c5a880]/15 text-7xl transition-colors pointer-events-none">
-            <i class="fa-solid fa-trophy"></i>
-          </div>
         </div>
 
       </div>
@@ -1028,748 +1134,498 @@
   </section>
 
   <!-- ==========================================
-       OUR REAL ESTATE SERVICES IN COIMBATORE
+       OUR REAL ESTATE SERVICES IN COIMBATORE (10 Services Single Row Staggered Slider)
        ========================================== -->
-  <section id="services" class="py-24 overflow-hidden relative bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
-      <div class="text-center max-w-2xl mx-auto reveal reveal-slide-up">
-        <span class="text-[#c5a880] font-sans font-semibold tracking-[1.75px] text-sm uppercase mb-2 block">
+  <section id="services" class="py-24 overflow-hidden relative bg-[#fdfbf7]">
+    <div class="max-w-[1550px] mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header (Centered Title, Arrow buttons removed as requested) -->
+      <div class="text-center max-w-3xl mx-auto mb-12 reveal reveal-slide-up">
+        <span class="text-[#c5a880] font-['Inter',sans-serif] font-bold tracking-[0.2em] text-xs sm:text-sm uppercase mb-2 block">
           EXPERT REAL ESTATE SOLUTIONS
         </span>
-        <h2 class="text-3xl sm:text-[40px] font-['Outfit',_sans-serif] text-[#612124] font-bold leading-[48px] mb-2">
+        <h2 class="text-3xl sm:text-4xl lg:text-[44px] font-['Outfit',_sans-serif] text-[#612124] font-extrabold leading-tight">
           Our Real Estate Services in Coimbatore
         </h2>
+      </div>
+
+      <!-- Single Horizontal Row Container with Staggered (Up & Center) Cards -->
+      <div class="relative w-full pt-8 pb-12">
         
-      </div>
-    </div>
+        <!-- Left & Right Floating Arrow Buttons Overlay on Track End -->
+        <button id="services-track-left"
+          class="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/95 backdrop-blur-md text-[#612124] border border-[#612124]/30 hover:bg-[#612124] hover:text-white shadow-2xl flex items-center justify-center transition-all cursor-pointer">
+          <i class="fa-solid fa-chevron-left text-lg"></i>
+        </button>
 
-    <!-- Infinite Scroll Marquee Cards Wrapper (Glassy Transparent Cards with Square Borders) -->
-    <div class="space-y-8">
+        <button id="services-track-right"
+          class="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/95 backdrop-blur-md text-[#612124] border border-[#612124]/30 hover:bg-[#612124] hover:text-white shadow-2xl flex items-center justify-center transition-all cursor-pointer">
+          <i class="fa-solid fa-chevron-right text-lg"></i>
+        </button>
 
-      <!-- Row 1: Services 1 to 5 (Moving Left to Right) -->
-      <div class="marquee-container">
-        <div class="marquee-track-ltr">
+        <!-- The 10-Card Horizontal Infinite Auto-Moving & Floating Marquee Track -->
+        <div id="services-track"
+          class="flex items-stretch overflow-hidden no-scrollbar px-0 py-6 min-h-[560px] relative">
+          
+          <div class="infinite-marquee-track flex items-stretch space-x-6 sm:space-x-8 pr-6 sm:pr-8">
 
-          <!-- Card 1: Land Sales -->
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/land-development.jpg" alt="Land Sales Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-layer-group"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                COIMBATORE PLOTS
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Land Sales</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Verified plots, agricultural land, and development sites across Coimbatore, listed with clear titles
-                  and fair market pricing.
+            <!-- ── SET 1: CARDS 1 to 10 ── -->
+
+            <!-- CARD 1 (Land Sales) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 0s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-1.jpg" alt="Land Sales Coimbatore" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Land Sales
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  Coimbatore Plots &amp; Sites
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-shield-halved text-[#c5a880] mr-1"></i> Verified Titles</span>
+                  <span><i class="fa-solid fa-map-location-dot text-[#c5a880] mr-1"></i> Fair Pricing</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  Verified plots, agricultural land, and development sites across Coimbatore, listed with clear titles and fair market pricing.
                 </p>
               </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
             </div>
-          </div>
 
-          <!-- Card 2: Land Purchase Assistance -->
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/handshake-deal.jpg" alt="Land Purchase Assistance Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-handshake"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                BUYER SUPPORT
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Land Purchase Assistance</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  End-to-end buyer support, site shortlisting, due diligence, price negotiation, and title verification
-                  so you invest with confidence.
+            <!-- CARD 2 (Land Purchase Assistance) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 0.6s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-2.jpg" alt="Land Purchase Assistance" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Land Purchase Assistance
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  End-to-End Buyer Support
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-handshake text-[#c5a880] mr-1"></i> Due Diligence</span>
+                  <span><i class="fa-solid fa-file-contract text-[#c5a880] mr-1"></i> Title Verification</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  End-to-end buyer support, including site shortlisting, due diligence, price negotiation, and title verification, so you invest with confidence.
                 </p>
               </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
             </div>
-          </div>
 
-          <!-- Card 3: Property Management -->
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/about-property-management.jpg" alt="Property Management Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-city"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                ASSET SECURITY
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Property Management</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Handling residential and commercial assets with care: tenant coordination, rent collection,
-                  maintenance, and regular property inspections.
+            <!-- CARD 3 (Property Management) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 1.2s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-3.jpg" alt="Property Management" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Property Management
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  Asset Security &amp; Care
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-building text-[#c5a880] mr-1"></i> Tenant Coordination</span>
+                  <span><i class="fa-solid fa-screwdriver-wrench text-[#c5a880] mr-1"></i> Regular Audits</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  As an experienced property management company in Coimbatore, we handle residential and commercial assets with care: tenant coordination, rent collection, maintenance, and regular property inspections.
                 </p>
               </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
             </div>
-          </div>
 
-          <!-- Card 4: NRI Property Management -->
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/hero-2.jpg" alt="NRI Property Management Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-globe"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                REMOTE PROTECTION
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  NRI Property Management</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Dedicated NRI service protecting remote properties while abroad — secure rent handling,
-                  anti-encroachment checks, and transparent reporting.
+            <!-- CARD 4 (NRI Property Management) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 1.8s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-4.jpg" alt="NRI Property Management" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  NRI Property Management
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  Dedicated Remote Protection
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-globe text-[#c5a880] mr-1"></i> Global Protection</span>
+                  <span><i class="fa-solid fa-chart-pie text-[#c5a880] mr-1"></i> Transparent Reporting</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  A dedicated, NRI-focused service that protects your property while you're abroad — secure rent handling, encroachment monitoring, document management, and transparent reporting you can trust from anywhere in the world.
                 </p>
               </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
             </div>
-          </div>
 
-          <!-- Card 5: Building Construction -->
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/hero-1.jpg" alt="Building Construction Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-helmet-safety"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                TURNKEY PROJECTS
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Building Construction</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Reliable construction support for homes, commercial units, and rental developments, managed with
-                  quality control and on-time delivery.
+            <!-- CARD 5 (Building Construction) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 2.4s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-5.jpg" alt="Building Construction" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Building Construction
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  Turnkey Architectural Construction
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-helmet-safety text-[#c5a880] mr-1"></i> Quality Control</span>
+                  <span><i class="fa-solid fa-clock text-[#c5a880] mr-1"></i> On-Time Delivery</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  Reliable construction support for homes, commercial units, and rental developments, managed with quality control and on-time delivery.
                 </p>
               </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
             </div>
-          </div>
 
-          <!-- Loop Duplicates 1-5 -->
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/land-development.jpg" alt="Land Sales Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-layer-group"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                COIMBATORE PLOTS
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Land Sales</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Verified plots, agricultural land, and development sites across Coimbatore, listed with clear titles
-                  and fair market pricing.
+            <!-- CARD 6 (Building Valuation) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 3s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-6.jpg" alt="Building Valuation" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Building Valuation
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  Market-Aligned Valuation Reports
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-chart-line text-[#c5a880] mr-1"></i> Price Intelligence</span>
+                  <span><i class="fa-solid fa-scale-balanced text-[#c5a880] mr-1"></i> Legal &amp; Loan Reports</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  Accurate, market-aligned valuations for sale, purchase, loan, or legal purposes, prepared with local price intelligence.
                 </p>
               </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
             </div>
-          </div>
 
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/handshake-deal.jpg" alt="Land Purchase Assistance Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-handshake"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                BUYER SUPPORT
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Land Purchase Assistance</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  End-to-end buyer support, site shortlisting, due diligence, price negotiation, and title verification
-                  so you invest with confidence.
+            <!-- CARD 7 (Land Approval and Documentation) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 0.3s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-7.jpg" alt="Land Approval and Documentation" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Land Approval and Documentation
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  DTCP / RERA / Legal Clearances
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-stamp text-[#c5a880] mr-1"></i> DTCP Approvals</span>
+                  <span><i class="fa-solid fa-file-signature text-[#c5a880] mr-1"></i> Registration Support</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  Guidance through DTCP/local body approvals, registrations, and paperwork, reducing delays and compliance risk.
                 </p>
               </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
             </div>
-          </div>
 
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/about-property-management.jpg" alt="Property Management Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-city"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                ASSET SECURITY
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Property Management</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Handling residential and commercial assets with care: tenant coordination, rent collection,
-                  maintenance, and regular property inspections.
+            <!-- CARD 8 (Land Conversion Services) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 0.9s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-8.jpg" alt="Land Conversion Services" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Land Conversion Services
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  Agricultural to Layout Conversion
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-wheat-awn text-[#c5a880] mr-1"></i> Zoning Change</span>
+                  <span><i class="fa-solid fa-certificate text-[#c5a880] mr-1"></i> Legal Compliance</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  Professional assistance converting agricultural land to residential or commercial use, handled correctly the first time.
                 </p>
               </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
             </div>
-          </div>
 
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/hero-2.jpg" alt="NRI Property Management Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-globe"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                REMOTE PROTECTION
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  NRI Property Management</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Dedicated NRI service protecting remote properties while abroad — secure rent handling,
-                  anti-encroachment checks, and transparent reporting.
+            <!-- CARD 9 (Rental Services) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 1.5s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-9.jpg" alt="Rental Services" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Rental Services
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  Leasing &amp; Tenant Sourcing
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-key text-[#c5a880] mr-1"></i> Tenant Sourcing</span>
+                  <span><i class="fa-solid fa-file-pen text-[#c5a880] mr-1"></i> Property Finding</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  Tenant sourcing and rental management for owners, plus property-finding help for tenants seeking homes, offices, and commercial space.
                 </p>
               </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
             </div>
-          </div>
 
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/hero-1.jpg" alt="Building Construction Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-helmet-safety"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                TURNKEY PROJECTS
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Building Construction</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Reliable construction support for homes, commercial units, and rental developments, managed with
-                  quality control and on-time delivery.
+            <!-- CARD 10 (Warehouse and Corporate Solutions) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 2.1s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-10.jpg" alt="Warehouse and Corporate Solutions" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Warehouse and Corporate Solutions
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  Industrial &amp; Corporate Spaces
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-warehouse text-[#c5a880] mr-1"></i> Warehousing &amp; Godowns</span>
+                  <span><i class="fa-solid fa-briefcase text-[#c5a880] mr-1"></i> Corporate Spaces</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  Industrial and commercial real estate support for businesses needing warehousing, godowns, and corporate spaces along Coimbatore's key logistics routes.
                 </p>
               </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
+            </div>
+
+
+            <!-- ── SET 2: DUPLICATED FOR SEAMLESS INFINITE MARQUEE LOOP ── -->
+
+            <!-- CARD 1 (Land Sales) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 0s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-1.jpg" alt="Land Sales Coimbatore" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Land Sales
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  Coimbatore Plots &amp; Sites
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-shield-halved text-[#c5a880] mr-1"></i> Verified Titles</span>
+                  <span><i class="fa-solid fa-map-location-dot text-[#c5a880] mr-1"></i> Fair Pricing</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  Verified plots, agricultural land, and development sites across Coimbatore, listed with clear titles and fair market pricing.
+                </p>
               </div>
             </div>
+
+            <!-- CARD 2 (Land Purchase Assistance) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 0.6s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-2.jpg" alt="Land Purchase Assistance" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Land Purchase Assistance
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  End-to-End Buyer Support
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-handshake text-[#c5a880] mr-1"></i> Due Diligence</span>
+                  <span><i class="fa-solid fa-file-contract text-[#c5a880] mr-1"></i> Title Verification</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  End-to-end buyer support, including site shortlisting, due diligence, price negotiation, and title verification, so you invest with confidence.
+                </p>
+              </div>
+            </div>
+
+            <!-- CARD 3 (Property Management) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 1.2s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-3.jpg" alt="Property Management" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Property Management
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  Asset Security &amp; Care
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-building text-[#c5a880] mr-1"></i> Tenant Coordination</span>
+                  <span><i class="fa-solid fa-screwdriver-wrench text-[#c5a880] mr-1"></i> Regular Audits</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  As an experienced property management company in Coimbatore, we handle residential and commercial assets with care: tenant coordination, rent collection, maintenance, and regular property inspections.
+                </p>
+              </div>
+            </div>
+
+            <!-- CARD 4 (NRI Property Management) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 1.8s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-4.jpg" alt="NRI Property Management" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  NRI Property Management
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  Dedicated Remote Protection
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-globe text-[#c5a880] mr-1"></i> Global Protection</span>
+                  <span><i class="fa-solid fa-chart-pie text-[#c5a880] mr-1"></i> Transparent Reporting</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  A dedicated, NRI-focused service that protects your property while you're abroad — secure rent handling, encroachment monitoring, document management, and transparent reporting you can trust from anywhere in the world.
+                </p>
+              </div>
+            </div>
+
+            <!-- CARD 5 (Building Construction) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 2.4s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-5.jpg" alt="Building Construction" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Building Construction
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  Turnkey Architectural Construction
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-helmet-safety text-[#c5a880] mr-1"></i> Quality Control</span>
+                  <span><i class="fa-solid fa-clock text-[#c5a880] mr-1"></i> On-Time Delivery</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  Reliable construction support for homes, commercial units, and rental developments, managed with quality control and on-time delivery.
+                </p>
+              </div>
+            </div>
+
+            <!-- CARD 6 (Building Valuation) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 3s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-6.jpg" alt="Building Valuation" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Building Valuation
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  Market-Aligned Valuation Reports
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-chart-line text-[#c5a880] mr-1"></i> Price Intelligence</span>
+                  <span><i class="fa-solid fa-scale-balanced text-[#c5a880] mr-1"></i> Legal &amp; Loan Reports</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  Accurate, market-aligned valuations for sale, purchase, loan, or legal purposes, prepared with local price intelligence.
+                </p>
+              </div>
+            </div>
+
+            <!-- CARD 7 (Land Approval and Documentation) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 0.3s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-7.jpg" alt="Land Approval and Documentation" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Land Approval and Documentation
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  DTCP / RERA / Legal Clearances
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-stamp text-[#c5a880] mr-1"></i> DTCP Approvals</span>
+                  <span><i class="fa-solid fa-file-signature text-[#c5a880] mr-1"></i> Registration Support</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  Guidance through DTCP/local body approvals, registrations, and paperwork, reducing delays and compliance risk.
+                </p>
+              </div>
+            </div>
+
+            <!-- CARD 8 (Land Conversion Services) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 0.9s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-8.jpg" alt="Land Conversion Services" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Land Conversion Services
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  Agricultural to Layout Conversion
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-wheat-awn text-[#c5a880] mr-1"></i> Zoning Change</span>
+                  <span><i class="fa-solid fa-certificate text-[#c5a880] mr-1"></i> Legal Compliance</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  Professional assistance converting agricultural land to residential or commercial use, handled correctly the first time.
+                </p>
+              </div>
+            </div>
+
+            <!-- CARD 9 (Rental Services) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 1.5s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-9.jpg" alt="Rental Services" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Rental Services
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  Leasing &amp; Tenant Sourcing
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-key text-[#c5a880] mr-1"></i> Tenant Sourcing</span>
+                  <span><i class="fa-solid fa-file-pen text-[#c5a880] mr-1"></i> Property Finding</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  Tenant sourcing and rental management for owners, plus property-finding help for tenants seeking homes, offices, and commercial space.
+                </p>
+              </div>
+            </div>
+
+            <!-- CARD 10 (Warehouse and Corporate Solutions) -->
+            <div class="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80" style="animation-delay: 2.1s;">
+              <div class="w-full flex flex-col items-center">
+                <div class="w-full aspect-[4/3] rounded-[18px] overflow-hidden shadow-md border border-stone-200 bg-stone-900 mb-5">
+                  <img src="assets/images/service-10.jpg" alt="Warehouse and Corporate Solutions" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                </div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-[#612124] font-['Outfit',_sans-serif] mb-1">
+                  Warehouse and Corporate Solutions
+                </h3>
+                <span class="text-xs font-bold text-[#c5a880] uppercase tracking-[0.18em] font-['Inter',_sans-serif] mb-3 block">
+                  Industrial &amp; Corporate Spaces
+                </span>
+                <div class="flex items-center justify-center gap-4 text-xs font-semibold text-stone-500 py-2 border-t border-b border-stone-200/80 w-full mb-3 font-['Inter',_sans-serif]">
+                  <span><i class="fa-solid fa-warehouse text-[#c5a880] mr-1"></i> Warehousing &amp; Godowns</span>
+                  <span><i class="fa-solid fa-briefcase text-[#c5a880] mr-1"></i> Corporate Spaces</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-600 font-normal leading-relaxed font-['Inter',_sans-serif]">
+                  Industrial and commercial real estate support for businesses needing warehousing, godowns, and corporate spaces along Coimbatore's key logistics routes.
+                </p>
+              </div>
+            </div>
+
           </div>
+        </div>
 
         </div>
       </div>
 
-      <!-- Row 2: Services 6 to 10 (Moving Right to Left) -->
-      <div class="marquee-container">
-        <div class="marquee-track-rtl">
-
-          <!-- Card 6: Building Valuation -->
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/hero-3.jpg" alt="Building Valuation Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-chart-line"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                VALUATION REPORTS
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Building Valuation</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Accurate, market-aligned valuations for sale, purchase, loan, or legal purposes, prepared with local
-                  price intelligence.
-                </p>
-              </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 7: Land Approval & Docs -->
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/hero-4.jpg" alt="Land Approval Docs Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-file-signature"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                LEGAL COMPLIANCE
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Land Approval &amp; Docs</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Guidance through DTCP/local body approvals, registrations, patta transfer, and legal paperwork,
-                  reducing delays and compliance risk.
-                </p>
-              </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 8: Land Conversion -->
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/plot-layout-1.jpg" alt="Land Conversion Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-wheat-awn"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                AGRI TO RESIDENTIAL
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Land Conversion</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Professional assistance converting agricultural land to residential or commercial layout use, handled
-                  correctly the first time.
-                </p>
-              </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 9: Rental Services -->
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/plot-layout-2.jpg" alt="Rental Services Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-key"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                TENANT &amp; LEASING
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Rental Services</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Tenant sourcing and rental management for owners, plus property-finding help for tenants seeking
-                  homes, offices, and commercial space.
-                </p>
-              </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 10: Warehouse & Corporate -->
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/plot-layout-3.jpg" alt="Warehouse Corporate Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-warehouse"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                COMMERCIAL SPACES
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Warehouse &amp; Corporate</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Industrial and commercial real estate support for businesses needing warehousing, godowns, and
-                  corporate spaces along logistics routes.
-                </p>
-              </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Loop Duplicates 6-10 -->
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/hero-3.jpg" alt="Building Valuation Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-chart-line"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                VALUATION REPORTS
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Building Valuation</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Accurate, market-aligned valuations for sale, purchase, loan, or legal purposes, prepared with local
-                  price intelligence.
-                </p>
-              </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/hero-4.jpg" alt="Land Approval Docs Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-file-signature"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                LEGAL COMPLIANCE
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Land Approval &amp; Docs</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Guidance through DTCP/local body approvals, registrations, patta transfer, and legal paperwork,
-                  reducing delays and compliance risk.
-                </p>
-              </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/plot-layout-1.jpg" alt="Land Conversion Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-wheat-awn"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                AGRI TO RESIDENTIAL
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Land Conversion</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Professional assistance converting agricultural land to residential or commercial layout use, handled
-                  correctly the first time.
-                </p>
-              </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/plot-layout-2.jpg" alt="Rental Services Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-key"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                TENANT &amp; LEASING
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Rental Services</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Tenant sourcing and rental management for owners, plus property-finding help for tenants seeking
-                  homes, offices, and commercial space.
-                </p>
-              </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="w-[340px] sm:w-[380px] h-[390px] shrink-0 service-card-float bg-white/85 backdrop-blur-md rounded-md border border-white/80 shadow-[0_15px_35px_-10px_rgba(97,33,36,0.15)] hover:shadow-2xl hover:border-[#c5a880] hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden group">
-            <div class="relative h-[160px] w-full overflow-hidden shrink-0">
-              <img src="assets/images/plot-layout-3.jpg" alt="Warehouse Corporate Coimbatore"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              <div
-                class="absolute bottom-3 left-4 w-11 h-11 rounded-md bg-[#612124] text-[#c5a880] border border-[#c5a880]/50 flex items-center justify-center font-bold text-lg shadow-xl group-hover:bg-[#c5a880] group-hover:text-[#612124] transition-colors duration-300">
-                <i class="fa-solid fa-warehouse"></i>
-              </div>
-              <span
-                class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-[#c5a880] border border-[#c5a880]/40 text-[10px] uppercase font-bold px-3 py-1 rounded-sm tracking-wider shadow-md">
-                COMMERCIAL SPACES
-              </span>
-            </div>
-            <div class="p-5 flex flex-col justify-between flex-1 bg-white/60 backdrop-blur-sm">
-              <div>
-                <h3
-                  class="text-[#612124] font-['Outfit',_sans-serif] text-lg font-bold leading-snug mb-1.5 group-hover:text-[#8A1F36] transition-colors">
-                  Warehouse &amp; Corporate</h3>
-                <p class="text-[#334155] font-['Inter',_sans-serif] text-xs leading-relaxed my-1">
-                  Industrial and commercial real estate support for businesses needing warehousing, godowns, and
-                  corporate spaces along logistics routes.
-                </p>
-              </div>
-              <div class="pt-3 border-t border-gray-200/80 flex items-center justify-end mt-auto">
-                <a href="#contact"
-                  class="inline-flex items-center gap-1.5 text-[#612124] hover:text-[#c5a880] font-bold text-xs transition-colors group/btn">
-                  <span>Read More</span>
-                  <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-
-        </div>
+      <!-- Action Bottom Button: Single Common READ MORE Button at Section End -->
+      <div class="mt-4 text-center reveal reveal-slide-up">
+        <a href="#contact"
+          class="inline-block border-2 border-[#612124] text-[#612124] hover:bg-[#612124] hover:text-white px-9 py-4 rounded-none font-bold text-xs tracking-[0.25em] transition-all duration-300 uppercase shadow-sm hover:shadow-md hover:-translate-y-0.5 font-['Inter',_sans-serif]">
+          READ MORE
+        </a>
       </div>
 
     </div>
@@ -1786,12 +1642,12 @@
       <!-- Left Column Text -->
       <div class="pt-[4.8px] flex flex-col gap-[12.8px] items-start justify-start relative reveal reveal-slide-right">
         <div
-          class="text-[#c5a880] text-left font-['Poppins',_sans-serif] text-sm leading-[22px] font-semibold uppercase relative flex items-center justify-start tracking-[1.75px]">
+          class="text-[#c5a880] text-left font-['Inter',_sans-serif] text-sm leading-[22px] font-semibold uppercase relative flex items-center justify-start tracking-[1.75px]">
           WHY TRUST US
         </div>
         <div class="flex flex-col gap-0 items-start justify-start self-stretch shrink-0 relative">
           <h2
-            class="text-[#612124] text-left font-['Outfit',_sans-serif] text-[36px] sm:text-[40px] leading-[44px] sm:leading-[48px] font-bold relative self-stretch flex items-center justify-start">
+            class="text-[#612124] text-left font-['Inter',_sans-serif] text-[36px] sm:text-[40px] leading-[44px] sm:leading-[48px] font-bold relative self-stretch flex items-center justify-start">
             Built on Experience, Run on<br />Trust
           </h2>
         </div>
@@ -1962,9 +1818,11 @@
     <div
       class="pb-10 w-full shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 w-full max-w-[1440px] px-6 sm:px-10 lg:px-16 relative z-10 mx-auto">
       <!-- Col 1: Brand & Tagline -->
-      <div class="flex flex-col gap-2.5 items-start justify-start relative text-left">
-        <img class="shrink-0 w-[80px] h-[52px] relative object-contain" src="vizhi-infragen-realtors-logo0.png"
-          alt="Vizhi Infragen Realtors Logo" />
+      <div class="flex flex-col gap-3 items-start justify-start relative text-left">
+        <a href="#home" class="inline-block hover:scale-105 transition-transform duration-300">
+          <img class="shrink-0 w-[130px] h-[72px] sm:w-[150px] sm:h-[80px] relative object-contain footer-logo-img" src="vizhi-infragen-realtors-logo-white.png"
+            alt="Vizhi Infragen Realtors Logo" />
+        </a>
         <div class="flex flex-col gap-0 items-start justify-start shrink-0 max-w-[260px] relative text-left">
           <p
             class="text-[#9b98a1] text-left font-['Inter',_sans-serif] text-xs leading-[18px] font-normal relative block">
@@ -1987,7 +1845,7 @@
       <!-- Col 2: Company Links -->
       <div class="flex flex-col gap-2 items-start justify-start relative">
         <div
-          class="text-[#ffffff] text-left font-['Outfit-Bold',_sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
+          class="text-[#ffffff] text-left font-['Inter',_sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
           Company
         </div>
         <a href="#about"
@@ -2011,7 +1869,7 @@
       <!-- Col 3: Services Links -->
       <div class="flex flex-col gap-2 items-start justify-start relative">
         <div
-          class="text-[#ffffff] text-left font-['Outfit-Bold',_sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
+          class="text-[#ffffff] text-left font-['Inter',_sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
           Services
         </div>
         <a href="#services"
@@ -2035,7 +1893,7 @@
       <!-- Col 4: Contact Info -->
       <div class="flex flex-col gap-2 items-start justify-start relative">
         <div
-          class="text-[#ffffff] text-left font-['Outfit-Bold',_sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
+          class="text-[#ffffff] text-left font-['Inter',_sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
           Contact Us
         </div>
         <a href="mailto:srissa2006@gmail.com?subject=Inquiry%20Regarding%20Coimbatore%20Real%20Estate%20Properties&body=Hii!%20I'm%20interested%20can%20i%20know%20about%20more%20details"
@@ -2054,7 +1912,7 @@
       <!-- Col 5: Find Us Google Map -->
       <div class="flex flex-col gap-2 items-start justify-start relative w-full">
         <div
-          class="text-[#ffffff] text-left font-['Outfit-Bold',_sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
+          class="text-[#ffffff] text-left font-['Inter',_sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
           Find Us
         </div>
         <div

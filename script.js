@@ -1,83 +1,132 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // ==========================================
-  // 1. HERO 7-IMAGE CARD CAROUSEL & VIDEO MODAL CONTROLLER
-  // ==========================================
-  const heroCardSlides = document.querySelectorAll('.hero-card-slide');
-  const dotsContainer = document.getElementById('hero-carousel-dots');
-  let currentCardIndex = 0;
-
-  if (heroCardSlides.length > 0) {
-    // Populate Dots
-    if (dotsContainer) {
-      dotsContainer.innerHTML = '';
-      heroCardSlides.forEach((_, idx) => {
-        const dot = document.createElement('button');
-        dot.className = `w-2 h-2 rounded-full transition-all duration-300 ${idx === 0 ? 'w-6 bg-[#c5a880]' : 'bg-white/50'}`;
-        dot.setAttribute('aria-label', `Go to slide ${idx + 1}`);
-        dot.addEventListener('click', () => setHeroCardSlide(idx));
-        dotsContainer.appendChild(dot);
-      });
-    }
-
-    function setHeroCardSlide(index) {
-      heroCardSlides.forEach((slide, idx) => {
-        if (idx === index) {
-          slide.classList.add('active');
-          slide.style.opacity = '1';
-        } else {
-          slide.classList.remove('active');
-          slide.style.opacity = '0';
-        }
-      });
-
-      if (dotsContainer) {
-        const dots = dotsContainer.querySelectorAll('button');
-        dots.forEach((dot, idx) => {
-          if (idx === index) {
-            dot.className = 'w-6 h-2 rounded-full bg-[#c5a880] transition-all duration-300';
-          } else {
-            dot.className = 'w-2 h-2 rounded-full bg-white/50 transition-all duration-300';
-          }
-        });
-      }
-      currentCardIndex = index;
-    }
-
-    // Auto rotate every 2.0 seconds for a pleasant, smooth pace
-    setInterval(() => {
-      const nextIndex = (currentCardIndex + 1) % heroCardSlides.length;
-      setHeroCardSlide(nextIndex);
-    }, 2000);
-  }
-
-  // Video Popup Modal Controller
-  const openVideoBtn = document.getElementById('open-video-modal');
-  const closeVideoBtn = document.getElementById('close-video-modal');
+// ==========================================
+// GLOBAL VIDEO POPUP MODAL CONTROLLERS
+// ==========================================
+window.openVideoModal = function() {
   const videoModal = document.getElementById('hero-video-modal');
   const modalVideoPlayer = document.getElementById('modal-video-player');
-
-  function openVideoModal() {
-    if (videoModal && modalVideoPlayer) {
+  if (videoModal) {
+    videoModal.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+    videoModal.classList.add('flex');
+    setTimeout(() => {
       videoModal.classList.remove('opacity-0', 'pointer-events-none');
+    }, 10);
+    if (modalVideoPlayer) {
       modalVideoPlayer.currentTime = 0;
       modalVideoPlayer.play().catch(e => console.log('Video play error:', e));
-      document.body.style.overflow = 'hidden';
     }
+    document.body.style.overflow = 'hidden';
   }
+};
 
-  function closeVideoModal() {
-    if (videoModal && modalVideoPlayer) {
-      videoModal.classList.add('opacity-0', 'pointer-events-none');
+window.closeVideoModal = function() {
+  const videoModal = document.getElementById('hero-video-modal');
+  const modalVideoPlayer = document.getElementById('modal-video-player');
+  if (videoModal) {
+    videoModal.classList.add('opacity-0', 'pointer-events-none');
+    setTimeout(() => {
+      videoModal.classList.add('hidden');
+      videoModal.classList.remove('flex');
+    }, 300);
+    if (modalVideoPlayer) {
       modalVideoPlayer.pause();
-      document.body.style.overflow = '';
     }
+    document.body.style.overflow = '';
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  // ==========================================
+  // 1. HERO DAYLIGHT CAROUSEL CONTROLLER
+  // ==========================================
+  const heroSlides = document.querySelectorAll('.hero-slide');
+  const heroDots = document.querySelectorAll('.hero-dot');
+  const heroPrevBtn = document.getElementById('hero-prev');
+  const heroNextBtn = document.getElementById('hero-next');
+  let currentHeroSlide = 0;
+  let heroInterval = null;
+
+  function setHeroSlide(index) {
+    if (!heroSlides.length) return;
+    currentHeroSlide = (index + heroSlides.length) % heroSlides.length;
+
+    heroSlides.forEach((slide, idx) => {
+      if (idx === currentHeroSlide) {
+        slide.classList.remove('opacity-0', 'z-0');
+        slide.classList.add('opacity-100', 'z-10');
+      } else {
+        slide.classList.remove('opacity-100', 'z-10');
+        slide.classList.add('opacity-0', 'z-0');
+      }
+    });
+
+    heroDots.forEach((dot, idx) => {
+      if (idx === currentHeroSlide) {
+        dot.className = 'hero-dot w-9 h-2.5 rounded-full bg-[#c5a880] transition-all duration-300';
+      } else {
+        dot.className = 'hero-dot w-2.5 h-2.5 rounded-full bg-white/40 hover:bg-white/80 transition-all duration-300';
+      }
+    });
+
+    // Re-trigger text float-down and float-up animations on every slide change
+    const animatedElements = document.querySelectorAll('#home .animate-float-down, #home .animate-float-up');
+    animatedElements.forEach(el => {
+      el.style.animation = 'none';
+      el.offsetHeight; // trigger DOM reflow
+      el.style.animation = '';
+    });
   }
 
-  if (openVideoBtn) openVideoBtn.addEventListener('click', openVideoModal);
-  if (closeVideoBtn) closeVideoBtn.addEventListener('click', closeVideoModal);
+  function startHeroAutoplay() {
+    stopHeroAutoplay();
+    heroInterval = setInterval(() => {
+      setHeroSlide(currentHeroSlide + 1);
+    }, 4500);
+  }
+
+  function stopHeroAutoplay() {
+    if (heroInterval) clearInterval(heroInterval);
+  }
+
+  if (heroSlides.length > 0) {
+    setHeroSlide(0);
+    startHeroAutoplay();
+
+    if (heroPrevBtn) {
+      heroPrevBtn.addEventListener('click', () => {
+        setHeroSlide(currentHeroSlide - 1);
+        startHeroAutoplay();
+      });
+    }
+
+    if (heroNextBtn) {
+      heroNextBtn.addEventListener('click', () => {
+        setHeroSlide(currentHeroSlide + 1);
+        startHeroAutoplay();
+      });
+    }
+
+    heroDots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        setHeroSlide(idx);
+        startHeroAutoplay();
+      });
+    });
+  }
+
+  const openVideoBtns = document.querySelectorAll('#open-hero-video, #open-hero-video-lg, #open-video-modal, .hero-play-btn');
+  const closeVideoBtn = document.getElementById('close-video-modal');
+  const videoModal = document.getElementById('hero-video-modal');
+
+  openVideoBtns.forEach(btn => btn.addEventListener('click', window.openVideoModal));
+  if (closeVideoBtn) closeVideoBtn.addEventListener('click', window.closeVideoModal);
   if (videoModal) {
     videoModal.addEventListener('click', (e) => {
-      if (e.target === videoModal) closeVideoModal();
+      if (e.target === videoModal) window.closeVideoModal();
+    });
+  }
+  if (videoModal) {
+    videoModal.addEventListener('click', (e) => {
+      if (e.target === videoModal) window.closeVideoModal();
     });
   }
 
@@ -194,39 +243,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // 4. ACTIVE LINK HIGHLIGHTER ON SCROLL
+  // 4. CONSTANT NAVBAR (Maintains #381e23 Luxury Brown Background Across All Sections)
   // ==========================================
-  const sections = document.querySelectorAll('section, header[id]');
-  const navLinks = document.querySelectorAll('nav a');
-
-  window.addEventListener('scroll', () => {
-    let current = '';
-    const scrollPos = window.scrollY + 120; // Offset for sticky header
-
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.offsetHeight;
-      if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-        current = section.getAttribute('id');
-      }
-    });
-
-    navLinks.forEach(link => {
-      if (link.classList.contains('nav-link')) {
-        link.classList.remove('text-[#c5a880]', 'border-[#d4a672]');
-        link.classList.add('text-[#334155]', 'border-transparent');
-        if (link.getAttribute('href') === `#${current}`) {
-          link.classList.remove('text-[#334155]', 'border-transparent');
-          link.classList.add('text-[#c5a880]', 'border-[#d4a672]');
-        }
-      } else {
-        link.classList.remove('text-burgundy-700', 'font-bold');
-        if (link.getAttribute('href') === `#${current}`) {
-          link.classList.add('text-burgundy-700', 'font-bold');
-        }
-      }
-    });
-  });
 
   // ==========================================
   // 5. INQUIRY FORM MAIL & CONTACT HANDLER
@@ -389,32 +407,8 @@ document.addEventListener('DOMContentLoaded', () => {
   drawerLinks.forEach(link => link.addEventListener('click', closeDrawer));
 
   // ==========================================
-  // DYNAMIC NAVBAR OVERLAY (Transparent on Video -> Solid White on Cursor Hover or Scroll)
+  // CONSTANT SOLID LUXURY BROWN NAVBAR (#381e23)
   // ==========================================
-  const mainHeader = document.getElementById('main-header');
-
-  if (mainHeader) {
-    function updateHeaderStyle() {
-      // Turns solid white immediately when user scrolls inside hero section (> 20px)
-      if (window.scrollY > 20) {
-        mainHeader.classList.add('is-scrolled');
-      } else {
-        mainHeader.classList.remove('is-scrolled');
-      }
-    }
-
-    // Explicit cursor hover state handler (turns solid white when hovering navbar over video)
-    mainHeader.addEventListener('mouseenter', () => {
-      mainHeader.classList.add('is-hovered');
-    });
-
-    mainHeader.addEventListener('mouseleave', () => {
-      mainHeader.classList.remove('is-hovered');
-    });
-
-    window.addEventListener('scroll', updateHeaderStyle);
-    updateHeaderStyle(); // Initial execution
-  }
 
   // ==========================================
   // SERVICE CARDS 3D FLIP ON TOUCH / CLICK
@@ -426,6 +420,118 @@ document.addEventListener('DOMContentLoaded', () => {
       card.classList.toggle('flipped');
     });
   });
+
+  // ==========================================
+  // STATS COUNTER ANIMATION
+  // Only starts counting when user scrolls down to the stats bar
+  // ==========================================
+  (function() {
+    var statsBar = document.getElementById('stats-counter-bar');
+    var statCounters = document.querySelectorAll('.stat-counter');
+    var hasAnimated = false;
+
+    if (!statsBar || statCounters.length === 0) return;
+
+    // Always reset to 0 on page load
+    statCounters.forEach(function(el) {
+      var suffix = el.getAttribute('data-suffix') || '';
+      el.textContent = '0' + suffix;
+    });
+
+    function isInViewport(el) {
+      var rect = el.getBoundingClientRect();
+      return rect.top < window.innerHeight - 50 && rect.bottom > 50;
+    }
+
+    function countUp(el, target, suffix, delay) {
+      setTimeout(function() {
+        var current = 0;
+        var stepTime = 30; // ms between each tick
+        var timer = setInterval(function() {
+          var remaining = target - current;
+          var increment = Math.max(1, Math.ceil(remaining / 10));
+          current = Math.min(current + increment, target);
+          el.textContent = current + suffix;
+          if (current >= target) {
+            el.textContent = target + suffix;
+            clearInterval(timer);
+          }
+        }, stepTime);
+      }, delay);
+    }
+
+    function startAnimation() {
+      if (hasAnimated) return;
+      hasAnimated = true;
+
+      // Reset to 0 before animating
+      statCounters.forEach(function(el) {
+        var suffix = el.getAttribute('data-suffix') || '';
+        el.textContent = '0' + suffix;
+      });
+
+      // Start each counter with a stagger
+      statCounters.forEach(function(el, i) {
+        var target = parseInt(el.getAttribute('data-target'), 10);
+        var suffix = el.getAttribute('data-suffix') || '';
+        countUp(el, target, suffix, i * 250);
+      });
+    }
+
+    // Listen on scroll — only trigger when stats bar enters the viewport
+    function onScroll() {
+      if (isInViewport(statsBar)) {
+        startAnimation();
+        window.removeEventListener('scroll', onScroll);
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+  })();
+
+  // ==========================================
+  // SERVICES AUTOMATIC CONTINUOUS MOVING & FLOATING TRACK
+  // High-performance 60FPS smooth auto-scroll loop with pause-on-hover
+  // ==========================================
+  const servicesTrack = document.getElementById('services-track');
+  const scrollLeftBtns = [
+    document.getElementById('services-scroll-left'),
+    document.getElementById('services-track-left')
+  ];
+  const scrollRightBtns = [
+    document.getElementById('services-scroll-right'),
+    document.getElementById('services-track-right')
+  ];
+
+  const marqueeTrack = document.querySelector('.infinite-marquee-track');
+
+  if (marqueeTrack) {
+    scrollLeftBtns.forEach(btn => {
+      if (btn) {
+        btn.addEventListener('click', () => {
+          marqueeTrack.style.animationPlayState = 'paused';
+          servicesTrack.scrollBy({ left: -390, behavior: 'smooth' });
+          setTimeout(() => {
+            marqueeTrack.style.animationPlayState = 'running';
+          }, 4000);
+        });
+      }
+    });
+
+    scrollRightBtns.forEach(btn => {
+      if (btn) {
+        btn.addEventListener('click', () => {
+          marqueeTrack.style.animationPlayState = 'paused';
+          servicesTrack.scrollBy({ left: 390, behavior: 'smooth' });
+          setTimeout(() => {
+            marqueeTrack.style.animationPlayState = 'running';
+          }, 4000);
+        });
+      }
+    });
+  }
+
+
 });
 
 
