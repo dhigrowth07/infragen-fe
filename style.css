@@ -647,5 +647,71 @@ body {
   box-shadow: 0 24px 36px -10px rgba(97, 33, 36, 0.18) !important;
 }
 
+/* ==========================================
+   INTERACTIVE SCROLL REVEAL & GLASSMORPHISM ANIMATIONS
+   ========================================== */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(35px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-up.active,
+.reveal-left.active,
+.reveal-right.active,
+.reveal-scale.active {
+  opacity: 1;
+  transform: translateY(0) translateX(0) scale(1);
+}
+
+/* Ambient Radial Glow Pulse */
+@keyframes ambientGlowPulse {
+  0%, 100% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(1.1);
+  }
+}
+
+.animate-glow-pulse {
+  animation: ambientGlowPulse 6s ease-in-out infinite;
+}
+
+/* Glowing Border Hover Card Effect */
+.hover-gold-glow {
+  transition: all 0.4s ease;
+}
+
+.hover-gold-glow:hover {
+  border-color: #c5a880 !important;
+  box-shadow: 0 12px 30px -8px rgba(197, 168, 128, 0.3) !important;
+}
+
+
 
 

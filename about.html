@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>About Us | Vizhi Infragen Realtors LLP - Coimbatore Real Estate</title>
+
+  <!-- Meta Tags for SEO -->
+  <meta name="description"
+    content="Learn about Vizhi Infragen Realtors LLP, Coimbatore's premier real estate and property management company. Over 7 years of trusted expertise in land sales, NRI property management, construction, and approvals.">
+  <meta name="keywords"
+    content="About Vizhi Infragen Realtors, Coimbatore real estate company, NRI property management Coimbatore, trusted realtors Sulur Coimbatore">
+  <meta name="author" content="Vizhi Infragen Realtors LLP">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+    rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Favicon -->
+  <link rel="icon" href="vizhi-infragen-realtors-logo.png" type="image/png">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            burgundy: {
+              50: '#FDF2F4',
+              100: '#FAD5DC',
+              500: '#A22C46',
+              600: '#8A1F36',
+              700: '#6B1D2F',
+              800: '#4E1421',
+              900: '#330B14',
+            },
+            gold: {
+              DEFAULT: '#c5a880',
+              hover: '#b59870',
+              bright: '#D4AF37'
+            },
+            cream: {
+              DEFAULT: '#FDFBF7',
+              dark: '#F5EFE6',
+              card: '#FAF6F0'
+            }
+          },
+          fontFamily: {
+            sans: ['Outfit', 'Inter', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-[#FDFBF7] text-[#1E293B] antialiased overflow-x-hidden">
+
+  <!-- ==========================================
+       SIDE DRAWER / OFF-CANVAS OVERLAY MENU
+       ========================================== -->
+  <div id="side-drawer-overlay"
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <div id="side-drawer"
+    class="fixed top-0 right-0 h-full w-[340px] sm:w-[400px] bg-white z-[101] shadow-2xl translate-x-full transition-transform duration-300 ease-out flex flex-col justify-between p-8 overflow-y-auto">
+
+    <!-- Top Close Button -->
+    <button id="close-side-drawer"
+      class="absolute top-6 right-6 w-10 h-10 rounded-full bg-stone-100 text-[#4E1421] hover:bg-[#4E1421] hover:text-white flex items-center justify-center transition-all cursor-pointer shadow-sm">
+      <i class="fa-solid fa-xmark text-lg"></i>
+    </button>
+
+    <div class="flex flex-col items-center text-center mt-6 space-y-6">
+
+      <!-- Company Logo in Center -->
+      <div class="p-3 bg-stone-50 rounded-2xl border border-stone-200/80 shadow-md inline-block mb-2">
+        <img src="vizhi-infragen-realtors-logo.png" alt="Vizhi Infragen Realtors Logo"
+          class="w-36 h-20 object-contain mx-auto" />
+      </div>
+
+      <!-- Navigation Links List inside Drawer -->
+      <nav class="flex flex-col space-y-3 w-full border-t border-b border-stone-100 py-6">
+        <a href="index.html"
+          class="drawer-link text-lg font-bold text-[#334155] hover:text-[#c5a880] transition-colors font-['Inter',sans-serif]">Home</a>
+        <a href="about.html"
+          class="drawer-link text-lg font-bold text-[#c5a880] hover:text-[#4E1421] transition-colors font-['Inter',sans-serif]">About Us</a>
+        <a href="index.html#properties"
+          class="drawer-link text-lg font-bold text-[#334155] hover:text-[#c5a880] transition-colors font-['Inter',sans-serif]">Properties</a>
+        <a href="index.html#services"
+          class="drawer-link text-lg font-bold text-[#334155] hover:text-[#c5a880] transition-colors font-['Inter',sans-serif]">Services</a>
+        <a href="index.html#blog"
+          class="drawer-link text-lg font-bold text-[#334155] hover:text-[#c5a880] transition-colors font-['Inter',sans-serif]">Blog</a>
+        <a href="contact.html"
+          class="drawer-link text-lg font-bold text-[#334155] hover:text-[#c5a880] transition-colors font-['Inter',sans-serif]">Contact Us</a>
+      </nav>
+
+      <!-- Company Address & Contact Details -->
+      <div class="space-y-3 text-center text-[#334155] font-['Inter',sans-serif] text-sm">
+        <div class="flex items-center justify-center gap-2 text-[#4E1421] font-bold text-base font-['Inter',sans-serif]">
+          <i class="fa-solid fa-location-dot text-[#c5a880]"></i>
+          <span>Vizhi Infragen Realtors LLP</span>
+        </div>
+        <p class="text-xs text-stone-600 leading-relaxed max-w-[280px] mx-auto">
+          First Floor, Shop No.24, Old Bus Stand Complex, 24, Suganthi Nagar Rd, Sulur, Tamil Nadu 641402
+        </p>
+
+        <div class="pt-2 flex flex-col items-center gap-2 text-xs">
+          <a href="mailto:srissa2006@gmail.com?subject=Inquiry%20Regarding%20Coimbatore%20Real%20Estate%20Properties"
+            class="flex items-center gap-2 text-[#4E1421] hover:text-[#c5a880] font-semibold transition-colors">
+            <i class="fa-solid fa-envelope text-[#c5a880]"></i>
+            <span>srissa2006@gmail.com</span>
+          </a>
+          <a href="tel:9688889420"
+            class="flex items-center gap-2 text-[#4E1421] hover:text-[#c5a880] font-semibold transition-colors">
+            <i class="fa-solid fa-phone text-[#c5a880]"></i>
+            <span>+91 96888 89420</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Social Media Icons Row -->
+      <div class="flex items-center justify-center gap-3 pt-4 border-t border-stone-100 w-full">
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+          class="w-10 h-10 rounded-full bg-stone-100 text-[#1877F2] hover:bg-[#1877F2]/10 flex items-center justify-center transition-all">
+          <i class="fa-brands fa-facebook-f text-lg"></i>
+        </a>
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
+          class="w-10 h-10 rounded-full bg-stone-100 text-[#1DA1F2] hover:bg-[#1DA1F2]/10 flex items-center justify-center transition-all">
+          <i class="fa-brands fa-twitter text-lg"></i>
+        </a>
+        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer"
+          class="w-10 h-10 rounded-full bg-stone-100 text-[#FF0000] hover:bg-[#FF0000]/10 flex items-center justify-center transition-all">
+          <i class="fa-brands fa-youtube text-lg"></i>
+        </a>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+          class="w-10 h-10 rounded-full bg-stone-100 text-[#E4405F] hover:bg-[#E4405F]/10 flex items-center justify-center transition-all">
+          <i class="fa-brands fa-instagram text-lg"></i>
+        </a>
+        <a href="https://wa.me/919688889420" target="_blank" rel="noopener noreferrer"
+          class="w-10 h-10 rounded-full bg-stone-100 text-[#25D366] hover:bg-[#25D366]/10 flex items-center justify-center transition-all">
+          <i class="fa-brands fa-whatsapp text-lg"></i>
+        </a>
+      </div>
+
+    </div>
+
+    <div class="text-center pt-6 text-[11px] text-stone-400 font-medium">
+      &copy; 2026 Vizhi Infragen Realtors LLP. All Rights Reserved.
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       TOP NAVBAR (Matches Home Page Solid Luxury Brown Header)
+       ========================================== -->
+  <header id="main-header"
+    class="fixed top-0 left-0 w-full z-[100] bg-[#381e23] border-b border-white/10 shadow-2xl transition-colors duration-300">
+    <div class="max-w-[1650px] mx-auto px-4 sm:px-8 lg:px-12">
+      <div class="flex justify-between items-center h-20 sm:h-24">
+
+        <!-- Left: White Transparent Logo -->
+        <a href="index.html" class="flex items-center gap-3 hover:scale-[1.02] transition-transform duration-300 group">
+          <img class="w-[135px] h-[75px] sm:w-[160px] sm:h-[82px] object-contain drop-shadow-md nav-logo-img"
+            src="vizhi-infragen-realtors-logo-white.png" alt="Vizhi Infragen Realtors Logo" />
+        </a>
+
+        <!-- Center: Navigation Menu with Vertical Line Dividers -->
+        <nav class="hidden md:flex items-center h-full">
+          <a href="index.html"
+            class="text-white hover:text-[#c5a880] font-medium text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6 border-r border-white/20">
+            Home
+          </a>
+          <!-- Active About Us Link -->
+          <a href="about.html"
+            class="text-[#c5a880] font-bold text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6 border-r border-white/20 relative group">
+            <span>About Us</span>
+            <span class="absolute bottom-1 left-4 right-4 h-0.5 bg-[#c5a880] rounded-full"></span>
+          </a>
+          <!-- Properties with Dropdown Icon -->
+          <a href="index.html#properties"
+            class="text-white hover:text-[#c5a880] font-medium text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6 border-r border-white/20 flex items-center gap-1.5">
+            <span>Properties</span>
+            <i class="fa-solid fa-chevron-down text-[10px] lg:text-[11px] opacity-75"></i>
+          </a>
+          <!-- Services with Dropdown Icon -->
+          <a href="index.html#services"
+            class="text-white hover:text-[#c5a880] font-medium text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6 border-r border-white/20 flex items-center gap-1.5">
+            <span>Services</span>
+            <i class="fa-solid fa-chevron-down text-[10px] lg:text-[11px] opacity-75"></i>
+          </a>
+          <a href="index.html#blog"
+            class="text-white hover:text-[#c5a880] font-medium text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6 border-r border-white/20">
+            Blog
+          </a>
+          <a href="contact.html"
+            class="text-white hover:text-[#c5a880] font-medium text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6">
+            Contact Us
+          </a>
+        </nav>
+
+        <!-- Right: Social Icons + Mobile Menu Toggle -->
+        <div class="flex items-center space-x-3 sm:space-x-4">
+          <a href="https://wa.me/919688889420?text=Hii!%20I'm%20interested%20Can%20i%20know%20about%20more%20details"
+            target="_blank" rel="noopener noreferrer"
+            class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 text-white hover:bg-[#c5a880] hover:text-[#381e23] flex items-center justify-center text-base sm:text-lg transition-all duration-300"
+            aria-label="WhatsApp">
+            <i class="fa-brands fa-whatsapp"></i>
+          </a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+            class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 text-white hover:bg-[#c5a880] hover:text-[#381e23] flex items-center justify-center text-base sm:text-lg transition-all duration-300"
+            aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+            class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 text-white hover:bg-[#c5a880] hover:text-[#381e23] flex items-center justify-center text-base sm:text-lg transition-all duration-300"
+            aria-label="Facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+
+          <!-- Mobile Hamburger Drawer Trigger Button -->
+          <button id="open-side-drawer"
+            class="md:hidden w-10 h-10 rounded-full bg-white/10 text-white hover:bg-[#c5a880] hover:text-[#381e23] flex items-center justify-center transition-all">
+            <i class="fa-solid fa-bars text-lg"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       HERO SECTION (Luxury Real Estate Glass Villa Twilight with Ken-Burns Animation)
+       ========================================== -->
+  <div class="relative bg-[#381e23] text-white pt-20 sm:pt-24">
+    <section class="relative w-full overflow-hidden">
+      
+      <!-- Hero Background Image Container -->
+      <div class="relative w-full min-h-[500px] sm:min-h-[580px] lg:min-h-[640px] flex items-center overflow-hidden">
+        
+        <!-- Animated Hero Background Image (Ken-Burns Slow Zoom) -->
+        <div class="absolute inset-0 w-full h-full overflow-hidden">
+          <img src="assets/images/daylight-villa-1.png" alt="Vizhi Infragen Realtors Luxury Architectural Villa"
+            class="carousel-zoom-img w-full h-full object-cover object-center scale-110" />
+          
+          <!-- Gradient Contrast Overlays -->
+          <div class="absolute inset-0 bg-gradient-to-r from-black/95 via-black/75 to-black/45"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-[#381e23] via-transparent to-black/50"></div>
+        </div>
+
+        <!-- Animated Hero Content Overlay -->
+        <div class="relative z-20 max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 w-full py-20 sm:py-28">
+          <div class="max-w-3xl space-y-5">
+            
+            <!-- Floating Subtitle Banner -->
+            <span class="text-[#c5a880] font-['Inter',sans-serif] text-xs sm:text-sm font-bold tracking-[0.28em] uppercase block animate-float-down">
+              ABOUT VIZHI INFRAGEN REALTORS LLP
+            </span>
+
+            <!-- H1 Heading with Smooth Entrance -->
+            <h1 class="font-extrabold font-['Outfit',sans-serif] text-white tracking-tight animate-float-up [animation-delay:200ms]" style="font-size: 40px; line-height: 48px;">
+              A Trusted Real Estate and Property Management Company in <span class="text-[#c5a880]">Coimbatore</span>
+            </h1>
+
+            <!-- Glowing Gold Line -->
+            <div class="w-20 h-1 bg-[#c5a880] rounded-full my-4 shadow-lg shadow-[#c5a880]/50 animate-float-up [animation-delay:400ms]"></div>
+
+            <!-- Brief Tagline -->
+            <p class="text-stone-200 text-sm sm:text-base leading-relaxed font-['Inter',sans-serif] max-w-2xl font-normal opacity-95 animate-float-up [animation-delay:600ms]">
+              Building trust through genuine market knowledge, complete documentation transparency, and hands-on property management expertise across Coimbatore and South India.
+            </p>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- ==========================================
+       SECTION 1: ABOUT VIZHI INFRAGEN (Left Image reveal-left, Right Content reveal-right)
+       ========================================== -->
+  <section class="py-18 sm:py-28 px-6 sm:px-10 lg:px-16 bg-[#FDFBF7] overflow-hidden">
+    <div class="max-w-[1440px] mx-auto">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        
+        <!-- Left Side Image Card with reveal-left animation -->
+        <div class="lg:col-span-5 relative reveal-left">
+          <div class="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-stone-200 group hover-gold-glow">
+            <img src="assets/images/experience.jpg" alt="Vizhi Infragen Team Consultation in Coimbatore"
+              class="w-full h-[420px] sm:h-[500px] object-cover object-center group-hover:scale-108 transition-transform duration-700 ease-out" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-70"></div>
+            
+            <!-- Floating Bobbing Badge Overlay -->
+            <div class="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md p-5 rounded-2xl border border-stone-200 shadow-2xl floating-bob-card">
+              <div class="flex items-center gap-4">
+                <div class="w-13 h-13 rounded-full bg-[#4E1421] text-[#c5a880] flex items-center justify-center text-xl shrink-0 font-extrabold shadow-md">
+                  7+
+                </div>
+                <div>
+                  <h4 class="font-bold text-sm text-[#1E293B] font-['Outfit',sans-serif]">Years of Excellence</h4>
+                  <p class="text-xs text-stone-500 font-['Inter',sans-serif]">Guiding buyers, sellers, and NRI property owners</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right Side: Content with reveal-right animation -->
+        <div class="lg:col-span-7 space-y-6 reveal-right">
+          
+          <span class="text-[#c5a880] font-['Inter',sans-serif] text-xs font-bold tracking-[0.22em] uppercase block">
+            WHO WE ARE
+          </span>
+
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1E293B] font-['Outfit',sans-serif] tracking-tight leading-snug">
+            Professional Real Estate &amp; Property Management Expertise
+          </h2>
+
+          <div class="w-12 h-1 bg-[#c5a880] rounded-full"></div>
+
+          <div class="space-y-4 text-stone-600 text-sm sm:text-base leading-relaxed font-['Inter',sans-serif]">
+            <p class="font-medium text-stone-800">
+              Vizhi Infragen Realtors LLP is a professional real estate and property management company based in Coimbatore, Tamil Nadu. We help individuals, investors, corporates, and NRI clients buy, sell, manage, and develop property with complete transparency and dependable, hands-on expertise.
+            </p>
+            <p>
+              Real estate is rarely just a transaction. It is a home, a retirement plan, an inheritance, or a business decision that affects a family for years. We built Vizhi Infragen around that reality to take the uncertainty out of property dealings in Coimbatore and replace it with clear advice, honest documentation, and follow-through you can rely on.
+            </p>
+            <p class="bg-[#FAF5EE] p-5 rounded-2xl border-l-4 border-[#c5a880] text-stone-700 text-xs sm:text-sm italic shadow-sm hover:shadow-md transition-shadow">
+              "From the established corridors of Avinashi Road, Trichy Road, and Sathy Road to the fast-growing belts of Pattanam, Sulur, Neelambur, and Kalapatti, we bring genuine, on-the-ground market knowledge to every client we serve."
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SECTION 2: OUR STORY, OUR VISION & OUR MISSION (Staggered reveal-up Cards)
+       ========================================== -->
+  <section class="py-18 sm:py-28 px-6 sm:px-10 lg:px-16 bg-[#FAF7F2] border-y border-stone-200/60 overflow-hidden">
+    <div class="max-w-[1440px] mx-auto">
+      
+      <div class="text-center max-w-2xl mx-auto mb-14 space-y-3 reveal-up">
+        <span class="text-[#c5a880] font-['Inter',sans-serif] text-xs font-bold tracking-[0.2em] uppercase block">
+          OUR FOUNDATION
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1E293B] font-['Outfit',sans-serif] tracking-tight">
+          Story, Vision &amp; Mission
+        </h2>
+        <div class="w-16 h-1 bg-[#c5a880] mx-auto rounded-full"></div>
+      </div>
+
+      <!-- 3 Columns Layout with Staggered Scroll Reveal -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+        
+        <!-- Column 1: Our Story (reveal-up) -->
+        <div class="bg-white rounded-3xl p-8 sm:p-9 shadow-md border border-stone-100 flex flex-col justify-between space-y-6 hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 reveal-up hover-gold-glow" style="transition-delay: 100ms;">
+          <div class="space-y-4">
+            
+            <div class="w-13 h-13 rounded-2xl bg-[#FAF5EE] text-[#4E1421] flex items-center justify-center text-xl font-bold border border-[#c5a880]/30 shadow-sm">
+              <i class="fa-solid fa-book-open text-[#c5a880]"></i>
+            </div>
+
+            <h3 class="text-2xl font-extrabold text-[#1E293B] font-['Outfit',sans-serif]">
+              Our Story
+            </h3>
+
+            <p class="text-stone-600 text-xs sm:text-sm font-['Inter',sans-serif] leading-relaxed">
+              What began as a commitment to do real estate the right way has grown into a full-service property partner for clients across Coimbatore and beyond. Over 7 years, we have guided buyers through due diligence, helped sellers reach the right price, managed assets for owners living overseas, and supported families through approvals, valuations, and construction.
+            </p>
+            <p class="text-stone-600 text-xs sm:text-sm font-['Inter',sans-serif] leading-relaxed">
+              Through it all, one principle has stayed constant: transparency builds trust, and trust builds lasting relationships. It is the reason so much of our work comes from referrals and repeat clients.
+            </p>
+
+          </div>
+
+          <!-- 2x2 Highlights Grid -->
+          <div class="grid grid-cols-2 gap-3 pt-4 border-t border-stone-100">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-shield-check text-[#c5a880] text-sm"></i>
+              <span class="text-[11px] font-bold text-stone-700 font-['Inter',sans-serif]">7+ Yrs Experience</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-gem text-[#c5a880] text-sm"></i>
+              <span class="text-[11px] font-bold text-stone-700 font-['Inter',sans-serif]">Referral Driven</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-file-contract text-[#c5a880] text-sm"></i>
+              <span class="text-[11px] font-bold text-stone-700 font-['Inter',sans-serif]">Verified Titles</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-handshake text-[#c5a880] text-sm"></i>
+              <span class="text-[11px] font-bold text-stone-700 font-['Inter',sans-serif]">100% Honest</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 2: Our Vision (reveal-up) -->
+        <div class="bg-white rounded-3xl overflow-hidden shadow-md border border-stone-100 flex flex-col justify-between hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 reveal-up hover-gold-glow" style="transition-delay: 250ms;">
+          <div class="relative h-48 sm:h-52 w-full overflow-hidden bg-stone-100 group">
+            <img src="assets/images/about-property-management.jpg" alt="Vizhi Infragen Vision Real Estate"
+              class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700" />
+            <div class="absolute top-4 left-4 bg-[#4E1421] text-white text-xs font-bold px-3.5 py-1.5 rounded-full shadow-md">
+              Target &amp; Outlook
+            </div>
+          </div>
+
+          <div class="p-8 space-y-4 flex-1 flex flex-col justify-between">
+            <div class="space-y-3">
+              <h3 class="text-2xl font-extrabold text-[#1E293B] font-['Outfit',sans-serif]">
+                Our Vision
+              </h3>
+              <p class="text-stone-700 font-medium text-xs sm:text-sm font-['Inter',sans-serif] leading-relaxed">
+                To become South India's most trusted real estate and property management company by delivering transparent, sustainable, and value driven property solutions.
+              </p>
+              <p class="text-stone-500 text-xs font-['Inter',sans-serif] leading-relaxed">
+                We measure success not by the number of deals we close, but by the long-term value and confidence we create for the people who choose us.
+              </p>
+            </div>
+
+            <div class="pt-4 border-t border-stone-100 flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-[#FAF5EE] text-[#c5a880] flex items-center justify-center text-xs shrink-0 font-bold">
+                <i class="fa-solid fa-eye"></i>
+              </div>
+              <span class="text-xs font-bold text-[#4E1421] font-['Outfit',sans-serif]">South India's Most Trusted Partner</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 3: Our Mission (reveal-up) -->
+        <div class="bg-white rounded-3xl overflow-hidden shadow-md border border-stone-100 flex flex-col justify-between hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 reveal-up hover-gold-glow" style="transition-delay: 400ms;">
+          <div class="relative h-48 sm:h-52 w-full overflow-hidden bg-stone-100 group">
+            <img src="assets/images/key-handover.jpg" alt="Vizhi Infragen Mission Property Care"
+              class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700" />
+            <div class="absolute top-4 left-4 bg-[#c5a880] text-[#381e23] text-xs font-bold px-3.5 py-1.5 rounded-full shadow-md">
+              Core Mission
+            </div>
+          </div>
+
+          <div class="p-8 space-y-4 flex-1 flex flex-col justify-between">
+            <div class="space-y-3">
+              <h3 class="text-2xl font-extrabold text-[#1E293B] font-['Outfit',sans-serif]">
+                Our Mission
+              </h3>
+              
+              <ul class="space-y-2.5 text-stone-600 text-xs font-['Inter',sans-serif] leading-relaxed">
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-[#c5a880] text-xs mt-1 shrink-0"></i>
+                  <span><strong>End-to-End Solutions:</strong> Site selection, documentation, construction, valuation &amp; management under one roof.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-[#c5a880] text-xs mt-1 shrink-0"></i>
+                  <span><strong>Hassle-Free NRI Care:</strong> Secure, transparent, fully reported care for property back home.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-[#c5a880] text-xs mt-1 shrink-0"></i>
+                  <span><strong>Long-Term Relationships:</strong> Loyalty earned through honesty, consistency, and accountability.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-[#c5a880] text-xs mt-1 shrink-0"></i>
+                  <span><strong>Expert Investment Guidance:</strong> Backed by real local market knowledge for confident investing.</span>
+                </li>
+              </ul>
+
+            </div>
+
+            <div class="pt-4 border-t border-stone-100 flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-[#FAF5EE] text-[#c5a880] flex items-center justify-center text-xs shrink-0 font-bold">
+                <i class="fa-solid fa-bullseye"></i>
+              </div>
+              <span class="text-xs font-bold text-[#4E1421] font-['Outfit',sans-serif]">100% Value Driven Client Commitments</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SECTION 3: WHAT WE DO (Staggered Entrance for 10 Offering Cards)
+       ========================================== -->
+  <section class="py-18 sm:py-28 px-6 sm:px-10 lg:px-16 bg-[#FDFBF7] overflow-hidden">
+    <div class="max-w-[1440px] mx-auto space-y-12">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-3 reveal-up">
+        <span class="text-[#c5a880] font-['Inter',sans-serif] text-xs font-bold tracking-[0.2em] uppercase block">
+          COMPREHENSIVE OFFERINGS
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1E293B] font-['Outfit',sans-serif] tracking-tight">
+          What We Do
+        </h2>
+        <div class="w-16 h-1 bg-[#c5a880] mx-auto rounded-full"></div>
+        <p class="text-stone-600 text-xs sm:text-sm font-['Inter',sans-serif] max-w-xl mx-auto pt-2">
+          We offer a complete range of property services so you never have to coordinate multiple agencies.
+        </p>
+      </div>
+
+      <!-- 10 Comprehensive Services Grid Cards with Staggered Entrance & Hover 3D Scale -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+        
+        <div class="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-2.5 transition-all duration-400 space-y-3 group reveal-up hover-gold-glow" style="transition-delay: 50ms;">
+          <div class="w-11 h-11 rounded-xl bg-[#FAF5EE] text-[#c5a880] group-hover:bg-[#4E1421] group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+            <i class="fa-solid fa-map-location-dot text-base"></i>
+          </div>
+          <h4 class="font-bold text-sm text-[#1E293B] font-['Outfit',sans-serif]">Land Sales</h4>
+          <p class="text-stone-500 text-xs font-['Inter',sans-serif]">Verified DTCP &amp; RERA approved plots across Coimbatore.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-2.5 transition-all duration-400 space-y-3 group reveal-up hover-gold-glow" style="transition-delay: 100ms;">
+          <div class="w-11 h-11 rounded-xl bg-[#FAF5EE] text-[#c5a880] group-hover:bg-[#4E1421] group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+            <i class="fa-solid fa-magnifying-glass-location text-base"></i>
+          </div>
+          <h4 class="font-bold text-sm text-[#1E293B] font-['Outfit',sans-serif]">Purchase Assistance</h4>
+          <p class="text-stone-500 text-xs font-['Inter',sans-serif]">End-to-end guidance from title checks to price negotiation.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-2.5 transition-all duration-400 space-y-3 group reveal-up hover-gold-glow" style="transition-delay: 150ms;">
+          <div class="w-11 h-11 rounded-xl bg-[#FAF5EE] text-[#c5a880] group-hover:bg-[#4E1421] group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+            <i class="fa-solid fa-building-user text-base"></i>
+          </div>
+          <h4 class="font-bold text-sm text-[#1E293B] font-['Outfit',sans-serif]">Property Management</h4>
+          <p class="text-stone-500 text-xs font-['Inter',sans-serif]">Complete maintenance, inspection, and tenant care.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-2.5 transition-all duration-400 space-y-3 group reveal-up hover-gold-glow" style="transition-delay: 200ms;">
+          <div class="w-11 h-11 rounded-xl bg-[#FAF5EE] text-[#c5a880] group-hover:bg-[#4E1421] group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+            <i class="fa-solid fa-plane-shield text-base"></i>
+          </div>
+          <h4 class="font-bold text-sm text-[#1E293B] font-['Outfit',sans-serif]">NRI Property Shield</h4>
+          <p class="text-stone-500 text-xs font-['Inter',sans-serif]">Dedicated overseas asset protection &amp; periodic reporting.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-2.5 transition-all duration-400 space-y-3 group reveal-up hover-gold-glow" style="transition-delay: 250ms;">
+          <div class="w-11 h-11 rounded-xl bg-[#FAF5EE] text-[#c5a880] group-hover:bg-[#4E1421] group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+            <i class="fa-solid fa-hammer text-base"></i>
+          </div>
+          <h4 class="font-bold text-sm text-[#1E293B] font-['Outfit',sans-serif]">Building Construction</h4>
+          <p class="text-stone-500 text-xs font-['Inter',sans-serif]">Turnkey residential &amp; commercial construction excellence.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-2.5 transition-all duration-400 space-y-3 group reveal-up hover-gold-glow" style="transition-delay: 300ms;">
+          <div class="w-11 h-11 rounded-xl bg-[#FAF5EE] text-[#c5a880] group-hover:bg-[#4E1421] group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+            <i class="fa-solid fa-calculator text-base"></i>
+          </div>
+          <h4 class="font-bold text-sm text-[#1E293B] font-['Outfit',sans-serif]">Building Valuation</h4>
+          <p class="text-stone-500 text-xs font-['Inter',sans-serif]">Accurate market &amp; bank structural valuation reports.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-2.5 transition-all duration-400 space-y-3 group reveal-up hover-gold-glow" style="transition-delay: 350ms;">
+          <div class="w-11 h-11 rounded-xl bg-[#FAF5EE] text-[#c5a880] group-hover:bg-[#4E1421] group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+            <i class="fa-solid fa-file-check text-base"></i>
+          </div>
+          <h4 class="font-bold text-sm text-[#1E293B] font-['Outfit',sans-serif]">Land Approvals</h4>
+          <p class="text-stone-500 text-xs font-['Inter',sans-serif]">DTCP, LPA layout approvals and legal verification.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-2.5 transition-all duration-400 space-y-3 group reveal-up hover-gold-glow" style="transition-delay: 400ms;">
+          <div class="w-11 h-11 rounded-xl bg-[#FAF5EE] text-[#c5a880] group-hover:bg-[#4E1421] group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+            <i class="fa-solid fa-arrows-rotate text-base"></i>
+          </div>
+          <h4 class="font-bold text-sm text-[#1E293B] font-['Outfit',sans-serif]">Land Conversion</h4>
+          <p class="text-stone-500 text-xs font-['Inter',sans-serif]">Hassle-free agricultural to residential/commercial conversion.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-2.5 transition-all duration-400 space-y-3 group reveal-up hover-gold-glow" style="transition-delay: 450ms;">
+          <div class="w-11 h-11 rounded-xl bg-[#FAF5EE] text-[#c5a880] group-hover:bg-[#4E1421] group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+            <i class="fa-solid fa-key text-base"></i>
+          </div>
+          <h4 class="font-bold text-sm text-[#1E293B] font-['Outfit',sans-serif]">Rental Services</h4>
+          <p class="text-stone-500 text-xs font-['Inter',sans-serif]">Leasing solutions for residential &amp; commercial assets.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm hover:shadow-xl hover:-translate-y-2.5 transition-all duration-400 space-y-3 group reveal-up hover-gold-glow" style="transition-delay: 500ms;">
+          <div class="w-11 h-11 rounded-xl bg-[#FAF5EE] text-[#c5a880] group-hover:bg-[#4E1421] group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+            <i class="fa-solid fa-warehouse text-base"></i>
+          </div>
+          <h4 class="font-bold text-sm text-[#1E293B] font-['Outfit',sans-serif]">Warehouse &amp; Corporate</h4>
+          <p class="text-stone-500 text-xs font-['Inter',sans-serif]">Industrial land, godowns &amp; corporate space sourcing.</p>
+        </div>
+
+      </div>
+
+      <!-- Quote Banner with Scale Reveal -->
+      <div class="bg-[#381e23] text-white p-8 rounded-3xl text-center max-w-3xl mx-auto shadow-2xl reveal-scale floating-bob-card">
+        <p class="text-stone-200 text-xs sm:text-sm font-['Inter',sans-serif] leading-relaxed">
+          "Whether you are investing in land, selling an asset, managing property from overseas, or building from the ground up, our team handles the complexity so you can make decisions with peace of mind."
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SECTION 4: THE VALUES THAT GUIDE US (Animations & Glassmorphism Blur Overlay)
+       ========================================== -->
+  <section class="relative py-20 sm:py-28 px-6 sm:px-10 lg:px-16 overflow-hidden">
+    
+    <!-- Background Image with Pulsing Dark Blur Overlay -->
+    <div class="absolute inset-0 w-full h-full">
+      <img src="assets/images/coimbatore-map-bg.jpg" alt="Coimbatore Real Estate Background"
+        class="w-full h-full object-cover object-center filter blur-md scale-110 animate-pulse" style="animation-duration: 8s;" />
+      <div class="absolute inset-0 bg-[#160A0D]/90 backdrop-blur-xl"></div>
+    </div>
+
+    <div class="relative z-10 max-w-[1440px] mx-auto text-white space-y-14">
+      
+      <!-- Section Title -->
+      <div class="text-center max-w-2xl mx-auto space-y-3 reveal-up">
+        <span class="text-[#c5a880] font-['Inter',sans-serif] text-xs font-bold tracking-[0.25em] uppercase block">
+          CORE PHILOSOPHY
+        </span>
+        <h2 class="text-3xl sm:text-5xl font-extrabold font-['Outfit',sans-serif] tracking-tight">
+          The Values That Guide Us
+        </h2>
+        <div class="w-16 h-1 bg-[#c5a880] mx-auto rounded-full"></div>
+      </div>
+
+      <!-- 5 Glassmorphism Value Cards Grid with Staggered Entrance -->
+      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        
+        <!-- Value 1: Transparency -->
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-7 border border-white/15 hover:border-[#c5a880] hover:bg-white/15 transition-all duration-500 hover:-translate-y-3 group space-y-4 reveal-up" style="transition-delay: 100ms;">
+          <div class="w-12 h-12 rounded-xl bg-[#c5a880]/20 text-[#c5a880] group-hover:bg-[#c5a880] group-hover:text-[#381e23] flex items-center justify-center text-xl transition-all duration-300 group-hover:rotate-6">
+            <i class="fa-solid fa-eye"></i>
+          </div>
+          <h3 class="text-xl font-bold font-['Outfit',sans-serif] text-white">Transparency</h3>
+          <p class="text-stone-300 text-xs font-['Inter',sans-serif] leading-relaxed">
+            Clear pricing, verified documentation, and honest timelines, with no hidden surprises.
+          </p>
+        </div>
+
+        <!-- Value 2: Expertise -->
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-7 border border-white/15 hover:border-[#c5a880] hover:bg-white/15 transition-all duration-500 hover:-translate-y-3 group space-y-4 reveal-up" style="transition-delay: 200ms;">
+          <div class="w-12 h-12 rounded-xl bg-[#c5a880]/20 text-[#c5a880] group-hover:bg-[#c5a880] group-hover:text-[#381e23] flex items-center justify-center text-xl transition-all duration-300 group-hover:rotate-6">
+            <i class="fa-solid fa-award"></i>
+          </div>
+          <h3 class="text-xl font-bold font-['Outfit',sans-serif] text-white">Expertise</h3>
+          <p class="text-stone-300 text-xs font-['Inter',sans-serif] leading-relaxed">
+            First-hand knowledge of Coimbatore's micro-markets, approval bodies, and price trends.
+          </p>
+        </div>
+
+        <!-- Value 3: Accountability -->
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-7 border border-white/15 hover:border-[#c5a880] hover:bg-white/15 transition-all duration-500 hover:-translate-y-3 group space-y-4 reveal-up" style="transition-delay: 300ms;">
+          <div class="w-12 h-12 rounded-xl bg-[#c5a880]/20 text-[#c5a880] group-hover:bg-[#c5a880] group-hover:text-[#381e23] flex items-center justify-center text-xl transition-all duration-300 group-hover:rotate-6">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <h3 class="text-xl font-bold font-['Outfit',sans-serif] text-white">Accountability</h3>
+          <p class="text-stone-300 text-xs font-['Inter',sans-serif] leading-relaxed">
+            We stand behind our clients long after the paperwork is signed.
+          </p>
+        </div>
+
+        <!-- Value 4: Sustainability -->
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-7 border border-white/15 hover:border-[#c5a880] hover:bg-white/15 transition-all duration-500 hover:-translate-y-3 group space-y-4 reveal-up" style="transition-delay: 400ms;">
+          <div class="w-12 h-12 rounded-xl bg-[#c5a880]/20 text-[#c5a880] group-hover:bg-[#c5a880] group-hover:text-[#381e23] flex items-center justify-center text-xl transition-all duration-300 group-hover:rotate-6">
+            <i class="fa-solid fa-seedling"></i>
+          </div>
+          <h3 class="text-xl font-bold font-['Outfit',sans-serif] text-white">Sustainability</h3>
+          <p class="text-stone-300 text-xs font-['Inter',sans-serif] leading-relaxed">
+            Value-driven, responsible solutions designed to last, not just to close a deal.
+          </p>
+        </div>
+
+        <!-- Value 5: Client-first thinking -->
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-7 border border-white/15 hover:border-[#c5a880] hover:bg-white/15 transition-all duration-500 hover:-translate-y-3 group space-y-4 reveal-up" style="transition-delay: 500ms;">
+          <div class="w-12 h-12 rounded-xl bg-[#c5a880]/20 text-[#c5a880] group-hover:bg-[#c5a880] group-hover:text-[#381e23] flex items-center justify-center text-xl transition-all duration-300 group-hover:rotate-6">
+            <i class="fa-solid fa-user-gear"></i>
+          </div>
+          <h3 class="text-xl font-bold font-['Outfit',sans-serif] text-white">Client-first</h3>
+          <p class="text-stone-300 text-xs font-['Inter',sans-serif] leading-relaxed">
+            Advice shaped around your goals, your budget, and your timeline.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SECTION 5: WHY CLIENTS TRUST VIZHI INFRAGEN (Reveal Scale & Glow Pulse)
+       ========================================== -->
+  <section class="py-18 sm:py-28 px-6 sm:px-10 lg:px-16 bg-[#FDFBF7] overflow-hidden">
+    <div class="max-w-[1440px] mx-auto reveal-scale">
+      
+      <div class="bg-gradient-to-br from-[#1F0A10] via-[#381e23] to-[#120508] text-white rounded-3xl p-8 sm:p-14 shadow-2xl relative overflow-hidden border border-stone-800">
+        
+        <!-- Glowing Ambient Radial Background Pulse -->
+        <div class="absolute -bottom-20 -right-20 w-96 h-96 bg-[#c5a880]/20 rounded-full blur-3xl pointer-events-none animate-glow-pulse"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
+          
+          <!-- Text Column -->
+          <div class="lg:col-span-8 space-y-6">
+            
+            <span class="text-[#c5a880] font-['Inter',sans-serif] text-xs font-bold tracking-[0.25em] uppercase block">
+              EARNED TRUST &amp; DEPENDABILITY
+            </span>
+
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-['Outfit',sans-serif] tracking-tight leading-tight">
+              Why Clients Trust <span class="text-[#c5a880]">Vizhi Infragen</span>
+            </h2>
+
+            <div class="w-14 h-1 bg-[#c5a880] rounded-full"></div>
+
+            <div class="space-y-4 text-stone-300 text-xs sm:text-sm font-['Inter',sans-serif] leading-relaxed">
+              <p>
+                Confidence in real estate is earned, never claimed. Every transaction we handle is led by people who have done it before — verifying titles, walking sites, negotiating fairly, and reporting honestly. For our NRI clients especially, this means consistent updates and verifiable records, so your property is as secure as if you were managing it yourself.
+              </p>
+              <p class="text-white font-semibold">
+                We believe in showing our work, not just promising results. That commitment to professionalism and transparency is what makes Vizhi Infragen a partner clients return to and recommend.
+              </p>
+            </div>
+
+            <!-- Talk To Us Box -->
+            <div class="pt-4 border-t border-white/15 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <h4 class="font-bold text-white font-['Outfit',sans-serif] text-base">Talk to Us</h4>
+                <p class="text-xs text-stone-300 font-['Inter',sans-serif]">If you are looking for a transparent, professional, and reliable partner in Coimbatore, we would be glad to help.</p>
+              </div>
+              
+              <a href="contact.html"
+                class="bg-[#c5a880] hover:bg-white text-[#381e23] hover:text-[#381e23] px-8 py-4 rounded-xl text-xs font-extrabold font-['Outfit',sans-serif] transition-all duration-300 inline-flex items-center gap-2 shadow-2xl shrink-0 hover:scale-105 active:scale-95 group">
+                <span>Get in Touch</span>
+                <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+              </a>
+            </div>
+
+          </div>
+
+          <!-- Feature Badges Column -->
+          <div class="lg:col-span-4 space-y-4 bg-white/5 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-white/10 shadow-lg">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-[#c5a880] text-[#381e23] flex items-center justify-center font-bold text-sm shrink-0 shadow-md">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <span class="text-xs font-bold text-white font-['Inter',sans-serif]">Verified Property Titles</span>
+            </div>
+            
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-[#c5a880] text-[#381e23] flex items-center justify-center font-bold text-sm shrink-0 shadow-md">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <span class="text-xs font-bold text-white font-['Inter',sans-serif]">Regular NRI Field Audits</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-[#c5a880] text-[#381e23] flex items-center justify-center font-bold text-sm shrink-0 shadow-md">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <span class="text-xs font-bold text-white font-['Inter',sans-serif]">No Hidden Surprises</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-[#c5a880] text-[#381e23] flex items-center justify-center font-bold text-sm shrink-0 shadow-md">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <span class="text-xs font-bold text-white font-['Inter',sans-serif]">Dedicated Hands-on Advice</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer
+    class="bg-[#121212] pt-16 pb-8 px-6 sm:px-10 lg:px-16 flex flex-col items-center justify-start relative overflow-hidden reveal-up">
+    <div
+      class="pb-10 w-full shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 w-full max-w-[1440px] px-6 sm:px-10 lg:px-16 relative z-10 mx-auto">
+      
+      <!-- Col 1: Brand & Tagline -->
+      <div class="flex flex-col gap-3 items-start justify-start relative text-left">
+        <a href="index.html" class="inline-block hover:scale-105 transition-transform duration-300">
+          <img class="shrink-0 w-[130px] h-[72px] sm:w-[150px] sm:h-[80px] relative object-contain footer-logo-img"
+            src="vizhi-infragen-realtors-logo-white.png" alt="Vizhi Infragen Realtors Logo" />
+        </a>
+        <div class="flex flex-col gap-0 items-start justify-start shrink-0 max-w-[260px] relative text-left">
+          <p class="text-[#9b98a1] text-left font-['Inter',_sans-serif] text-xs leading-[18px] font-normal relative block">
+            Vizhi Infragen Realtors LLP — Your Trusted Partner in Real Estate &amp; Property Management.
+          </p>
+        </div>
+        <a href="contact.html"
+          class="bg-[#c99b4a] hover:bg-[#b98c3b] hover:scale-[1.02] active:scale-[0.98] rounded-full border-none py-1.5 px-3.5 flex flex-row gap-2 items-center justify-start shrink-0 relative transition-all duration-300 group shadow-md mt-1">
+          <span class="text-[#3f131c] text-left font-['Inter',_sans-serif] text-xs font-semibold relative flex items-center justify-start">
+            Start Property Journey
+          </span>
+          <i class="fa-solid fa-arrow-right text-[#3f131c] text-[10px] group-hover:translate-x-1 transition-transform"></i>
+        </a>
+      </div>
+
+      <!-- Col 2: Company Links -->
+      <div class="flex flex-col gap-2 items-start justify-start relative">
+        <div class="text-[#ffffff] text-left font-['Inter',_sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
+          Company
+        </div>
+        <a href="about.html"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          About Us
+        </a>
+        <a href="index.html#services"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          Our Services
+        </a>
+        <a href="index.html#projects"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          Projects
+        </a>
+        <a href="contact.html"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          Contact
+        </a>
+      </div>
+
+      <!-- Col 3: Services Links -->
+      <div class="flex flex-col gap-2 items-start justify-start relative">
+        <div class="text-[#ffffff] text-left font-['Inter',_sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
+          Services
+        </div>
+        <a href="index.html#services"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          Land Sales &amp; Plots
+        </a>
+        <a href="index.html#services"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          Property Management
+        </a>
+        <a href="index.html#services"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          NRI Property Shield
+        </a>
+        <a href="index.html#services"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          DTCP &amp; Legal Approvals
+        </a>
+      </div>
+
+      <!-- Col 4: Contact Info -->
+      <div class="flex flex-col gap-2 items-start justify-start relative">
+        <div class="text-[#ffffff] text-left font-['Inter',_sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
+          Contact Us
+        </div>
+        <a href="mailto:srissa2006@gmail.com"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal break-all">
+          📧 srissa2006@gmail.com
+        </a>
+        <a href="tel:+919688889420"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          📞 +91 96888 89420
+        </a>
+        <div class="text-[#9b98a1] text-left font-['Inter',_sans-serif] text-xs leading-[18px] font-normal max-w-[220px]">
+          📍 First Floor, Shop No.24, Old Bus Stand Complex, 24, Suganthi Nagar Rd, Sulur, TN 641402
+        </div>
+      </div>
+
+      <!-- Col 5: Find Us Google Map -->
+      <div class="flex flex-col gap-2 items-start justify-start relative w-full">
+        <div class="text-[#ffffff] text-left font-['Inter',_sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
+          Find Us
+        </div>
+        <div class="rounded-xl border-solid border-[rgba(255,255,255,0.12)] border flex flex-col gap-0 items-start justify-center w-full max-w-[200px] shrink-0 h-[120px] relative overflow-hidden shadow-md">
+          <div class="bg-[rgba(255,255,255,0.20)] w-full h-full relative overflow-hidden">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.483981881518!2d77.1235!3d11.0258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba85703730aa18b%3A0xc3457df7aa121d5a!2sOld%20Bus%20Stand%20Complex%2C%20Suganthi%20Nagar%20Rd%2C%20Sulur%2C%20Tamil%20Nadu%20641402!5e0!3m2!1sen!2sin!4v1721800000000"
+              class="absolute inset-0 w-full h-full border-0 grayscale opacity-80 hover:opacity-100 hover:grayscale-0 transition-all duration-500"
+              allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+            <div class="bg-white rounded-sm px-2 py-1 flex items-center justify-start shrink-0 absolute left-2 top-2 z-10 shadow-md">
+              <a href="https://maps.google.com/?q=First+Floor,+Shop+No.24,+Old+Bus+Stand+Complex,+24,+Suganthi+Nagar+Rd,+Sulur,+Tamil+Nadu+641402" target="_blank"
+                class="flex flex-row gap-1 items-center justify-start cursor-pointer group">
+                <span class="text-[#1a73e8] text-[10px] font-medium group-hover:underline">Maps</span>
+                <i class="fa-solid fa-location-dot text-[#1a73e8] text-[9px]"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Copyright Bar -->
+    <div class="border-solid border-[rgba(255,255,255,0.1)] border-t py-6 px-6 sm:px-10 lg:px-16 flex flex-col sm:flex-row items-center justify-between w-full max-w-[1440px] gap-4 relative z-10 mx-auto">
+      <div class="text-[#888888] text-center sm:text-left font-['Inter',_sans-serif] text-xs font-normal">
+        © 2026 Vizhi Infragen Realtors LLP. All rights reserved.
+      </div>
+      <div class="flex flex-row gap-7 sm:gap-8 items-center justify-start shrink-0">
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+          class="text-[#E4405F] hover:scale-125 transition-transform duration-300" aria-label="Instagram">
+          <i class="fa-brands fa-instagram text-xl"></i>
+        </a>
+        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer"
+          class="text-[#FF0000] hover:scale-125 transition-transform duration-300" aria-label="YouTube">
+          <i class="fa-brands fa-youtube text-xl"></i>
+        </a>
+        <a href="https://wa.me/919688889420" target="_blank" rel="noopener noreferrer"
+          class="text-[#25D366] hover:scale-125 transition-transform duration-300" aria-label="WhatsApp">
+          <i class="fa-brands fa-whatsapp text-xl"></i>
+        </a>
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
+          class="text-[#1DA1F2] hover:scale-125 transition-transform duration-300" aria-label="Twitter">
+          <i class="fa-brands fa-twitter text-xl"></i>
+        </a>
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+          class="text-[#1877F2] hover:scale-125 transition-transform duration-300" aria-label="Facebook">
+          <i class="fa-brands fa-facebook-f text-xl"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Custom JS Script -->
+  <script src="script.js"></script>
+</body>
+
+</html>

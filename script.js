@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // 2. SCROLL REVEAL (Intersection Observer)
   // ==========================================
-  const revealElements = document.querySelectorAll('.reveal');
+  const revealElements = document.querySelectorAll('.reveal, .reveal-up, .reveal-left, .reveal-right, .reveal-scale');
 
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -144,8 +144,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }, {
-    threshold: 0.15,
-    rootMargin: '0px 0px -50px 0px'
+    threshold: 0.12,
+    rootMargin: '0px 0px -40px 0px'
   });
 
   revealElements.forEach(el => revealObserver.observe(el));
