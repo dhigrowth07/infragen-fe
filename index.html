@@ -1993,6 +1993,204 @@
 
   <!-- Custom JS Script -->
   <script src="script.js"></script>
+
+  <!-- ==========================================
+       VIZHI CHATBOT WIDGET
+       ========================================== -->
+  <style>
+    #vi-chat-trigger {
+      position:fixed;bottom:28px;right:28px;z-index:9999;
+      width:58px;height:58px;border-radius:50%;
+      background:linear-gradient(135deg,#1F0A10 0%,#3d1520 100%);
+      border:2.5px solid #c5a880;
+      box-shadow:0 6px 28px rgba(0,0,0,0.35);
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+      opacity:0;transform:scale(0.7) translateY(20px);
+      transition:opacity 0.4s ease,transform 0.4s ease;
+    }
+    #vi-chat-trigger.show{opacity:1;transform:scale(1) translateY(0);}
+    #vi-chat-trigger:hover{transform:scale(1.10) translateY(0);}
+    .vi-pulse{position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(197,168,128,0.4);animation:vi-pulse 2.2s ease-out infinite;}
+    @keyframes vi-pulse{0%{transform:scale(1);opacity:0.8}100%{transform:scale(1.6);opacity:0}}
+    #vi-chat-trigger i{font-size:22px;color:#c5a880;position:relative;z-index:2;}
+    #vi-unread-badge{position:absolute;top:-2px;right:-2px;width:18px;height:18px;border-radius:50%;background:#e53e3e;color:#fff;font-size:10px;font-family:'Inter',sans-serif;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #fff;z-index:3;}
+    #vi-chat-window{position:fixed;bottom:100px;right:28px;z-index:9998;width:370px;max-height:580px;background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.25),0 4px 16px rgba(0,0,0,0.12);display:flex;flex-direction:column;overflow:hidden;transform:scale(0.85) translateY(20px);opacity:0;pointer-events:none;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),opacity 0.3s ease;}
+    #vi-chat-window.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all;}
+    .vi-header{background:linear-gradient(135deg,#1F0A10 0%,#3d1520 100%);padding:14px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+    .vi-header-avatar{width:40px;height:40px;border-radius:50%;background:rgba(197,168,128,0.20);border:2px solid #c5a880;display:flex;align-items:center;justify-content:center;font-size:18px;color:#c5a880;flex-shrink:0;}
+    .vi-header-info{flex:1;}
+    .vi-header-name{font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;color:#fff;}
+    .vi-header-status{font-family:'Inter',sans-serif;font-size:11px;color:#c5a880;display:flex;align-items:center;gap:4px;}
+    .vi-status-dot{width:7px;height:7px;border-radius:50%;background:#48bb78;}
+    .vi-header-actions{display:flex;gap:8px;}
+    .vi-header-btn{width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);display:flex;align-items:center;justify-content:center;font-size:11px;transition:background 0.2s;}
+    .vi-header-btn:hover{background:rgba(255,255,255,0.22);}
+    #vi-messages{flex:1;overflow-y:auto;padding:16px 14px;background:#f8f5f0;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;}
+    #vi-messages::-webkit-scrollbar{width:4px;}
+    #vi-messages::-webkit-scrollbar-thumb{background:#c5a880;border-radius:4px;}
+    .vi-msg-row{display:flex;align-items:flex-end;gap:8px;}
+    .vi-msg-row.user{flex-direction:row-reverse;}
+    .vi-bot-av{width:28px;height:28px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#1F0A10,#3d1520);border:1.5px solid #c5a880;display:flex;align-items:center;justify-content:center;font-size:12px;color:#c5a880;}
+    .vi-bubble{max-width:78%;padding:10px 14px;border-radius:16px;font-family:'Inter',sans-serif;font-size:13px;line-height:1.55;}
+    .vi-bubble.bot{background:#fff;color:#1a1a1a;border-radius:4px 16px 16px 16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+    .vi-bubble.user{background:linear-gradient(135deg,#1F0A10,#3d1520);color:#fff;border-radius:16px 4px 16px 16px;}
+    .vi-time{font-size:10px;color:#aaa;margin-top:3px;display:block;text-align:right;}
+    .vi-bubble.user .vi-time{color:rgba(255,255,255,0.55);}
+    .vi-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px;padding-left:36px;}
+    .vi-chip{padding:6px 13px;border-radius:20px;font-size:12px;font-family:'Inter',sans-serif;cursor:pointer;border:1.5px solid #c5a880;color:#1F0A10;background:rgba(197,168,128,0.10);transition:all 0.2s ease;white-space:nowrap;display:flex;align-items:center;gap:5px;}
+    .vi-chip:hover{background:#c5a880;color:#1F0A10;font-weight:600;}
+    .vi-chip i{font-size:10px;}
+    .vi-typing-dots{display:flex;align-items:center;gap:4px;padding:10px 14px;}
+    .vi-typing-dots span{width:7px;height:7px;border-radius:50%;background:#c5a880;animation:vi-bounce 1.2s infinite ease-in-out;}
+    .vi-typing-dots span:nth-child(2){animation-delay:0.2s;}
+    .vi-typing-dots span:nth-child(3){animation-delay:0.4s;}
+    @keyframes vi-bounce{0%,80%,100%{transform:scale(0.7);opacity:0.5}40%{transform:scale(1);opacity:1}}
+    .vi-input-area{display:flex;align-items:center;gap:10px;padding:12px 14px;border-top:1px solid #ede8e0;background:#fff;flex-shrink:0;}
+    #vi-input{flex:1;border:1.5px solid #e2d9ce;border-radius:24px;padding:9px 16px;font-family:'Inter',sans-serif;font-size:13px;outline:none;background:#faf7f3;color:#1a1a1a;transition:border 0.2s;}
+    #vi-input:focus{border-color:#c5a880;}
+    #vi-input::placeholder{color:#b0a89a;}
+    #vi-send-btn{width:38px;height:38px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,#1F0A10,#3d1520);color:#c5a880;display:flex;align-items:center;justify-content:center;font-size:14px;transition:transform 0.2s,box-shadow 0.2s;flex-shrink:0;}
+    #vi-send-btn:hover{transform:scale(1.10);box-shadow:0 4px 12px rgba(31,10,16,0.4);}
+    @media(max-width:480px){#vi-chat-window{width:calc(100vw - 24px);right:12px;}}
+  </style>
+
+  <div id="vi-chat-trigger" onclick="viToggleChat()" title="Chat with Vizhi Assistant">
+    <div class="vi-pulse"></div>
+    <i class="fa-solid fa-comment-dots"></i>
+    <div id="vi-unread-badge">1</div>
+  </div>
+
+  <div id="vi-chat-window">
+    <div class="vi-header">
+      <div class="vi-header-avatar"><i class="fa-solid fa-robot"></i></div>
+      <div class="vi-header-info">
+        <div class="vi-header-name">Vizhi Assistant</div>
+        <div class="vi-header-status"><span class="vi-status-dot"></span> Online — here to help</div>
+      </div>
+      <div class="vi-header-actions">
+        <button class="vi-header-btn" onclick="viToggleChat()" title="Minimize"><i class="fa-solid fa-minus"></i></button>
+        <button class="vi-header-btn" onclick="viCloseChat()" title="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    </div>
+    <div id="vi-messages"></div>
+    <div class="vi-input-area">
+      <input id="vi-input" type="text" placeholder="Type a message…" onkeydown="if(event.key==='Enter')viSendUser()" maxlength="200"/>
+      <button id="vi-send-btn" onclick="viSendUser()"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var viOpen=false;
+    var viKB={
+      greetings:['hi','hello','hey','good morning','good afternoon','good evening','hii','helo','hai','howdy'],
+      services:['service','services','what do you offer','offer','offerings','solutions','what you do'],
+      land:['land','plot','plots','agricultural','farm','site','sites','layouts','layout'],
+      residential:['residential','house','home','apartment','flat','villa','bungalow','duplex','row house'],
+      commercial:['commercial','office','shop','showroom','retail','warehouse','industrial'],
+      nri:['nri','overseas','abroad','foreign','non resident','nro','nri service'],
+      contact:['contact','phone','call','email','address','reach','whatsapp','number','mobile'],
+      location:['location','where','area','coimbatore','sulur','kalapatti','saravanampatti','neelambur','avinashi','trichy road','sathy road','bypass','pattanam'],
+      price:['price','cost','budget','rate','amount','how much','affordable','cheap','expensive'],
+      documentation:['document','legal','title','encumbrance','registration','patta','approval','dtcp','rera','paperwork'],
+      construction:['construction','build','building','contractor','civil','construct'],
+      valuation:['valuation','value','worth','market value','appraisal'],
+      management:['management','manage','property management','caretaker','maintenance','rental management'],
+      about:['about','who are you','vizhi','infragen','company','history','team','experience'],
+      thanks:['thanks','thank you','ok','okay','great','perfect','got it','understood','sure','bye','goodbye','cya']
+    };
+    var viR={
+      greeting:{text:"Hi there! 👋 Welcome to <strong>Vizhi Infragen Realtors</strong>!<br>I'm your virtual property assistant. How can I help you today?",chips:[{icon:'fa-house',label:'Explore Properties'},{icon:'fa-map-marker-alt',label:'Find by Location'},{icon:'fa-concierge-bell',label:'Our Services'},{icon:'fa-phone',label:'Contact Us'},{icon:'fa-file-contract',label:'Documentation'},{icon:'fa-globe',label:'NRI Services'}]},
+      land:{text:"🌿 <strong>Land & Plots</strong> across Coimbatore & South India:<br><br>• DTCP & RERA approved layouts<br>• Agricultural & residential plots<br>• Sizes from 1200 sq.ft to acres<br>• Prime locations: Sulur, Avinashi Rd, Trichy Rd, Sathy Rd<br><br>Want to explore a specific area?",chips:[{icon:'fa-map-marker-alt',label:'Sulur'},{icon:'fa-map-marker-alt',label:'Avinashi Road'},{icon:'fa-map-marker-alt',label:'Trichy Road'},{icon:'fa-map-marker-alt',label:'Sathy Road'},{icon:'fa-phone',label:'Talk to an Expert'}]},
+      residential:{text:"🏠 <strong>Dream Homes</strong> — we offer:<br><br>• Villas & luxury bungalows<br>• Row houses & duplex homes<br>• Apartments & flats<br>• Ready-to-occupy & under-construction<br>• Curated Coimbatore locations",chips:[{icon:'fa-home',label:'Villa / Luxury'},{icon:'fa-building',label:'Apartment'},{icon:'fa-house-user',label:'Row House'},{icon:'fa-phone',label:'Get Assistance'}]},
+      commercial:{text:"🏢 <strong>Commercial Real Estate</strong>:<br><br>• Office spaces & IT parks<br>• Retail shops & showrooms<br>• Warehouses & industrial sheds<br>• DTCP-approved commercial plots",chips:[{icon:'fa-briefcase',label:'Office Space'},{icon:'fa-store',label:'Retail / Shop'},{icon:'fa-warehouse',label:'Warehouse'},{icon:'fa-phone',label:'Contact Expert'}]},
+      nri:{text:"✈️ <strong>NRI Property Shield</strong> — for Non-Resident Indians:<br><br>• Regular on-site visits & photo reports<br>• Tenant sourcing & rent collection<br>• Legal documentation & title monitoring<br>• Tax & compliance guidance<br>• WhatsApp/email updates<br><br>Your property is safe with us!",chips:[{icon:'fa-phone',label:'Call Us Now'},{icon:'fa-whatsapp',label:'WhatsApp'},{icon:'fa-info-circle',label:'About Page'}]},
+      services:{text:"🛠️ <strong>10+ End-to-End Services:</strong><br><br>• Land Sales & Plots<br>• Property Purchase Assistance<br>• Property Management<br>• NRI Property Shield<br>• Building Construction<br>• Building Valuation<br>• Legal Documentation<br>• Land Conversion<br>• Rental Management<br>• Corporate Solutions",chips:[{icon:'fa-seedling',label:'Land & Plots'},{icon:'fa-globe',label:'NRI Services'},{icon:'fa-hard-hat',label:'Construction'},{icon:'fa-file-contract',label:'Documentation'}]},
+      contact:{text:"📞 <strong>Reach Us:</strong><br><br>📱 <a href='tel:+919688889420' style='color:#c5a880;'>+91 96888 89420</a><br>📧 <a href='mailto:srissa2006@gmail.com' style='color:#c5a880;'>srissa2006@gmail.com</a><br>📍 Shop No.24, Old Bus Stand Complex, Sulur, Coimbatore – 641402<br><br>⏰ Mon–Sat: 9AM – 7PM",chips:[{icon:'fa-phone',label:'Call Now'},{icon:'fa-whatsapp',label:'WhatsApp'},{icon:'fa-map-marker-alt',label:'Get Directions'},{icon:'fa-envelope',label:'Email Us'}]},
+      location:{text:"📍 We serve <strong>Coimbatore & South India</strong>. Choose your area:",chips:[{icon:'fa-map-marker-alt',label:'Kalapatti'},{icon:'fa-map-marker-alt',label:'Saravanampatti'},{icon:'fa-map-marker-alt',label:'Sulur'},{icon:'fa-map-marker-alt',label:'Avinashi Road'},{icon:'fa-map-marker-alt',label:'Neelambur'},{icon:'fa-map-marker-alt',label:'Trichy Road'},{icon:'fa-map-marker-alt',label:'Sathy Road'},{icon:'fa-map-marker-alt',label:'Coimbatore Bypass'}]},
+      price:{text:"💰 <strong>Competitive Pricing:</strong><br><br>• Plots: From ₹8 Lakhs onwards<br>• Residential: From ₹25 Lakhs onwards<br>• Commercial: Custom pricing<br><br>Talk to our experts for the best deal!",chips:[{icon:'fa-phone',label:'Get Price Quote'},{icon:'fa-seedling',label:'View Plots'},{icon:'fa-home',label:'View Homes'}]},
+      documentation:{text:"📄 <strong>Legal & Documentation:</strong><br><br>• Title verification & EC checking<br>• DTCP / RERA verification<br>• Sale deed & registration<br>• Patta transfer assistance<br>• Land conversion services<br><br>Zero documentation surprises — guaranteed!",chips:[{icon:'fa-phone',label:'Talk to an Expert'},{icon:'fa-file-contract',label:'Contact Us'}]},
+      construction:{text:"🏗️ <strong>Building Construction:</strong><br><br>• Residential & commercial construction<br>• Architecture & design consultation<br>• Project management from foundation to finish<br>• Quality materials & certified contractors",chips:[{icon:'fa-phone',label:'Get Quote'},{icon:'fa-ruler-combined',label:'Contact Us'}]},
+      valuation:{text:"📊 <strong>Property Valuation:</strong><br><br>• Accurate market valuation reports<br>• Bank-approved certificates<br>• Current market trend comparisons<br>• Expert guidance on pricing",chips:[{icon:'fa-phone',label:'Book Valuation'},{icon:'fa-chart-line',label:'Contact Us'}]},
+      management:{text:"🔑 <strong>Property Management:</strong><br><br>• Tenant sourcing & background checks<br>• Rent collection & transfer<br>• Maintenance & repairs<br>• Regular inspection reports<br>• Legal support for agreements",chips:[{icon:'fa-globe',label:'NRI Services'},{icon:'fa-phone',label:'Contact Us'}]},
+      about:{text:"🏢 <strong>Vizhi Infragen Realtors LLP</strong><br><br>• 7+ Years in Coimbatore & South India<br>• 500+ satisfied clients<br>• 100% title-verified properties<br>• 10+ end-to-end services<br><br>Built on <strong>Honesty & Follow-Through</strong>.",chips:[{icon:'fa-info-circle',label:'About Page'},{icon:'fa-phone',label:'Contact Us'}]},
+      thanks:{text:"😊 You're welcome! Great chatting with you.<br>Feel free to return anytime — I'm here to help you find your perfect property! 🏠",chips:[{icon:'fa-house',label:'Explore Properties'},{icon:'fa-phone',label:'Contact Expert'},{icon:'fa-redo',label:'Main Menu'}]},
+      fallback:{text:"🤔 I didn't quite catch that. Here's what I can help with:",chips:[{icon:'fa-house',label:'Explore Properties'},{icon:'fa-map-marker-alt',label:'Find by Location'},{icon:'fa-concierge-bell',label:'Our Services'},{icon:'fa-phone',label:'Contact Us'},{icon:'fa-globe',label:'NRI Services'},{icon:'fa-file-contract',label:'Documentation'}]}
+    };
+    var viNavMap={
+      'About Page':'about.html','Contact Us':'contact.html','Get Directions':'https://maps.google.com/?q=Old+Bus+Stand+Complex+Sulur+Tamil+Nadu',
+      'Call Now':'tel:+919688889420','Call Us Now':'tel:+919688889420','WhatsApp':'https://wa.me/919688889420',
+      'Email Us':'mailto:srissa2006@gmail.com','Talk to an Expert':'tel:+919688889420','Contact Expert':'tel:+919688889420',
+      'Get Price Quote':'contact.html','Book Valuation':'contact.html','Get Quote':'contact.html',
+      'View Plots':'index.html#services','View Homes':'index.html#services'
+    };
+    var viLocChips=['Kalapatti','Saravanampatti','Sulur','Avinashi Road','Neelambur','Trichy Road','Sathy Road','Coimbatore Bypass','Pattanam'];
+    var viPropMap={'Explore Properties':'land','Find by Location':'location','Our Services':'services','NRI Services':'nri','Documentation':'documentation','Documentation Help':'documentation','Land & Plots':'land','Plot / Land':'land','Residential':'residential','Commercial':'commercial','Villa / Luxury':'residential','Apartment':'residential','Row House':'residential','Office Space':'commercial','Retail / Shop':'commercial','Warehouse':'commercial','Construction':'construction','Main Menu':'greeting','Explore More':'services','Market Insights':'services'};
+
+    function viDetect(t){
+      t=t.toLowerCase();
+      for(var k in viKB){var arr=viKB[k];for(var i=0;i<arr.length;i++){if(t.indexOf(arr[i])!==-1)return k;}}
+      return 'fallback';
+    }
+    function viTime(){var d=new Date(),h=d.getHours(),m=d.getMinutes();return(h>12?h-12:h||12)+':'+(m<10?'0'+m:m)+' '+(h>=12?'PM':'AM');}
+    function viAddMsg(text,who){
+      var msgs=document.getElementById('vi-messages');
+      var row=document.createElement('div');row.className='vi-msg-row '+who;
+      if(who==='bot'){row.innerHTML='<div class="vi-bot-av"><i class="fa-solid fa-robot"></i></div><div><div class="vi-bubble bot">'+text+'<span class="vi-time">'+viTime()+'</span></div></div>';}
+      else{row.innerHTML='<div><div class="vi-bubble user">'+text+'<span class="vi-time">'+viTime()+'</span></div></div>';}
+      msgs.appendChild(row);msgs.scrollTop=msgs.scrollHeight;
+    }
+    function viAddBot(text,chips){
+      var t=document.getElementById('vi-typing-el');if(t)t.remove();
+      viAddMsg(text,'bot');
+      if(chips&&chips.length){
+        var msgs=document.getElementById('vi-messages');
+        var el=document.createElement('div');el.className='vi-chips';
+        chips.forEach(function(c){
+          var btn=document.createElement('button');btn.className='vi-chip';
+          btn.innerHTML='<i class="fa-solid '+c.icon+'"></i> '+c.label;
+          btn.onclick=function(){viChipAction(c.label);};
+          el.appendChild(btn);
+        });
+        msgs.appendChild(el);msgs.scrollTop=msgs.scrollHeight;
+      }
+    }
+    function viShowTyping(cb){
+      var msgs=document.getElementById('vi-messages');
+      var el=document.createElement('div');el.id='vi-typing-el';el.className='vi-msg-row bot';
+      el.innerHTML='<div class="vi-bot-av"><i class="fa-solid fa-robot"></i></div><div class="vi-bubble bot vi-typing-dots"><span></span><span></span><span></span></div>';
+      msgs.appendChild(el);msgs.scrollTop=msgs.scrollHeight;
+      setTimeout(cb,900);
+    }
+    function viChipAction(label){
+      viAddMsg(label,'user');
+      if(viNavMap[label]){setTimeout(function(){window.location.href=viNavMap[label];},800);setTimeout(function(){viAddBot("Taking you there now… 🚀",[]);},300);return;}
+      if(viLocChips.indexOf(label)!==-1){setTimeout(function(){viAddBot("Great choice! <strong>"+label+"</strong> is one of our prime areas. 📍<br>What type of property are you looking for?",[{icon:'fa-seedling',label:'Plot / Land'},{icon:'fa-home',label:'Residential'},{icon:'fa-building',label:'Commercial'},{icon:'fa-phone',label:'Talk to an Expert'}]);},700);return;}
+      var intent=viPropMap[label]||viDetect(label);
+      var resp=viR[intent]||viR.fallback;
+      viShowTyping(function(){viAddBot(resp.text,resp.chips);});
+    }
+    window.viSendUser=function(){
+      var inp=document.getElementById('vi-input');var text=(inp.value||'').trim();if(!text)return;
+      inp.value='';viAddMsg(text,'user');
+      var intent=viDetect(text);var resp=viR[intent]||viR.fallback;
+      viShowTyping(function(){viAddBot(resp.text,resp.chips);});
+    };
+    window.viToggleChat=function(){
+      viOpen=!viOpen;
+      document.getElementById('vi-chat-window').classList.toggle('open',viOpen);
+      if(viOpen){
+        document.getElementById('vi-unread-badge').style.display='none';
+        if(!document.getElementById('vi-messages').children.length){setTimeout(function(){viAddBot(viR.greeting.text,viR.greeting.chips);},400);}
+      }
+    };
+    window.viCloseChat=function(){viOpen=false;document.getElementById('vi-chat-window').classList.remove('open');};
+    var viShown=false;
+    window.addEventListener('scroll',function(){if(!viShown&&window.scrollY>200){document.getElementById('vi-chat-trigger').classList.add('show');viShown=true;}});
+    setTimeout(function(){if(!viShown){document.getElementById('vi-chat-trigger').classList.add('show');viShown=true;}},3000);
+  })();
+  </script>
 </body>
 
 </html>
