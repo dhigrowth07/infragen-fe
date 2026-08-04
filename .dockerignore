@@ -1,0 +1,45 @@
+# ============================================================
+#  .dockerignore — Befhue Frontend
+#  Excludes everything not needed inside the Docker build
+#  context to keep the context small and builds fast.
+# ============================================================
+
+# Version control
+.git
+.gitignore
+
+# Dependencies (re-installed fresh inside the image)
+node_modules
+
+# Next.js build output (rebuilt inside the image)
+.next
+out
+
+# Local environment files (never bake secrets into images)
+.env
+.env.*
+!.env.example
+
+# Tooling / editor configs
+.eslintcache
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+
+# Coverage & test artefacts
+coverage
+__tests__
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Docs & misc
+README.md
+*.md
+.vercel
+
+# Docker files themselves
+Dockerfile
+.dockerignore
+docker-compose*.yml
