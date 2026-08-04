@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Contact Us | Vizhi Infragen Realtors - Coimbatore Real Estate</title>
+
+  <!-- Meta Tags for SEO -->
+  <meta name="description"
+    content="Contact Vizhi Infragen Realtors for expert real estate guidance, land sales, property management, and DTCP approvals in Coimbatore. Reach out to our team today.">
+  <meta name="keywords"
+    content="Contact Vizhi Infragen Realtors, Coimbatore real estate contact, property consultation Coimbatore, NRI property management contact">
+  <meta name="author" content="Vizhi Infragen Realtors">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+    rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Favicon -->
+  <link rel="icon" href="vizhi-infragen-realtors-logo.png" type="image/png">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Leaflet Interactive Map CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            burgundy: {
+              50: '#FDF2F4',
+              100: '#FAD5DC',
+              500: '#A22C46',
+              600: '#8A1F36',
+              700: '#6B1D2F',
+              800: '#4E1421',
+              900: '#330B14',
+            },
+            gold: {
+              DEFAULT: '#c5a880',
+              hover: '#b59870',
+              bright: '#D4AF37'
+            },
+            cream: {
+              DEFAULT: '#FDFBF7',
+              dark: '#F5EFE6',
+              card: '#FAF6F0'
+            }
+          },
+          fontFamily: {
+            sans: ['Outfit', 'Inter', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-[#FDFBF7] text-[#1E293B] antialiased">
+
+  <!-- ==========================================
+       SIDE DRAWER / OFF-CANVAS OVERLAY MENU
+       ========================================== -->
+  <div id="side-drawer-overlay"
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <div id="side-drawer"
+    class="fixed top-0 right-0 h-full w-[340px] sm:w-[400px] bg-white z-[101] shadow-2xl translate-x-full transition-transform duration-300 ease-out flex flex-col justify-between p-8 overflow-y-auto">
+
+    <!-- Top Close Button -->
+    <button id="close-side-drawer"
+      class="absolute top-6 right-6 w-10 h-10 rounded-full bg-stone-100 text-[#4E1421] hover:bg-[#4E1421] hover:text-white flex items-center justify-center transition-all cursor-pointer shadow-sm">
+      <i class="fa-solid fa-xmark text-lg"></i>
+    </button>
+
+    <div class="flex flex-col items-center text-center mt-6 space-y-6">
+
+      <!-- Company Logo in Center -->
+      <div class="p-3 bg-stone-50 rounded-2xl border border-stone-200/80 shadow-md inline-block mb-2">
+        <img src="vizhi-infragen-realtors-logo.png" alt="Vizhi Infragen Realtors Logo"
+          class="w-36 h-20 object-contain mx-auto" />
+      </div>
+
+      <!-- Navigation Links List inside Drawer -->
+      <nav class="flex flex-col space-y-3 w-full border-t border-b border-stone-100 py-6">
+        <a href="index.html"
+          class="drawer-link text-lg font-bold text-[#334155] hover:text-[#c5a880] transition-colors font-['Inter',sans-serif]">Home</a>
+        <a href="about.html"
+          class="drawer-link text-lg font-bold text-[#334155] hover:text-[#c5a880] transition-colors font-['Inter',sans-serif]">About Us</a>
+        <a href="index.html#properties"
+          class="drawer-link text-lg font-bold text-[#334155] hover:text-[#c5a880] transition-colors font-['Inter',sans-serif]">Properties</a>
+        <a href="services.html"
+          class="drawer-link text-lg font-bold text-[#334155] hover:text-[#c5a880] transition-colors font-['Inter',sans-serif]">Services</a>
+        <a href="index.html#blog"
+          class="drawer-link text-lg font-bold text-[#334155] hover:text-[#c5a880] transition-colors font-['Inter',sans-serif]">Blog</a>
+        <a href="contact.html"
+          class="drawer-link text-lg font-bold text-[#c5a880] hover:text-[#4E1421] transition-colors font-['Inter',sans-serif]">Contact Us</a>
+      </nav>
+
+      <!-- Company Address & Contact Details -->
+      <div class="space-y-3 text-center text-[#334155] font-['Inter',sans-serif] text-sm">
+        <div class="flex items-center justify-center gap-2 text-[#4E1421] font-bold text-base font-['Inter',sans-serif]">
+          <i class="fa-solid fa-location-dot text-[#c5a880]"></i>
+          <span>Vizhi Infragen Realtors</span>
+        </div>
+        <p class="text-xs text-stone-600 leading-relaxed max-w-[280px] mx-auto">
+          First Floor, Shop No.24, Old Bus Stand Complex, 24, Suganthi Nagar Rd, Sulur, Tamil Nadu 641402
+        </p>
+
+        <div class="pt-2 flex flex-col items-center gap-2 text-xs">
+          <a href="mailto:srissa2006@gmail.com?subject=Inquiry%20Regarding%20Coimbatore%20Real%20Estate%20Properties"
+            class="flex items-center gap-2 text-[#4E1421] hover:text-[#c5a880] font-semibold transition-colors">
+            <i class="fa-solid fa-envelope text-[#c5a880]"></i>
+            <span>srissa2006@gmail.com</span>
+          </a>
+          <a href="tel:9688889420"
+            class="flex items-center gap-2 text-[#4E1421] hover:text-[#c5a880] font-semibold transition-colors">
+            <i class="fa-solid fa-phone text-[#c5a880]"></i>
+            <span>+91 96888 89420</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Social Media Icons Row -->
+      <div class="flex items-center justify-center gap-3 pt-4 border-t border-stone-100 w-full">
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+          class="w-10 h-10 rounded-full bg-stone-100 text-[#1877F2] hover:bg-[#1877F2]/10 flex items-center justify-center transition-all">
+          <i class="fa-brands fa-facebook-f text-lg"></i>
+        </a>
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
+          class="w-10 h-10 rounded-full bg-stone-100 text-[#1DA1F2] hover:bg-[#1DA1F2]/10 flex items-center justify-center transition-all">
+          <i class="fa-brands fa-twitter text-lg"></i>
+        </a>
+        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer"
+          class="w-10 h-10 rounded-full bg-stone-100 text-[#FF0000] hover:bg-[#FF0000]/10 flex items-center justify-center transition-all">
+          <i class="fa-brands fa-youtube text-lg"></i>
+        </a>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+          class="w-10 h-10 rounded-full bg-stone-100 text-[#E4405F] hover:bg-[#E4405F]/10 flex items-center justify-center transition-all">
+          <i class="fa-brands fa-instagram text-lg"></i>
+        </a>
+        <a href="https://wa.me/919688889420" target="_blank" rel="noopener noreferrer"
+          class="w-10 h-10 rounded-full bg-stone-100 text-[#25D366] hover:bg-[#25D366]/10 flex items-center justify-center transition-all">
+          <i class="fa-brands fa-whatsapp text-lg"></i>
+        </a>
+      </div>
+
+    </div>
+
+    <div class="text-center pt-6 text-[11px] text-stone-400 font-medium">
+      &copy; 2026 Vizhi Infragen Realtors. All Rights Reserved.
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       TOP NAVBAR (Matches Home Page Solid Luxury Brown Header)
+       ========================================== -->
+  <header id="main-header"
+    class="fixed top-0 left-0 w-full z-[100] bg-[#381e23] border-b border-white/10 shadow-2xl transition-colors duration-300">
+    <div class="max-w-[1650px] mx-auto px-4 sm:px-8 lg:px-12">
+      <div class="flex justify-between items-center h-20 sm:h-24">
+
+        <!-- Left: White Transparent Logo -->
+        <a href="index.html" class="flex items-center gap-3 hover:scale-[1.02] transition-transform duration-300 group">
+          <img class="w-[135px] h-[75px] sm:w-[160px] sm:h-[82px] object-contain drop-shadow-md nav-logo-img"
+            src="vizhi-infragen-realtors-logo-white.png" alt="Vizhi Infragen Realtors Logo" />
+        </a>
+
+        <!-- Center: Navigation Menu with Vertical Line Dividers (Home | About Us | Properties v | Services v | Blog | Contact Us) -->
+        <nav class="hidden md:flex items-center h-full">
+          <a href="index.html"
+            class="text-white hover:text-[#c5a880] font-medium text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6 border-r border-white/20">
+            Home
+          </a>
+          <a href="about.html"
+            class="text-white hover:text-[#c5a880] font-medium text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6 border-r border-white/20">
+            About Us
+          </a>
+          <!-- Properties with Dropdown Icon -->
+          <a href="index.html#properties"
+            class="text-white hover:text-[#c5a880] font-medium text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6 border-r border-white/20 flex items-center gap-1.5">
+            <span>Properties</span>
+            <i class="fa-solid fa-chevron-down text-[10px] lg:text-[11px] opacity-75"></i>
+          </a>
+          <!-- Services -->
+          <a href="services.html"
+            class="text-white hover:text-[#c5a880] font-medium text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6 border-r border-white/20">
+            Services
+          </a>
+          <a href="index.html#blog"
+            class="text-white hover:text-[#c5a880] font-medium text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6 border-r border-white/20">
+            Blog
+          </a>
+          <!-- Active Contact Link -->
+          <a href="contact.html"
+            class="text-[#c5a880] font-bold text-[14px] lg:text-[15px] font-['Inter',sans-serif] tracking-wide transition-colors py-2 px-4 sm:px-6 relative group">
+            <span>Contact Us</span>
+            <span class="absolute bottom-1 left-4 right-4 h-0.5 bg-[#c5a880] rounded-full"></span>
+          </a>
+        </nav>
+
+        <!-- Right: Social Icons + Mobile Menu Toggle -->
+        <div class="flex items-center space-x-3 sm:space-x-4">
+          <a href="https://wa.me/919688889420?text=Hii!%20I'm%20interested%20Can%20i%20know%20about%20more%20details"
+            target="_blank" rel="noopener noreferrer"
+            class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 text-white hover:bg-[#c5a880] hover:text-[#381e23] flex items-center justify-center text-base sm:text-lg transition-all duration-300"
+            aria-label="WhatsApp">
+            <i class="fa-brands fa-whatsapp"></i>
+          </a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+            class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 text-white hover:bg-[#c5a880] hover:text-[#381e23] flex items-center justify-center text-base sm:text-lg transition-all duration-300"
+            aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+            class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 text-white hover:bg-[#c5a880] hover:text-[#381e23] flex items-center justify-center text-base sm:text-lg transition-all duration-300"
+            aria-label="Facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+
+          <!-- Mobile Hamburger Drawer Trigger Button -->
+          <button id="open-side-drawer"
+            class="md:hidden w-10 h-10 rounded-full bg-white/10 text-white hover:bg-[#c5a880] hover:text-[#381e23] flex items-center justify-center transition-all">
+            <i class="fa-solid fa-bars text-lg"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       HERO SECTION (Matching Reference Mockup Design)
+       ========================================== -->
+  <div class="relative bg-[#381e23] text-white pt-20 sm:pt-24">
+    <section class="relative w-full overflow-hidden">
+      
+      <!-- Hero Background Image Container -->
+      <div class="relative w-full min-h-[480px] sm:min-h-[550px] lg:min-h-[600px] flex items-center overflow-hidden">
+        
+        <!-- Hero Background Image with Ken-Burns Zoom-In / Zoom-Out Animation -->
+        <div class="absolute inset-0 w-full h-full overflow-hidden">
+          <img src="assets/images/carousel-villa-1.jpg" alt="Vizhi Infragen Realtors Luxury Property"
+            class="carousel-zoom-img w-full h-full object-cover object-center scale-110" />
+          <!-- Dark Contrast Overlay Gradient -->
+          <div class="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/30"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-[#381e23]/90 via-transparent to-black/40"></div>
+        </div>
+
+        <!-- Hero Content Overlay with Float Animations -->
+        <div class="relative z-20 max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 w-full py-16 sm:py-24">
+          <div class="max-w-2xl space-y-4">
+            
+            <!-- Subtitle — Float Down entrance -->
+            <span class="text-[#c5a880] font-['Inter',sans-serif] text-xs sm:text-sm font-bold tracking-[0.25em] uppercase block animate-float-down">
+              LET'S CONNECT
+            </span>
+
+            <!-- H1 Heading — Float Up entrance -->
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-['Outfit',sans-serif] text-white tracking-tight leading-tight animate-float-up [animation-delay:200ms]">
+              Contact <span class="text-[#c5a880]">Us</span>
+            </h1>
+
+            <!-- Accent Gold Line — Float Up with slight delay -->
+            <div class="w-12 h-1 bg-[#c5a880] rounded-full my-3 shadow-md shadow-[#c5a880]/40 animate-float-up [animation-delay:350ms]"></div>
+
+            <!-- Description — Float Up -->
+            <p class="text-stone-200 text-sm sm:text-base leading-relaxed font-['Inter',sans-serif] max-w-xl font-normal opacity-90 animate-float-up [animation-delay:500ms]">
+              We're here to help with all your real estate needs in Coimbatore. Reach out to our team for expert guidance and personalised solutions. We value your trust and look forward to working with you.
+            </p>
+
+            <!-- 3 Trust Badges — Float Up with longest delay -->
+            <div class="pt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 border-t border-white/15 mt-8 animate-float-up [animation-delay:700ms]">
+              
+              <!-- Badge 1: 24/7 Support -->
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full border border-[#c5a880]/60 bg-[#c5a880]/10 flex items-center justify-center text-[#c5a880] shrink-0 shadow-sm">
+                  <i class="fa-regular fa-comments text-base"></i>
+                </div>
+                <div>
+                  <h4 class="text-white font-bold text-sm leading-tight">24/7</h4>
+                  <p class="text-stone-300 text-xs font-medium">Support</p>
+                </div>
+              </div>
+
+              <!-- Badge 2: Trusted Local Experts -->
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full border border-[#c5a880]/60 bg-[#c5a880]/10 flex items-center justify-center text-[#c5a880] shrink-0 shadow-sm">
+                  <i class="fa-solid fa-shield-halved text-base"></i>
+                </div>
+                <div>
+                  <h4 class="text-white font-bold text-sm leading-tight">Trusted</h4>
+                  <p class="text-stone-300 text-xs font-medium">Local Experts</p>
+                </div>
+              </div>
+
+              <!-- Badge 3: Client Satisfaction -->
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full border border-[#c5a880]/60 bg-[#c5a880]/10 flex items-center justify-center text-[#c5a880] shrink-0 shadow-sm">
+                  <i class="fa-regular fa-star text-base"></i>
+                </div>
+                <div>
+                  <h4 class="text-white font-bold text-sm leading-tight">Client</h4>
+                  <p class="text-stone-300 text-xs font-medium">Satisfaction</p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+
+  <!-- ==========================================
+       MAIN SECTION: CONTACT FORM & LUXURY DARK CARD
+       ========================================== -->
+  <section class="py-16 sm:py-24 px-6 sm:px-10 lg:px-16 bg-[#FDFBF7]">
+    <div class="max-w-[1440px] mx-auto">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-stretch">
+        
+        <!-- Left Column: Contact Form (7 Cols) -->
+        <div class="lg:col-span-7 flex flex-col justify-center space-y-6">
+          <div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1E293B] font-['Outfit',sans-serif] tracking-tight">
+              Have Any Questions?
+            </h2>
+            <p class="text-stone-500 text-xs sm:text-sm font-['Inter',sans-serif] mt-2">
+              Fill in the details below and our team will get back to you at the earliest.
+            </p>
+          </div>
+
+          <form id="contact-page-form" class="space-y-4 pt-2">
+            
+            <!-- Row 1: First Name & Last Name -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <input type="text" id="contact-firstname" required placeholder="First Name *"
+                  class="w-full bg-white border border-stone-200 rounded-lg px-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880] transition-all shadow-sm font-['Inter',sans-serif]" />
+              </div>
+              <div>
+                <input type="text" id="contact-lastname" required placeholder="Last Name *"
+                  class="w-full bg-white border border-stone-200 rounded-lg px-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880] transition-all shadow-sm font-['Inter',sans-serif]" />
+              </div>
+            </div>
+
+            <!-- Row 2: Contact Number & Your Email -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="relative">
+                <input type="tel" id="contact-phone" required placeholder="Contact Number *"
+                  class="w-full bg-white border border-stone-200 rounded-lg pl-10 pr-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880] transition-all shadow-sm font-['Inter',sans-serif]" />
+                <i class="fa-solid fa-phone absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
+              </div>
+              <div class="relative">
+                <input type="email" id="contact-email" required placeholder="Your Email *"
+                  class="w-full bg-white border border-stone-200 rounded-lg pl-10 pr-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880] transition-all shadow-sm font-['Inter',sans-serif]" />
+                <i class="fa-solid fa-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
+              </div>
+            </div>
+
+            <!-- Row 3: Subject -->
+            <div>
+              <input type="text" id="contact-subject" required placeholder="Subject *"
+                class="w-full bg-white border border-stone-200 rounded-lg px-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880] transition-all shadow-sm font-['Inter',sans-serif]" />
+            </div>
+
+            <!-- Row 4: Your Message -->
+            <div class="relative">
+              <textarea id="contact-message" rows="4" required placeholder="Your Message *"
+                class="w-full bg-white border border-stone-200 rounded-lg pl-10 pr-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880] transition-all shadow-sm font-['Inter',sans-serif] resize-none"></textarea>
+              <i class="fa-solid fa-pen absolute left-3.5 top-4 text-stone-400 text-xs"></i>
+            </div>
+
+            <!-- Checkbox Terms -->
+            <div class="flex items-start gap-3 pt-1">
+              <input type="checkbox" id="contact-terms" required
+                class="mt-1 w-4 h-4 rounded border-stone-300 text-[#4E1421] focus:ring-[#c5a880] cursor-pointer" />
+              <label for="contact-terms" class="text-[11px] sm:text-xs text-stone-500 font-['Inter',sans-serif] leading-relaxed cursor-pointer select-none">
+                By clicking submit, I agree to the Terms &amp; Conditions and Privacy Policy and I am giving my consent to receive updates through email/sms.
+              </label>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-2">
+              <button type="submit"
+                class="bg-[#4E1421] hover:bg-[#612124] text-white px-8 py-3.5 rounded-lg text-sm font-bold font-['Outfit',sans-serif] transition-all duration-300 inline-flex items-center gap-2 shadow-lg hover:shadow-xl active:scale-[0.98] cursor-pointer">
+                <span>Send Message</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+        <!-- Right Column: Dark Luxury Trust Card (5 Cols) -->
+        <div class="lg:col-span-5 flex flex-col">
+          <div class="bg-[#111111] text-white rounded-3xl p-8 sm:p-10 flex flex-col items-center text-center justify-between h-full shadow-2xl relative overflow-hidden border border-stone-800">
+            
+            <!-- Subtle Radial Background Glow -->
+            <div class="absolute -top-24 -right-24 w-60 h-60 bg-[#c5a880]/15 rounded-full blur-3xl pointer-events-none"></div>
+
+            <!-- Profile Icon inside Thin Gold Circle -->
+            <div class="pt-2">
+              <div class="w-14 h-14 rounded-full border border-[#c5a880] flex items-center justify-center text-[#c5a880] text-xl mx-auto shadow-md">
+                <i class="fa-regular fa-user"></i>
+              </div>
+            </div>
+
+            <!-- Heading & Paragraph -->
+            <div class="my-6 space-y-3 max-w-sm">
+              <h3 class="text-2xl sm:text-3xl font-bold font-['Outfit',sans-serif] tracking-tight text-white">
+                We value your time and trust.
+              </h3>
+              
+              <!-- Gold Accent Divider Line -->
+              <div class="w-10 h-0.5 bg-[#c5a880] mx-auto my-2"></div>
+
+              <p class="text-stone-300 text-xs sm:text-sm font-['Inter',sans-serif] leading-relaxed font-normal opacity-80">
+                Our team is committed to providing you with the best real estate solutions.
+              </p>
+            </div>
+
+            <!-- Skyscraper / City Real Estate Image with Maroon Offset Border Frame -->
+            <div class="relative w-full max-w-xs mx-auto mt-4 mb-2">
+              <!-- Maroon Offset Border Behind -->
+              <div class="absolute -bottom-2 -right-2 w-full h-full border-2 border-[#4E1421] rounded-xl pointer-events-none bg-[#4E1421]"></div>
+              
+              <!-- Image Card Container -->
+              <div class="relative rounded-xl overflow-hidden shadow-xl border border-stone-700 bg-stone-900">
+                <img src="assets/images/about-property-management.jpg" alt="Real Estate Highrise Towers"
+                  class="w-full h-48 object-cover object-center" />
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SECTION: OTHER WAYS TO CONNECT (4 CARDS)
+       ========================================== -->
+  <section class="py-16 px-6 sm:px-10 lg:px-16 bg-[#FAF7F2]">
+    <div class="max-w-[1440px] mx-auto text-center space-y-12">
+      
+      <!-- Section Title with Gold Line -->
+      <div class="inline-block text-center">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1E293B] font-['Outfit',sans-serif] tracking-tight">
+          Other Ways To Connect
+        </h2>
+        <div class="w-16 h-1 bg-[#c5a880] mx-auto mt-3 rounded-full"></div>
+      </div>
+
+      <!-- 4 Cards Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Card 1: Call Us -->
+        <div class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 flex flex-col items-center text-center group">
+          <div class="w-14 h-14 rounded-full bg-[#FAF5EE] text-[#c5a880] flex items-center justify-center text-xl mb-5 group-hover:bg-[#4E1421] group-hover:text-white transition-all duration-300 shadow-sm">
+            <i class="fa-solid fa-phone"></i>
+          </div>
+          <h3 class="text-lg font-bold text-[#1E293B] font-['Outfit',sans-serif] mb-2">Call Us</h3>
+          <a href="tel:9688889420" class="text-stone-700 hover:text-[#4E1421] font-bold text-xs sm:text-sm font-['Inter',sans-serif] block mb-1">
+            +91 96888 89420
+          </a>
+          <p class="text-stone-400 text-xs font-['Inter',sans-serif]">Mon - Sun: 9.00 AM - 10.00 PM</p>
+        </div>
+
+        <!-- Card 2: Email Us -->
+        <div class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 flex flex-col items-center text-center group">
+          <div class="w-14 h-14 rounded-full bg-[#FAF5EE] text-[#c5a880] flex items-center justify-center text-xl mb-5 group-hover:bg-[#4E1421] group-hover:text-white transition-all duration-300 shadow-sm">
+            <i class="fa-solid fa-envelope"></i>
+          </div>
+          <h3 class="text-lg font-bold text-[#1E293B] font-['Outfit',sans-serif] mb-2">Email Us</h3>
+          <a href="mailto:srissa2006@gmail.com" class="text-stone-700 hover:text-[#4E1421] font-bold text-xs sm:text-sm font-['Inter',sans-serif] block mb-1 break-all">
+            srissa2006@gmail.com
+          </a>
+          <p class="text-stone-400 text-xs font-['Inter',sans-serif]">We respond within 24 hrs</p>
+        </div>
+
+        <!-- Card 3: Visit Us -->
+        <div class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 flex flex-col items-center text-center group">
+          <div class="w-14 h-14 rounded-full bg-[#FAF5EE] text-[#c5a880] flex items-center justify-center text-xl mb-5 group-hover:bg-[#4E1421] group-hover:text-white transition-all duration-300 shadow-sm">
+            <i class="fa-solid fa-location-dot"></i>
+          </div>
+          <h3 class="text-lg font-bold text-[#1E293B] font-['Outfit',sans-serif] mb-2">Visit Us</h3>
+          <p class="text-stone-700 font-bold text-xs leading-relaxed font-['Inter',sans-serif] mb-1">
+            Shop No.24, Old Bus Stand Complex, Suganthi Nagar Rd, Sulur, TN 641402
+          </p>
+        </div>
+
+        <!-- Card 4: Office Hours -->
+        <div class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 flex flex-col items-center text-center group">
+          <div class="w-14 h-14 rounded-full bg-[#FAF5EE] text-[#c5a880] flex items-center justify-center text-xl mb-5 group-hover:bg-[#4E1421] group-hover:text-white transition-all duration-300 shadow-sm">
+            <i class="fa-regular fa-clock"></i>
+          </div>
+          <h3 class="text-lg font-bold text-[#1E293B] font-['Outfit',sans-serif] mb-2">Office Hours</h3>
+          <p class="text-stone-700 font-bold text-xs sm:text-sm font-['Inter',sans-serif] mb-1">
+            Mon - Sun: 9.00 AM - 10.00 PM
+          </p>
+          <p class="text-stone-400 text-xs font-['Inter',sans-serif]">Open Everyday</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SECTION: GOOGLE MAP INTEGRATION & VISIT OUR OFFICE
+       ========================================== -->
+  <section class="py-16 sm:py-24 px-6 sm:px-10 lg:px-16 bg-[#FDFBF7]">
+    <div class="max-w-[1440px] mx-auto">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- Left Side: Interactive Map Frame (7 Cols) -->
+        <div class="lg:col-span-7">
+          <div class="relative w-full h-[380px] sm:h-[440px] rounded-3xl overflow-hidden shadow-2xl border border-stone-200 group">
+            
+            <!-- Interactive Map iframe / Container -->
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.483981881518!2d77.1235!3d11.0258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba85703730aa18b%3A0xc3457df7aa121d5a!2sOld%20Bus%20Stand%20Complex%2C%20Suganthi%20Nagar%20Rd%2C%20Sulur%2C%20Tamil%20Nadu%20641402!5e0!3m2!1sen!2sin!4v1721800000000"
+              class="w-full h-full border-0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+
+          </div>
+        </div>
+
+        <!-- Right Side: Visit Our Office Info Card (5 Cols) -->
+        <div class="lg:col-span-5">
+          <div class="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-stone-100 space-y-6">
+            
+            <span class="text-[#c5a880] font-['Inter',sans-serif] text-xs font-bold tracking-[0.2em] uppercase block">
+              OUR OFFICE
+            </span>
+
+            <div class="space-y-2">
+              <h3 class="text-3xl font-extrabold text-[#1E293B] font-['Outfit',sans-serif] tracking-tight">
+                Visit Our Office
+              </h3>
+              <div class="w-12 h-1 bg-[#c5a880] rounded-full"></div>
+            </div>
+
+            <div class="space-y-2">
+              <p class="text-stone-800 text-xs sm:text-sm font-semibold font-['Inter',sans-serif] leading-relaxed">
+                First Floor, Shop No.24, Old Bus Stand Complex, 24, Suganthi Nagar Rd, Sulur, Tamil Nadu 641402
+              </p>
+              <p class="text-stone-500 text-xs font-['Inter',sans-serif]">
+                Opening Hours: 9:00 AM - 10:00 PM (Daily)
+              </p>
+            </div>
+
+            <div class="pt-4">
+              <a href="https://maps.google.com/?q=First+Floor,+Shop+No.24,+Old+Bus+Stand+Complex,+24,+Suganthi+Nagar+Rd,+Sulur,+Tamil+Nadu+641402" target="_blank" rel="noopener noreferrer"
+                class="bg-[#4E1421] hover:bg-[#612124] text-white px-8 py-3.5 rounded-lg text-sm font-bold font-['Outfit',sans-serif] transition-all duration-300 inline-flex items-center gap-2 shadow-lg hover:shadow-xl active:scale-[0.98]">
+                <span>Get Directions</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       CTA BANNER: LET'S BUILD SOMETHING EXTRAORDINARY TOGETHER
+       ========================================== -->
+  <section class="bg-[#381e23] text-white py-16 sm:py-20 px-6 sm:px-10 lg:px-16 relative overflow-hidden">
+    
+    <!-- Background Glow -->
+    <div class="absolute top-0 right-0 w-96 h-96 bg-[#c5a880]/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-[1440px] mx-auto relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- Left Side Text & Action -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <span class="text-[#c5a880] font-['Inter',sans-serif] text-xs font-bold tracking-[0.25em] uppercase block">
+            READY TO GET STARTED?
+          </span>
+
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-['Outfit',sans-serif] tracking-tight leading-tight">
+            Let's Build Something <span class="text-[#c5a880]">Extraordinary</span> Together
+          </h2>
+
+          <p class="text-stone-300 text-xs sm:text-sm font-['Inter',sans-serif]">
+            Your dream property is just a conversation away.
+          </p>
+
+          <div class="pt-2">
+            <a href="tel:9688889420"
+              class="bg-[#c5a880] hover:bg-white text-[#381e23] hover:text-[#381e23] px-8 py-4 rounded-xl text-sm font-extrabold font-['Outfit',sans-serif] transition-all duration-300 inline-flex items-center gap-2 shadow-xl hover:shadow-2xl active:scale-[0.98]">
+              <span>Get in Touch Today</span>
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Right Side Features -->
+        <div class="lg:col-span-5 space-y-4 pt-6 lg:pt-0 border-t lg:border-t-0 lg:border-l border-white/15 lg:pl-10">
+          
+          <!-- Feature 1 -->
+          <div class="flex items-start gap-4">
+            <div class="w-8 h-8 rounded-full bg-[#c5a880]/20 text-[#c5a880] flex items-center justify-center shrink-0 mt-0.5">
+              <i class="fa-solid fa-users text-xs"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-sm text-white font-['Outfit',sans-serif]">Expert Guidance</h4>
+              <p class="text-stone-300 text-xs font-['Inter',sans-serif]">From our local real estate experts</p>
+            </div>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="flex items-start gap-4">
+            <div class="w-8 h-8 rounded-full bg-[#c5a880]/20 text-[#c5a880] flex items-center justify-center shrink-0 mt-0.5">
+              <i class="fa-solid fa-sliders text-xs"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-sm text-white font-['Outfit',sans-serif]">Personalised Solutions</h4>
+              <p class="text-stone-300 text-xs font-['Inter',sans-serif]">Tailored to meet your needs</p>
+            </div>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="flex items-start gap-4">
+            <div class="w-8 h-8 rounded-full bg-[#c5a880]/20 text-[#c5a880] flex items-center justify-center shrink-0 mt-0.5">
+              <i class="fa-solid fa-handshake text-xs"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-sm text-white font-['Outfit',sans-serif]">Trusted Partnership</h4>
+              <p class="text-stone-300 text-xs font-['Inter',sans-serif]">Building relationships that last</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ==========================================
+       FOOTER
+       ========================================== -->
+  <footer
+    class="bg-[#121212] pt-16 pb-8 px-6 sm:px-10 lg:px-16 flex flex-col items-center justify-start relative overflow-hidden">
+    <div
+      class="pb-10 w-full shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 w-full max-w-[1440px] px-6 sm:px-10 lg:px-16 relative z-10 mx-auto">
+      
+      <!-- Col 1: Brand & Tagline -->
+      <div class="flex flex-col gap-3 items-start justify-start relative text-left">
+        <a href="index.html" class="inline-block hover:scale-105 transition-transform duration-300">
+          <img class="shrink-0 w-[130px] h-[72px] sm:w-[150px] sm:h-[80px] relative object-contain footer-logo-img"
+            src="vizhi-infragen-realtors-logo-white.png" alt="Vizhi Infragen Realtors Logo" />
+        </a>
+        <div class="flex flex-col gap-0 items-start justify-start shrink-0 max-w-[260px] relative text-left">
+          <p class="text-[#9b98a1] text-left font-['Inter',_sans-serif] text-xs leading-[18px] font-normal relative block">
+            Building the future with geometric<br />
+            precision and organic harmony.<br />
+            Elevating real estate standards.
+          </p>
+        </div>
+        <a href="contact.html"
+          class="bg-[#c99b4a] hover:bg-[#b98c3b] hover:scale-[1.02] active:scale-[0.98] rounded-full border-none py-1.5 px-3.5 flex flex-row gap-2 items-center justify-start shrink-0 relative transition-all duration-300 group shadow-md mt-1">
+          <span class="text-[#3f131c] text-left font-['Inter',_sans-serif] text-xs font-semibold relative flex items-center justify-start">
+            Start Property Journey
+          </span>
+          <i class="fa-solid fa-arrow-right text-[#3f131c] text-[10px] group-hover:translate-x-1 transition-transform"></i>
+        </a>
+      </div>
+
+      <!-- Col 2: Company Links -->
+      <div class="flex flex-col gap-2 items-start justify-start relative">
+        <div class="text-[#ffffff] text-left font-['Inter',_sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
+          Company
+        </div>
+        <a href="about.html"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          About Us
+        </a>
+        <a href="services.html"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          Our Services
+        </a>
+        <a href="index.html#projects"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          Projects
+        </a>
+        <a href="contact.html"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          Contact
+        </a>
+      </div>
+
+      <!-- Col 3: Services Links -->
+      <div class="flex flex-col gap-2 items-start justify-start relative">
+        <div class="text-[#ffffff] text-left font-['Inter',_sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
+          Services
+        </div>
+        <a href="services.html#land-sales"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          Land Sales &amp; Plots
+        </a>
+        <a href="services.html#property-management"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          Property Management
+        </a>
+        <a href="services.html#nri-management"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          NRI Property Shield
+        </a>
+        <a href="services.html#approvals"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          DTCP &amp; Legal Approvals
+        </a>
+      </div>
+
+      <!-- Col 4: Contact Info -->
+      <div class="flex flex-col gap-2 items-start justify-start relative">
+        <div class="text-[#ffffff] text-left font-['Inter',_sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
+          Contact Us
+        </div>
+        <a href="mailto:srissa2006@gmail.com"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal break-all">
+          srissa2006@gmail.com
+        </a>
+        <a href="tel:+919688889420"
+          class="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',_sans-serif] text-xs leading-[20px] font-normal">
+          +91 96888 89420
+        </a>
+        <div class="text-[#9b98a1] text-left font-['Inter',_sans-serif] text-xs leading-[18px] font-normal max-w-[220px]">
+          First Floor, Shop No.24, Old Bus Stand Complex, 24, Suganthi Nagar Rd, Sulur, TN 641402
+        </div>
+      </div>
+
+      <!-- Col 5: Find Us Google Map -->
+      <div class="flex flex-col gap-2 items-start justify-start relative w-full">
+        <div class="text-[#ffffff] text-left font-['Inter',_sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
+          Find Us
+        </div>
+        <div class="rounded-xl border-solid border-[rgba(255,255,255,0.12)] border flex flex-col gap-0 items-start justify-center w-full max-w-[200px] shrink-0 h-[120px] relative overflow-hidden shadow-md">
+          <div class="bg-[rgba(255,255,255,0.20)] w-full h-full relative overflow-hidden">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.483981881518!2d77.1235!3d11.0258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba85703730aa18b%3A0xc3457df7aa121d5a!2sOld%20Bus%20Stand%20Complex%2C%20Suganthi%20Nagar%20Rd%2C%20Sulur%2C%20Tamil%20Nadu%20641402!5e0!3m2!1sen!2sin!4v1721800000000"
+              class="absolute inset-0 w-full h-full border-0 grayscale opacity-80 hover:opacity-100 hover:grayscale-0 transition-all duration-500"
+              allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+            <div class="bg-white rounded-sm px-2 py-1 flex items-center justify-start shrink-0 absolute left-2 top-2 z-10 shadow-md">
+              <a href="https://maps.google.com/?q=First+Floor,+Shop+No.24,+Old+Bus+Stand+Complex,+24,+Suganthi+Nagar+Rd,+Sulur,+Tamil+Nadu+641402" target="_blank"
+                class="flex flex-row gap-1 items-center justify-start cursor-pointer group">
+                <span class="text-[#1a73e8] text-[10px] font-medium group-hover:underline">Maps</span>
+                <i class="fa-solid fa-location-dot text-[#1a73e8] text-[9px]"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Copyright Bar -->
+    <div class="border-solid border-[rgba(255,255,255,0.1)] border-t py-6 px-6 sm:px-10 lg:px-16 flex flex-col sm:flex-row items-center justify-between w-full max-w-[1440px] gap-4 relative z-10 mx-auto">
+      <div class="text-[#888888] text-center sm:text-left font-['Inter',_sans-serif] text-xs font-normal">
+        © 2026 Vizhi Infragen Realtors LLP. All rights reserved.
+      </div>
+      <div class="flex flex-row gap-7 sm:gap-8 items-center justify-start shrink-0">
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+          class="text-[#E4405F] hover:scale-125 transition-transform duration-300" aria-label="Instagram">
+          <i class="fa-brands fa-instagram text-xl"></i>
+        </a>
+        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer"
+          class="text-[#FF0000] hover:scale-125 transition-transform duration-300" aria-label="YouTube">
+          <i class="fa-brands fa-youtube text-xl"></i>
+        </a>
+        <a href="https://wa.me/919688889420" target="_blank" rel="noopener noreferrer"
+          class="text-[#25D366] hover:scale-125 transition-transform duration-300" aria-label="WhatsApp">
+          <i class="fa-brands fa-whatsapp text-xl"></i>
+        </a>
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
+          class="text-[#1DA1F2] hover:scale-125 transition-transform duration-300" aria-label="Twitter">
+          <i class="fa-brands fa-twitter text-xl"></i>
+        </a>
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+          class="text-[#1877F2] hover:scale-125 transition-transform duration-300" aria-label="Facebook">
+          <i class="fa-brands fa-facebook-f text-xl"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================
+       SUCCESS TOAST NOTIFICATION
+       ========================================== -->
+  <div id="success-toast"
+    class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-500 ease-out max-w-sm">
+    <div class="bg-emerald-600 text-white rounded-xl shadow-2xl p-5 border border-emerald-500/30 flex items-start gap-4">
+      <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 text-white text-lg">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div>
+        <h4 class="font-bold text-sm">Message Sent!</h4>
+        <p class="text-white/80 text-xs mt-1 leading-relaxed">Thank you. Your inquiry is received successfully. Our team will get back to you shortly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom JS Script -->
+  <script src="script.js"></script>
+  <script>
+    // Contact Form Submission Handler
+    document.addEventListener('DOMContentLoaded', () => {
+      const contactForm = document.getElementById('contact-page-form');
+      if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          const firstName = document.getElementById('contact-firstname')?.value || '';
+          const lastName = document.getElementById('contact-lastname')?.value || '';
+          const phone = document.getElementById('contact-phone')?.value || '';
+          const email = document.getElementById('contact-email')?.value || '';
+          const subject = document.getElementById('contact-subject')?.value || '';
+          const message = document.getElementById('contact-message')?.value || '';
+
+          const constantToEmail = 'srissa2006@gmail.com';
+          const emailSubject = encodeURIComponent(`Contact Form: ${subject || 'Inquiry'} - ${firstName} ${lastName}`);
+          const emailBody = encodeURIComponent(`Name: ${firstName} ${lastName}\nPhone: ${phone}\nEmail: ${email}\n\nMessage:\n${message}`);
+
+          const mailtoUrl = `mailto:${constantToEmail}?subject=${emailSubject}&body=${emailBody}`;
+
+          window.location.href = mailtoUrl;
+
+          const successToast = document.getElementById('success-toast');
+          if (successToast) {
+            successToast.classList.remove('translate-y-24', 'opacity-0');
+            successToast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+              successToast.classList.remove('translate-y-0', 'opacity-100');
+              successToast.classList.add('translate-y-24', 'opacity-0');
+            }, 4000);
+          }
+
+          contactForm.reset();
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>
