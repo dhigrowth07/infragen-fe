@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #1F1720; /* Dark text */
+  --header-color: #4A2328; /* Derived from the image (Maroon) */
+
+  /* Figma Custom Colors */
+  --primary: #C99B4A; /* Gold/Bronze */
+  --primary-hover: #b3883d;
+  --secondary: #6F2231; /* Maroon/Red - Used for Button */
+  --secondary-hover: #5a1b28;
+  
+  --accent-dark: #3F131C; /* Dark red/brown */
+  --neutral-dark: #5C525C;
+  --neutral-muted: #9B98A1;
+  --neutral-light: #C8C5CC;
+
+  /* Button Specific Variables */
+  --btn-bg: var(--secondary);
+  --btn-text: #ffffff;
+  --btn-hover: var(--secondary-hover);
+
+  /* Fonts */
+  --font-outfit: "Outfit", sans-serif;
+  --font-inter: "Inter", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1F1720; /* Use the dark color from Figma as dark mode bg */
+    --foreground: #ffffff;
+    --header-color: #ffffff; /* Lighter header color for dark mode */
+    
+    --primary: #C99B4A;
+    --primary-hover: #dfac52;
+
+    --btn-bg: var(--secondary);
+    --btn-text: #ffffff;
+    --btn-hover: var(--secondary-hover);
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-header: var(--header-color);
+  
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
+  
+  --color-accent-dark: var(--accent-dark);
+  --color-neutral-dark: var(--neutral-dark);
+  --color-neutral-muted: var(--neutral-muted);
+  --color-neutral-light: var(--neutral-light);
+
+  --color-btn-bg: var(--btn-bg);
+  --color-btn-text: var(--btn-text);
+  --color-btn-hover: var(--btn-hover);
+
+  --font-outfit: var(--font-outfit);
+  --font-inter: var(--font-inter);
+}
+
+@layer base {
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-inter), sans-serif;
+  }
+}
+
+@layer components {
+  .hero-heading {
+    @apply text-4xl md:text-5xl lg:text-6xl font-outfit font-bold leading-tight tracking-tight;
+  }
+}
