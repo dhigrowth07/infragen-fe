@@ -1,0 +1,196 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: #6B1D2F;
+  --color-primary-dark: #4E1421;
+  --color-secondary: #D4AF37;
+  --color-bg-cream: #FDFBF7;
+  --color-text-dark: #1E293B;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-outfit), var(--font-inter), sans-serif;
+  background-color: #FDFBF7;
+  color: #1E293B;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F1F1;
+}
+::-webkit-scrollbar-thumb {
+  background: #6B1D2F;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4E1421;
+}
+
+/* Hide Scrollbar Utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+/* Hero Carousel Zoom */
+@keyframes zoomInOut {
+  0%   { transform: scale(1.00); }
+  50%  { transform: scale(1.15); }
+  100% { transform: scale(1.00); }
+}
+
+.carousel-zoom-img {
+  animation: zoomInOut 8s ease-in-out infinite !important;
+  transform-origin: center center !important;
+  will-change: transform;
+}
+
+/* Glassmorphism Classes */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-white-box {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.25);
+}
+
+.glass-dark {
+  background: rgba(107, 29, 47, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Marquee Animations */
+@keyframes infiniteHorizontalMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.infinite-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: infiniteHorizontalMarquee 40s linear infinite;
+  will-change: transform;
+}
+
+.infinite-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes autoFloatBob {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-16px);
+  }
+}
+
+.floating-bob-card {
+  animation: autoFloatBob 3.6s ease-in-out infinite;
+}
+
+.service-float-card {
+  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
+}
+
+.service-float-card:hover {
+  transform: translateY(-18px) scale(1.03) !important;
+  box-shadow: 0 24px 36px -10px rgba(97, 33, 36, 0.18) !important;
+}
+
+/* Serpentine SVG drawing & nodes */
+.serpentine-draw-line {
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.1s linear;
+}
+
+.process-step-node {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.3);
+  transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.process-step-node.step-visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.process-step-node.step-visible .node-pulse-ring {
+  animation: stepPulse 1.5s ease-out infinite;
+}
+
+@keyframes stepPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(197, 168, 128, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(197, 168, 128, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(197, 168, 128, 0);
+  }
+}
+
+/* Scroll Reveal classes */
+.reveal, .reveal-up, .reveal-left, .reveal-right, .reveal-scale {
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform, opacity;
+}
+
+.reveal-slide-up {
+  transform: translateY(40px);
+}
+
+.reveal-slide-down {
+  transform: translateY(-40px);
+}
+
+.reveal-slide-left {
+  transform: translateX(-40px);
+}
+
+.reveal-slide-right {
+  transform: translateX(40px);
+}
+
+.reveal-scale {
+  transform: scale(0.95);
+}
+
+.reveal.active,
+.reveal-up.active,
+.reveal-slide-up.active,
+.reveal-slide-left.active,
+.reveal-slide-right.active,
+.reveal-scale.active {
+  opacity: 1;
+  transform: translate(0) scale(1);
+}
