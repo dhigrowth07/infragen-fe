@@ -45,7 +45,7 @@ export default function HeroSection({ onOpenVideoModal }: HeroSectionProps) {
   return (
     <div className="relative bg-[#381e23] text-white overflow-hidden w-full m-0 p-0">
       {/* Full-bleed Hero Carousel Container (Covers top-0 behind Navbar fully) */}
-      <section id="home" className="relative w-full min-h-[640px] sm:min-h-[700px] lg:min-h-[760px] flex items-center overflow-hidden">
+      <section id="home" className="relative w-full min-h-[640px] md:min-h-[720px] lg:min-h-[760px] flex items-center overflow-hidden">
         
         {/* Full-bleed Carousel Slides (Edge to Edge, Top to Bottom) */}
         <div className="absolute inset-0 w-full h-full overflow-hidden">
@@ -73,17 +73,17 @@ export default function HeroSection({ onOpenVideoModal }: HeroSectionProps) {
         </div>
 
         {/* Hero Content Overlay (Positioned below floating Navbar with top padding) */}
-        <div className="relative z-20 max-w-[1600px] mx-auto px-6 sm:px-12 lg:px-20 w-full pt-32 sm:pt-36 lg:pt-40 pb-16 sm:pb-20 flex flex-col justify-between min-h-[640px] sm:min-h-[700px] lg:min-h-[760px]">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center my-auto">
+        <div className="relative z-20 max-w-[1600px] mx-auto px-5 sm:px-10 lg:px-16 xl:px-20 w-full pt-28 sm:pt-32 md:pt-36 lg:pt-40 pb-12 sm:pb-16 flex flex-col justify-between min-h-[640px] md:min-h-[720px] lg:min-h-[760px]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center my-auto">
             
             {/* Left Text */}
-            <div className="lg:col-span-8 space-y-5 text-left">
+            <div className="lg:col-span-8 space-y-4 sm:space-y-5 text-left">
               <span className="text-[#c5a880] font-['Inter',sans-serif] text-xs sm:text-sm font-bold tracking-[0.25em] uppercase block animate-float-down">
                 Welcome to vizhi infragen
               </span>
 
-              <h1 className="text-[32px] sm:text-[42px] lg:text-[50px] font-extrabold text-white leading-[40px] sm:leading-[50px] lg:leading-[58px] font-['Outfit',sans-serif] tracking-tight max-w-3xl animate-float-down [animation-delay:200ms]">
-                Trusted Real Estate Company &amp; NRI Property Management Company in Coimbatore
+              <h1 className="text-[28px] sm:text-[36px] md:text-[40px] lg:text-[46px] xl:text-[50px] font-extrabold text-white leading-[36px] sm:leading-[46px] md:leading-[50px] lg:leading-[54px] xl:leading-[58px] font-['Outfit',sans-serif] tracking-tight max-w-3xl animate-float-down [animation-delay:200ms]">
+                Trusted Real Estate &amp; NRI Property Management Company
               </h1>
 
               <p className="text-white/90 font-['Inter',sans-serif] text-base sm:text-lg font-normal max-w-2xl leading-relaxed animate-float-down [animation-delay:400ms]">
@@ -105,7 +105,7 @@ export default function HeroSection({ onOpenVideoModal }: HeroSectionProps) {
             </div>
 
             {/* Right Interactive Video Button */}
-            <div className="lg:col-span-4 flex justify-center items-center py-4">
+            <div className="lg:col-span-4 flex justify-center items-center py-4 hidden lg:flex">
               <button
                 onClick={() => {
                   if (onOpenVideoModal) onOpenVideoModal();

@@ -7,7 +7,7 @@ export default function VisionMissionSection() {
   return (
     <section id="vm-section" className="bg-white py-16 sm:py-20 px-6 sm:px-10 border-t border-stone-200">
       <div className="max-w-[960px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12">
           
           {/* VISION */}
           <div className="flex flex-col items-start">

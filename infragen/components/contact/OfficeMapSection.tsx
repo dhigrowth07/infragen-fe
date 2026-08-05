@@ -6,7 +6,7 @@ export default function OfficeMapSection() {
   return (
     <section className="py-16 sm:py-24 px-6 sm:px-10 lg:px-16 bg-[#FDFBF7] border-t border-stone-200">
       <div className="max-w-[1440px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           
           {/* Left: Interactive Map */}
           <div className="lg:col-span-7">

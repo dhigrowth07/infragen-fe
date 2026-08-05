@@ -7,12 +7,12 @@ export default function WhoWeAreSection() {
   return (
     <div className="relative bg-white pb-20 sm:pb-28 z-20">
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
           
           {/* Left Column: Overlapping Image Card */}
           <div className="lg:col-span-5 relative -mt-16 sm:-mt-20 z-30 reveal-slide-right">
             <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-white group w-full max-h-[760px]">
-              <div className="relative h-[620px] sm:h-[720px] w-full">
+              <div className="relative h-[420px] sm:h-[520px] lg:h-[620px] xl:h-[720px] w-full">
                 <Image
                   src="/assets/images/experience.jpg"
                   alt="Vizhi Infragen Team Consultation"
@@ -47,7 +47,7 @@ export default function WhoWeAreSection() {
           </div>
 
           {/* Right Column: Narrative Story */}
-          <div className="lg:col-span-7 pt-6 lg:pt-10 reveal-slide-left">
+          <div className="lg:col-span-7 pt-4 lg:pt-10 reveal-slide-left">
             <span className="text-[#c5a880] font-['Inter',sans-serif] text-xs font-bold tracking-[0.28em] uppercase block mb-3">
               WHO WE ARE
             </span>

@@ -77,7 +77,7 @@ export default function WhyTrustSection() {
       <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-[#612124]/30 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="max-w-[1550px] mx-auto px-6 sm:px-10 lg:px-16 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
           
           {/* Left Column */}
           <div className="lg:col-span-5 space-y-6 text-left relative z-10">
