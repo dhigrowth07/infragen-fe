@@ -7,7 +7,7 @@ export default function OurStorySection() {
   return (
     <section id="our-story" className="relative bg-[#121212] py-24 sm:py-32 px-6 sm:px-10 lg:px-16 overflow-hidden text-white">
       <div className="relative max-w-[1440px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 xl:gap-24 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 xl:gap-24 items-center">
           
           {/* Left Column */}
           <div className="lg:col-span-6 space-y-7 reveal-slide-right">

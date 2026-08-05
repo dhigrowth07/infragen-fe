@@ -52,7 +52,7 @@ export default function ContactEnquirySection() {
         backgroundPosition: "center",
       }}
     >
-      <div className="w-full max-w-none px-6 sm:px-10 lg:px-16 flex flex-col lg:flex-row gap-[60px] items-center justify-between relative z-10 mx-auto">
+      <div className="w-full max-w-5xl px-5 sm:px-8 md:px-10 lg:px-12 flex flex-col lg:flex-row gap-10 lg:gap-[60px] items-start lg:items-center justify-between relative z-10 mx-auto">
         
         {/* Left Column */}
         <div className="pt-[4.79px] flex flex-col gap-[16px] items-start justify-start flex-1 relative text-left">

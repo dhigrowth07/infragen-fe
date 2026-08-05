@@ -26,9 +26,9 @@ export default function TrustExperienceSection() {
   return (
     <section
       id="why-trust-experience"
-      className="bg-white py-20 px-4 md:px-[160.4px] flex flex-col gap-0 items-start justify-start relative overflow-hidden"
+      className="bg-white py-16 sm:py-20 px-4 sm:px-8 md:px-12 lg:px-16 flex flex-col gap-0 items-start justify-start relative overflow-hidden"
     >
-      <div className="pr-6 pl-6 w-full shrink-0 grid grid-cols-1 lg:grid-cols-2 gap-[70px] max-w-[1200px] relative mx-auto items-center">
+      <div className="pr-4 pl-4 sm:pr-6 sm:pl-6 w-full shrink-0 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-[70px] max-w-[1200px] relative mx-auto items-center">
         
         {/* Left Column */}
         <div className="pt-[4.8px] flex flex-col gap-[12.8px] items-start justify-start relative reveal reveal-slide-right">
