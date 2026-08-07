@@ -62,7 +62,7 @@ export default function TrustExperienceSection() {
                   idx === activeIdx ? "opacity-100" : "opacity-0"
                 }`}
               >
-                <Image src={img.src} alt={img.alt} fill className="object-cover rounded-[20px]" />
+                <Image src={img.src} alt={img.alt} fill sizes="(max-width: 768px) 100vw, 480px" className="object-cover rounded-[20px]" />
               </div>
             ))}
 

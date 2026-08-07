@@ -51,6 +51,7 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
               width={144}
               height={80}
               className="w-36 h-20 object-contain mx-auto"
+              style={{ width: "auto", height: "auto" }}
             />
           </div>
 

@@ -140,6 +140,7 @@ export default function ProcessSection() {
                 width={130}
                 height={70}
                 className="w-32 h-16 object-contain"
+                style={{ width: "auto", height: "auto" }}
               />
             </div>
 

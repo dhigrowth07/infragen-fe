@@ -51,6 +51,7 @@ export default function Navbar({ onOpenDrawer }: NavbarProps) {
               className="w-[95px] sm:w-[105px] lg:w-[115px] xl:w-[130px] h-auto object-contain drop-shadow-md nav-logo-img"
               src="/vizhi-infragen-realtors-logo-white.png"
               alt="Vizhi Infragen Realtors Logo"
+              style={{ height: "auto" }}
               priority
             />
           </Link>
