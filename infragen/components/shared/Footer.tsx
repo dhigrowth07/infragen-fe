@@ -17,6 +17,7 @@ export default function Footer() {
               className="shrink-0 w-[130px] h-[72px] sm:w-[150px] sm:h-[80px] relative object-contain footer-logo-img"
               src="/vizhi-infragen-realtors-logo-white.png"
               alt="Vizhi Infragen Realtors Logo"
+              style={{ width: "auto", height: "auto" }}
             />
           </Link>
           <div className="flex flex-col gap-0 items-start justify-start shrink-0 max-w-[260px] relative text-left">

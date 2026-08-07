@@ -11,11 +11,7 @@ import ServicesSection from "@/components/home/ServicesSection";
 import TrustExperienceSection from "@/components/home/TrustExperienceSection";
 import ContactEnquirySection from "@/components/home/ContactEnquirySection";
 
-interface HomePageProps {
-  onOpenVideoModal?: () => void;
-}
-
-export default function HomePage({ onOpenVideoModal }: HomePageProps) {
+export default function HomePage() {
   useEffect(() => {
     // Scroll Reveal Observer for elements with reveal classes
     const revealElements = document.querySelectorAll(
@@ -43,7 +39,7 @@ export default function HomePage({ onOpenVideoModal }: HomePageProps) {
 
   return (
     <>
-      <HeroSection onOpenVideoModal={onOpenVideoModal} />
+      <HeroSection />
       <StatsCounterBar />
       <AboutSection />
       <ProcessSection />
