@@ -3,38 +3,25 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { propertiesData, PropertyItem } from "@/data/properties";
-import { searchKnowledge } from "@/lib/ragKnowledge";
+import { searchKnowledge, searchKnowledgeKeywordMode, parseFileMentions, splitTextIntoChunks } from "@/lib/ragKnowledge";
+import { ChatMode, UploadedDocument, MessageItem, CardType, ChipItem, SessionMemory } from "@/lib/types";
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// ── Mentions Catalogue for Autocomplete ───────────────────────────────────────
 
-type CardType = "booking_form" | "lead_form" | "handoff";
-
-interface ChipItem {
-  icon: string;
-  label: string;
-  action: string;
-}
-
-interface MessageItem {
-  id: number;
-  sender: "bot" | "user";
-  text: string;
-  time: string;
-  chips?: ChipItem[];
-  properties?: PropertyItem[];
-  cardType?: CardType;
-}
-
-interface SessionMemory {
-  propertyType?: string;
-  location?: string;
-  budget?: string;
-  name?: string;
-  phone?: string;
-  purpose?: string;
-}
-
-// ── Helpers ───────────────────────────────────────────────────────────────────
+const MENTION_OPTIONS = [
+  { tag: "@land", label: "Land & Plot Sales", icon: "fa-map-location-dot" },
+  { tag: "@nri", label: "NRI Services & Remittance", icon: "fa-globe" },
+  { tag: "@sulur", label: "Sulur Corridor Plots", icon: "fa-location-dot" },
+  { tag: "@kalapatti", label: "Kalapatti IT Corridor", icon: "fa-location-dot" },
+  { tag: "@pattanam", label: "Pattanam Residential Land", icon: "fa-location-dot" },
+  { tag: "@neelambur", label: "Neelambur Commercial Zone", icon: "fa-location-dot" },
+  { tag: "@dtcp", label: "DTCP & RERA Approvals", icon: "fa-file-contract" },
+  { tag: "@properties", label: "Verified Property Listings", icon: "fa-house" },
+  { tag: "@legal", label: "Patta & Legal Verification", icon: "fa-shield-halved" },
+  { tag: "@construction", label: "Turnkey Building Construction", icon: "fa-helmet-safety" },
+  { tag: "@valuation", label: "Bank & Market Valuation", icon: "fa-chart-line" },
+  { tag: "@booking", label: "Schedule Site Visit", icon: "fa-calendar-check" },
+];
 
 const getNow = () => {
   const d = new Date();
@@ -43,127 +30,127 @@ const getNow = () => {
   return `${h > 12 ? h - 12 : h || 12}:${m < 10 ? "0" + m : m} ${h >= 12 ? "PM" : "AM"}`;
 };
 
-// ── Local AI RAG Engine ───────────────────────────────────────────────────────
-// Uses exact text RAG search + intent mapping.
-// Answers strictly based on company knowledge documents.
-
 interface BotResponse {
   text: string;
   chips?: ChipItem[];
   properties?: PropertyItem[];
   cardType?: CardType;
+  sources?: string[];
   memoryUpdates?: Partial<SessionMemory>;
 }
 
-function localAI(input: string, memory: SessionMemory): BotResponse {
+function localAI(input: string, memory: SessionMemory, mode: ChatMode = "rag"): BotResponse {
   const lo = input.toLowerCase().trim();
   const memoryUpdates: Partial<SessionMemory> = {};
 
-  // ── 1. Extract location memory ─────────────────────────────────────────────
+  // Extract memory locations & types
   if (lo.includes("sulur")) memoryUpdates.location = "Sulur";
   else if (lo.includes("kalapatti")) memoryUpdates.location = "Kalapatti";
   else if (lo.includes("neelambur")) memoryUpdates.location = "Neelambur";
   else if (lo.includes("sathy")) memoryUpdates.location = "Sathy Road";
   else if (lo.includes("avinashi")) memoryUpdates.location = "Avinashi Road";
   else if (lo.includes("pattanam")) memoryUpdates.location = "Pattanam";
-  else if (lo.includes("saravanampatti")) memoryUpdates.location = "Saravanampatti";
-  else if (lo.includes("kovaipudur")) memoryUpdates.location = "Kovaipudur";
   else if (lo.includes("trichy")) memoryUpdates.location = "Trichy Road";
 
-  // ── 2. Extract property type memory ─────────────────────────────────────────
   if (/\b(plot|plots|dtcp|rera|site|sites|layout|land)\b/.test(lo)) memoryUpdates.propertyType = "PLOTS & SITES";
-  else if (/\b(villa|villas|house|home|2bhk|3bhk|residential)\b/.test(lo)) memoryUpdates.propertyType = "VILLAS & HOMES";
-  else if (/\b(commercial|office|shop|warehouse|godown|corporate)\b/.test(lo)) memoryUpdates.propertyType = "COMMERCIAL SITES";
-  else if (/\b(agricultural|farm|farmland|agri)\b/.test(lo)) memoryUpdates.propertyType = "AGRICULTURAL";
+  else if (/\b(villa|villas|house|home|residential)\b/.test(lo)) memoryUpdates.propertyType = "VILLAS & HOMES";
+  else if (/\b(commercial|office|shop|warehouse|godown)\b/.test(lo)) memoryUpdates.propertyType = "COMMERCIAL SITES";
 
-  // ── 3. Extract budget memory ────────────────────────────────────────────────
-  const budgetMatch = lo.match(/(\d+)\s*(lakh|lakhs|l\b|crore|cr\b)/i);
-  if (budgetMatch) {
-    const amount = parseInt(budgetMatch[1]);
-    const unit = budgetMatch[2].toLowerCase();
-    const isLakh = unit.startsWith("l");
-    memoryUpdates.budget = isLakh ? `₹${amount}L` : `₹${amount}Cr`;
-  }
-
-  // ── 4. Direct Action Intent Triggers ────────────────────────────────────────
-
-  // Greetings
-  if (/\b(hi|hello|hey|good morning|good afternoon|good evening|start|namaste)\b/.test(lo)) {
+  // Dedicated Keyword Search Mode Fallback
+  if (mode === "keyword") {
+    const kwRes = searchKnowledgeKeywordMode(input, 3);
     return {
-      text: `👋 <strong>Welcome to Vizhi Infragen Realtors AI!</strong><br/><br/>I am your 24/7 Coimbatore real estate and property management assistant. I can help you:<br/>• 🏡 Search verified plots, villas & commercial land<br/>• 📜 Guidance on DTCP, RERA, Patta & Encumbrance Certificates<br/>• ✈️ Dedicated NRI Property Management services<br/>• 🏗️ Construction, Valuation & Land Conversion<br/>• 📅 Schedule site visits & speak with advisors<br/><br/>How can I assist you today?`,
+      text: kwRes.text,
+      sources: kwRes.sources,
       chips: [
         { icon: "fa-magnifying-glass", label: "Search Properties", action: "chip_search" },
-        { icon: "fa-house", label: "Buy Property", action: "chip_buy" },
-        { icon: "fa-tag", label: "Sell Property", action: "chip_sell" },
-        { icon: "fa-key", label: "Rent / Manage", action: "chip_rent" },
-        { icon: "fa-globe", label: "NRI Services", action: "chip_nri" },
-        { icon: "fa-circle-question", label: "FAQ & Legal", action: "chip_faq" },
-        { icon: "fa-calendar-check", label: "Book Visit", action: "chip_book" },
-        { icon: "fa-headset", label: "Contact Agent", action: "chip_agent" },
+        { icon: "fa-location-dot", label: "Filter Locations", action: "chip_locations" },
+        { icon: "fa-calendar-check", label: "Book Site Visit", action: "chip_book" },
+        { icon: "fa-headset", label: "Talk to Agent", action: "chip_agent" },
       ],
       memoryUpdates,
     };
   }
 
-  // Thank you
-  if (/\b(thank|thanks|great|perfect|awesome|wonderful)\b/.test(lo) && !lo.includes("buy") && !lo.includes("sell")) {
+  // Greetings & Interactive Flow Init
+  if (/\b(hi|hello|hey|good morning|start|namaste|menu|options|services|help)\b/.test(lo)) {
     return {
-      text: `🙏 <strong>You're welcome!</strong> Is there anything else I can help you with regarding Coimbatore real estate or property management?`,
+      text: `👋 <strong>Welcome to Vizhi Infragen Realtors AI Assistant!</strong><br/><br/>What kind of real estate service or property are you looking for in Coimbatore?<br/>Select a keyword category or location below:`,
       chips: [
-        { icon: "fa-magnifying-glass", label: "Search Properties", action: "chip_search" },
-        { icon: "fa-calendar-check", label: "Book Site Visit", action: "chip_book" },
-        { icon: "fa-house", label: "Main Menu", action: "chip_welcome" },
+        { icon: "fa-map-location-dot", label: "🏡 Land & Plots for Sale", action: "chip_search" },
+        { icon: "fa-location-dot", label: "📍 Locations & Corridors", action: "chip_locations" },
+        { icon: "fa-globe", label: "✈️ NRI Property Management", action: "chip_nri" },
+        { icon: "fa-file-contract", label: "📜 DTCP, Patta & Approvals", action: "chip_faq" },
+        { icon: "fa-helmet-safety", label: "🏗️ Building Construction", action: "chip_construction" },
+        { icon: "fa-chart-line", label: "📊 Building Valuation", action: "chip_valuation" },
+        { icon: "fa-calendar-check", label: "📅 Schedule Site Visit", action: "chip_book" },
+        { icon: "fa-headset", label: "🙋 Contact Advisor", action: "chip_agent" },
+      ],
+      memoryUpdates,
+    };
+  }
+
+  // Locations Guide Flow
+  if (lo.includes("location") || lo.includes("area") || lo.includes("corridor")) {
+    return {
+      text: `📍 <strong>Coimbatore High-Growth Real Estate Corridors</strong><br/><br/>Which location would you like to explore?`,
+      chips: [
+        { icon: "fa-location-pin", label: "Pattanam Plots", action: "chip_loc_pattanam" },
+        { icon: "fa-location-pin", label: "Sulur Airport Zone", action: "chip_loc_sulur" },
+        { icon: "fa-location-pin", label: "Kalapatti IT Belt", action: "chip_loc_kalapatti" },
+        { icon: "fa-location-pin", label: "Neelambur Commercial", action: "chip_loc_neelambur" },
+        { icon: "fa-location-pin", label: "Sathy Road Belt", action: "chip_loc_sathy" },
+        { icon: "fa-location-pin", label: "Avinashi Road Hub", action: "chip_loc_avinashi" },
+        { icon: "fa-location-pin", label: "Trichy Road Corridor", action: "chip_loc_trichy" },
+      ],
+      memoryUpdates,
+    };
+  }
+
+  // Specific Location Selection Trigger
+  const targetLoc = memoryUpdates.location || (lo.includes("sulur") ? "Sulur" : lo.includes("kalapatti") ? "Kalapatti" : lo.includes("pattanam") ? "Pattanam" : lo.includes("neelambur") ? "Neelambur" : lo.includes("sathy") ? "Sathy Road" : lo.includes("avinashi") ? "Avinashi Road" : lo.includes("trichy") ? "Trichy Road" : "");
+  if (targetLoc) {
+    const matchedProps = propertiesData.filter((p) => p.location.toLowerCase().includes(targetLoc.toLowerCase()));
+    const displayProps = matchedProps.length > 0 ? matchedProps : propertiesData.slice(0, 2);
+    const ragLocationChunks = searchKnowledge(targetLoc, 2);
+
+    const ragSnippet = ragLocationChunks.length > 0 ? ragLocationChunks[0].content.replace(/\n\n/g, "<br/>") : "";
+
+    return {
+      text: `📍 <strong>Real Estate & Properties in ${targetLoc}, Coimbatore</strong><br/><br/>${ragSnippet}<br/><br/><strong>Available Verified Listings:</strong>`,
+      properties: displayProps,
+      sources: ragLocationChunks.map((c) => c.title),
+      chips: [
+        { icon: "fa-calendar-check", label: `Book Visit in ${targetLoc}`, action: "chip_book" },
+        { icon: "fa-map-location-dot", label: "View Other Locations", action: "chip_locations" },
+        { icon: "fa-headset", label: "Talk to Advisor", action: "chip_agent" },
       ],
       memoryUpdates,
     };
   }
 
   // Agent Handoff Trigger
-  if (/\b(agent|human|person|talk to|speak to|call|phone|whatsapp|contact|advisor)\b/.test(lo) && !lo.includes("buy") && !lo.includes("sell") && !lo.includes("plot")) {
+  if (/\b(agent|human|person|talk to|speak to|call|phone|whatsapp|contact)\b/.test(lo) && !lo.includes("buy") && !lo.includes("sell")) {
     return { text: "", cardType: "handoff", memoryUpdates };
   }
 
   // Site Visit Booking Trigger
-  if (/\b(visit|book|schedule|appointment|site visit)\b/.test(lo) && !lo.includes("about") && !lo.includes("company")) {
-    const loc = memoryUpdates.location || memory.location;
+  if (/\b(visit|book|schedule|appointment|site visit)\b/.test(lo) && !lo.includes("about")) {
     return {
-      text: `📅 <strong>Schedule a Site Visit</strong><br/>${loc ? `We'll arrange a visit to our <em>${loc}</em> properties. ` : ""}Our Coimbatore property advisor will coordinate the visit details.<br/><br/>Please fill in your details below:`,
+      text: `📅 <strong>Schedule a Site Visit</strong><br/>Our Coimbatore property advisor will coordinate the visit details.<br/><br/>Please fill in your details below:`,
       cardType: "booking_form",
       memoryUpdates,
     };
   }
 
-  // Sell Property Lead Trigger
-  if (/\b(sell|selling|want to sell|list my property)\b/.test(lo)) {
-    return {
-      text: `🏷️ <strong>Sell Your Property with Vizhi Infragen</strong><br/><br/>We help you get fair market value with:<br/>• Data-backed property valuation<br/>• Verified buyer network (no pressure)<br/>• Complete title & legal documentation support<br/>• Transparent, seller-first process<br/><br/>Share your details below and our expert will contact you within 24 hours:`,
-      cardType: "lead_form",
-      chips: [
-        { icon: "fa-headset", label: "Talk to Agent Now", action: "chip_agent" },
-      ],
-      memoryUpdates: { ...memoryUpdates, purpose: "sell" },
-    };
-  }
-
   // Property Search Listings Trigger
   if (/\b(show|find|list|view|search|available|listings)\b/.test(lo) && /\b(properties|plots|villas|sites|land|houses)\b/.test(lo)) {
-    const type = memoryUpdates.propertyType || memory.propertyType;
-    const loc = memoryUpdates.location || memory.location;
-
-    const matched = propertiesData.filter((p) => {
-      const typeMatch = !type || type === "AGRICULTURAL" || p.category === type;
-      const locMatch = !loc || p.location.toLowerCase().includes(loc.toLowerCase());
-      return typeMatch && locMatch;
-    });
-
-    const results = matched.length > 0 ? matched.slice(0, 3) : propertiesData.slice(0, 3);
-    const typeLabel = type ? type.toLowerCase() : "verified properties";
-    const locLabel = loc ? ` in <strong>${loc}</strong>` : " across Coimbatore";
-
+    const results = propertiesData.slice(0, 3);
     return {
-      text: `🏘️ <strong>Properties Found</strong><br/>Here are ${typeLabel}${locLabel}:`,
+      text: `🏘️ <strong>Verified Properties Found in Coimbatore</strong>:<br/>Filter by location keyword or select below:`,
       properties: results,
       chips: [
+        { icon: "fa-location-dot", label: "Filter by Location", action: "chip_locations" },
         { icon: "fa-calendar-plus", label: "Book Site Visit", action: "chip_book" },
         { icon: "fa-headset", label: "Talk to Advisor", action: "chip_agent" },
       ],
@@ -171,82 +158,82 @@ function localAI(input: string, memory: SessionMemory): BotResponse {
     };
   }
 
-  // ── 5. Primary RAG Knowledge Search ─────────────────────────────────────────
-  // Performs exact & keyword RAG matching against all 20+ company documents.
-
-  const ragChunks = searchKnowledge(input, 2);
-
+  // Primary RAG Knowledge Content Search (Exact keyword matching against 20+ company documents)
+  const ragChunks = searchKnowledge(input, 3);
   if (ragChunks.length > 0) {
     const top = ragChunks[0];
-    // Format text nicely with linebreaks
-    const formattedText = top.content
-      .replace(/\n\n/g, "<br/><br/>")
-      .replace(/\n/g, "<br/>")
-      .replace(/•/g, "•");
-
     return {
-      text: `📋 <strong>${top.title}</strong><br/><br/>${formattedText}`,
+      text: `📋 <strong>${top.title}</strong><br/><br/>${top.content.replace(/\n\n/g, "<br/><br/>").replace(/\n/g, "<br/>")}`,
+      sources: ragChunks.map((c) => c.title),
       chips: [
         { icon: "fa-magnifying-glass", label: "Search Properties", action: "chip_search" },
+        { icon: "fa-location-dot", label: "View Locations", action: "chip_locations" },
         { icon: "fa-calendar-check", label: "Book Site Visit", action: "chip_book" },
-        { icon: "fa-circle-question", label: "FAQ & Legal", action: "chip_faq" },
         { icon: "fa-headset", label: "Talk to Agent", action: "chip_agent" },
       ],
       memoryUpdates,
     };
   }
 
-  // ── 6. Fallback Guardrail ───────────────────────────────────────────────────
   return {
-    text: `ℹ️ <strong>Vizhi Infragen Realtors LLP — Coimbatore</strong><br/><br/>We provide transparent real estate and property management services across Coimbatore (Pattanam, Sulur, Neelambur, Kalapatti, Sathy Road, Trichy Road, Avinashi Road).<br/><br/>How can I help you?<br/>• Land Sales & Purchase Assistance<br/>• Property Management & Dedicated NRI Services<br/>• Building Construction & Market Valuation<br/>• DTCP/RERA Approvals & Land Conversion`,
+    text: `ℹ️ <strong>Vizhi Infragen Realtors LLP — Coimbatore</strong><br/><br/>We provide transparent real estate & property management services across Coimbatore (Pattanam, Sulur, Neelambur, Kalapatti, Sathy Road, Avinashi Road).`,
     chips: [
       { icon: "fa-magnifying-glass", label: "Search Properties", action: "chip_search" },
       { icon: "fa-globe", label: "NRI Services", action: "chip_nri" },
-      { icon: "fa-circle-question", label: "FAQ & Legal", action: "chip_faq" },
       { icon: "fa-headset", label: "Contact Agent", action: "chip_agent" },
     ],
     memoryUpdates,
   };
 }
 
-// ── CHIP ACTION ROUTER ────────────────────────────────────────────────────────
-// Maps quick action chips to user prompts for RAG matching
-
 const CHIP_ROUTES: Record<string, { display: string; prompt: string }> = {
   chip_welcome: { display: "Main Menu", prompt: "hello" },
   chip_search: { display: "Search Properties", prompt: "show me land and plots for sale in Coimbatore" },
+  chip_locations: { display: "Explore Locations", prompt: "which locations and growth corridors do you cover in Coimbatore?" },
   chip_buy: { display: "Buy Property", prompt: "tell me about land purchase assistance and buying plots in Coimbatore" },
   chip_sell: { display: "Sell Property", prompt: "I want to sell my property in Coimbatore" },
   chip_rent: { display: "Rent / Manage", prompt: "tell me about property management and rental services in Coimbatore" },
-  chip_nri: { display: "NRI Services", prompt: "tell me about dedicated NRI property management in Coimbatore" },
-  chip_faq: { display: "FAQ & Legal", prompt: "what are the frequently asked questions about real estate legal documents DTCP RERA in Coimbatore?" },
+  chip_nri: { display: "NRI Services", prompt: "@nri tell me about dedicated NRI property management in Coimbatore" },
+  chip_faq: { display: "FAQ & Legal", prompt: "@dtcp what are the frequently asked questions about real estate legal documents DTCP RERA in Coimbatore?" },
+  chip_construction: { display: "Building Construction", prompt: "@construction tell me about turnkey building construction services in Coimbatore" },
+  chip_valuation: { display: "Building Valuation", prompt: "@valuation tell me about building valuation reports for bank loans and taxation" },
   chip_book: { display: "Book Visit", prompt: "I want to schedule a site visit" },
   chip_agent: { display: "Contact Agent", prompt: "I want to talk to a property advisor" },
-  chip_dtcp: { display: "DTCP Approval", prompt: "what is DTCP layout approval in Coimbatore?" },
-  chip_rera: { display: "RERA Registration", prompt: "what is RERA registration for properties?" },
-  chip_loan: { display: "Home Loans", prompt: "tell me about home loan guidance and bank coordination" },
-  chip_registration: { display: "Registration", prompt: "how does property registration and stamp duty work?" },
-  chip_ec: { display: "Encumbrance Cert.", prompt: "what is an encumbrance certificate EC?" },
-  chip_conversion: { display: "Land Conversion", prompt: "tell me about agricultural land conversion services" },
-  chip_docs: { display: "Documents Required", prompt: "what documents are required to buy land in Coimbatore?" },
-  chip_whatsapp: { display: "WhatsApp Us", prompt: "" },
+
+  // Location Chip Routing
+  chip_loc_pattanam: { display: "Pattanam Plots", prompt: "@pattanam tell me about plots and real estate in Pattanam Coimbatore" },
+  chip_loc_sulur: { display: "Sulur Corridor", prompt: "@sulur tell me about plots and investment land in Sulur Coimbatore" },
+  chip_loc_kalapatti: { display: "Kalapatti IT Belt", prompt: "@kalapatti tell me about residential plots in Kalapatti Coimbatore" },
+  chip_loc_neelambur: { display: "Neelambur Commercial", prompt: "@neelambur tell me about commercial land and warehousing in Neelambur Coimbatore" },
+  chip_loc_sathy: { display: "Sathy Road Belt", prompt: "tell me about land and plots on Sathy Road Coimbatore" },
+  chip_loc_avinashi: { display: "Avinashi Road Hub", prompt: "tell me about villa land and property on Avinashi Road Coimbatore" },
+  chip_loc_trichy: { display: "Trichy Road Corridor", prompt: "tell me about investment plots on Trichy Road Coimbatore" },
+
   chip_cancel: { display: "Cancel Booking", prompt: "" },
 };
-
-// ── Main Component ─────────────────────────────────────────────────────────────
 
 export default function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [hasUnread, setHasUnread] = useState(true);
   const [visible, setVisible] = useState(false);
+  const [mode, setMode] = useState<ChatMode>("rag");
   const [messages, setMessages] = useState<MessageItem[]>([]);
   const [apiHistory, setApiHistory] = useState<Array<{ role: "user" | "model"; content: string }>>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [memory, setMemory] = useState<SessionMemory>({});
 
-  // Booking form state
+  // Mentions autocomplete state
+  const [showMentionMenu, setShowMentionMenu] = useState(false);
+  const [mentionFilter, setMentionFilter] = useState("");
+
+  // Custom Document Upload state (inspired by rag-chat-bot-main)
+  const [uploadedDocs, setUploadedDocs] = useState<UploadedDocument[]>([]);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Booking & Lead state
   const [bName, setBName] = useState("");
   const [bPhone, setBPhone] = useState("");
   const [bEmail, setBEmail] = useState("");
@@ -254,7 +241,6 @@ export default function ChatbotWidget() {
   const [bSlot, setBSlot] = useState("10:00 AM");
   const [bPropertyHint, setBPropertyHint] = useState("");
 
-  // Cancel booking state — stores the last confirmed booking for cancellation
   const [lastBooking, setLastBooking] = useState<{
     name: string;
     phone: string;
@@ -263,7 +249,6 @@ export default function ChatbotWidget() {
     property: string;
   } | null>(null);
 
-  // Lead form state
   const [lName, setLName] = useState("");
   const [lPhone, setLPhone] = useState("");
   const [lEmail, setLEmail] = useState("");
@@ -287,16 +272,36 @@ export default function ChatbotWidget() {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
-  // ── Add messages ───────────────────────────────────────────────────────────
+  // Handle Input `@` Mention trigger
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setInput(val);
+
+    const lastWord = val.split(/\s+/).pop() || "";
+    if (lastWord.startsWith("@")) {
+      setShowMentionMenu(true);
+      setMentionFilter(lastWord.slice(1).toLowerCase());
+    } else {
+      setShowMentionMenu(false);
+    }
+  };
+
+  const selectMention = (tag: string) => {
+    const words = input.split(/\s+/);
+    words.pop();
+    const newText = [...words, tag].join(" ") + " ";
+    setInput(newText);
+    setShowMentionMenu(false);
+  };
 
   const addBotMessage = useCallback(
-    (text: string, chips?: ChipItem[], properties?: PropertyItem[], cardType?: CardType) => {
+    (text: string, chips?: ChipItem[], properties?: PropertyItem[], cardType?: CardType, sources?: string[]) => {
       setMessages((prev) => [
         ...prev,
-        { id: Date.now() + Math.random(), sender: "bot", text, time: getNow(), chips, properties, cardType },
+        { id: Date.now() + Math.random(), sender: "bot", text, time: getNow(), chips, properties, cardType, sources, mode },
       ]);
     },
-    []
+    [mode]
   );
 
   const addUserMessage = useCallback((text: string) => {
@@ -306,8 +311,34 @@ export default function ChatbotWidget() {
     ]);
   }, []);
 
-  // ── Gemini API call with local RAG fallback ────────────────────────────────
+  // Handle Document Upload (Inspired by rag-chat-bot-main)
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = (event.target?.result as string) || "";
+      const chunks = splitTextIntoChunks(text);
+      const newDoc: UploadedDocument = {
+        id: Date.now().toString(),
+        fileName: file.name,
+        chunks,
+        uploadedAt: new Date().toLocaleTimeString(),
+      };
+      setUploadedDocs((prev) => [...prev, newDoc]);
+      setShowUploadModal(false);
+      addBotMessage(
+        `📄 <strong>Uploaded Document Added!</strong><br/>File: <strong>${file.name}</strong> (${chunks.length} chunks extracted).<br/>You can now target it in chat using <code>@${file.name.replace(/\.[^/.]+$/, "")}</code>!`,
+        [
+          { icon: "fa-magnifying-glass", label: `Ask about ${file.name}`, action: `chip_doc_${newDoc.id}` },
+        ]
+      );
+    };
+    reader.readAsText(file);
+  };
+
+  // API Call with Streaming support & mode handling
   const askGemini = useCallback(
     async (userText: string, currentHistory: Array<{ role: "user" | "model"; content: string }>, currentMemory: SessionMemory): Promise<void> => {
       try {
@@ -317,6 +348,7 @@ export default function ChatbotWidget() {
           body: JSON.stringify({
             messages: [...currentHistory, { role: "user", content: userText }],
             sessionMemory: currentMemory,
+            mode,
           }),
         });
 
@@ -326,12 +358,12 @@ export default function ChatbotWidget() {
         if (data.type === "error") throw new Error(data.message);
 
         if (data.type === "tool_call") {
-          const toolResult = localAI(userText, currentMemory);
+          const toolResult = localAI(userText, currentMemory, mode);
           if (toolResult.memoryUpdates) setMemory((p) => ({ ...p, ...toolResult.memoryUpdates }));
           if (toolResult.cardType === "handoff" && !toolResult.text) {
             addBotMessage("🙋 <strong>Connect with a Vizhi Property Advisor</strong><br/>Our Coimbatore team is available Mon–Sat, 9AM–7PM.", undefined, undefined, "handoff");
           } else {
-            addBotMessage(toolResult.text, toolResult.chips, toolResult.properties, toolResult.cardType);
+            addBotMessage(toolResult.text, toolResult.chips, toolResult.properties, toolResult.cardType, toolResult.sources);
           }
           setApiHistory((prev) => [...prev, { role: "user", content: userText }]);
           return;
@@ -343,102 +375,63 @@ export default function ChatbotWidget() {
             .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
             .replace(/\*(.*?)\*/g, "<em>$1</em>")
             .replace(/\n/g, "<br/>");
-          addBotMessage(html, [
-            { icon: "fa-magnifying-glass", label: "Search Properties", action: "chip_search" },
-            { icon: "fa-calendar-check", label: "Book Site Visit", action: "chip_book" },
-            { icon: "fa-headset", label: "Talk to Agent", action: "chip_agent" },
-          ]);
+          addBotMessage(
+            html,
+            [
+              { icon: "fa-[#c5a880]", label: "Search Properties", action: "chip_search" },
+              { icon: "fa-location-dot", label: "View Locations", action: "chip_locations" },
+              { icon: "fa-calendar-check", label: "Book Site Visit", action: "chip_book" },
+              { icon: "fa-headset", label: "Talk to Agent", action: "chip_agent" },
+            ],
+            undefined,
+            undefined,
+            data.sources
+          );
           setApiHistory((prev) => [...prev, { role: "user", content: userText }, { role: "model", content: data.text }]);
           return;
         }
       } catch {
-        // Fallback to local RAG engine on error/quota limit
+        // Fallback to local AI engine on error
       }
 
-      // ── Local RAG fallback ─────────────────────────────────────────────────
       setIsTyping(false);
-      const localResponse = localAI(userText, currentMemory);
+      const localResponse = localAI(userText, currentMemory, mode);
       if (localResponse.memoryUpdates) setMemory((p) => ({ ...p, ...localResponse.memoryUpdates }));
       if (localResponse.cardType === "handoff" && !localResponse.text) {
-        addBotMessage("🙋 <strong>Connect with a Vizhi Property Advisor</strong><br/>Our Coimbatore team is available Mon–Sat, 9AM–7PM. Choose how you'd like to reach us:", undefined, undefined, "handoff");
+        addBotMessage("🙋 <strong>Connect with a Vizhi Property Advisor</strong><br/>Our Coimbatore team is available Mon–Sat, 9AM–7PM.", undefined, undefined, "handoff");
       } else {
-        addBotMessage(localResponse.text, localResponse.chips, localResponse.properties, localResponse.cardType);
+        addBotMessage(localResponse.text, localResponse.chips, localResponse.properties, localResponse.cardType, localResponse.sources);
       }
       setApiHistory((prev) => [...prev, { role: "user", content: userText }]);
     },
-    [addBotMessage]
+    [addBotMessage, mode]
   );
-
-  // ── Send handler ───────────────────────────────────────────────────────────
-
-  // ── Cancel Booking Handler ─────────────────────────────────────────────────
 
   const handleBookingCancel = useCallback(() => {
     if (!lastBooking) {
-      addBotMessage(
-        "ℹ️ <strong>No Active Booking Found</strong><br/>There is no confirmed booking to cancel at this time.",
-        [{ icon: "fa-calendar-check", label: "Book New Visit", action: "chip_book" }]
-      );
+      addBotMessage("ℹ️ <strong>No Active Booking Found</strong><br/>There is no confirmed booking to cancel at this time.", [
+        { icon: "fa-calendar-check", label: "Book New Visit", action: "chip_book" },
+      ]);
       return;
     }
 
     const { name, phone, date, slot, property } = lastBooking;
-
-    // Determine reschedule time — next day at 10 AM
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    const tomorrowLabel = tomorrow.toLocaleDateString("en-IN", {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-    });
-    const rescheduleTime = `${tomorrowLabel} at 10:00 AM`;
+    const rescheduleTime = `${tomorrow.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" })} at 10:00 AM`;
 
-    // Build cancellation WhatsApp message to client 7402297479
-    const waMsg = [
-      "❌ Site Visit Cancelled",
-      "",
-      `Booking for ${name} (${phone}) on ${date} at ${slot} has been cancelled.`,
-      "",
-      `We will reconnect with the visitor on ${rescheduleTime}.`,
-      "",
-      "Please follow up when available.",
-      "- Vizhi Infragen AI System",
-    ].join("\n");
+    const waMsg = `❌ Site Visit Cancelled\n\nBooking for ${name} (${phone}) on ${date} at ${slot} has been cancelled.\nReschedule target: ${rescheduleTime}.`;
+    window.open(`https://wa.me/919688889420?text=${encodeURIComponent(waMsg)}`, "_blank");
 
-    // Open WhatsApp to client number with cancellation message
-    window.open(
-      `https://wa.me/919688889420?text=${encodeURIComponent(waMsg)}`,
-      "_blank"
-    );
-
-    // Clear stored booking
     setLastBooking(null);
-
     addBotMessage(
-      `❌ <strong>Booking Cancelled</strong><br/><br/>` +
-        `We're sorry your site visit has been <strong>cancelled</strong>.<br/><br/>` +
-        `📋 <strong>Cancelled Booking:</strong><br/>` +
-        `• Name: ${name}<br/>` +
-        `• Date & Time: ${date} (${slot})<br/>` +
-        `• Property: ${property}<br/><br/>` +
-        `📲 <strong>WhatsApp notification</strong> sent to our team.<br/><br/>` +
-        `🔄 We will connect with you on <strong>${rescheduleTime}</strong>. We apologise for the inconvenience!`,
-      [
-        { icon: "fa-calendar-plus", label: "Book New Visit", action: "chip_book" },
-        { icon: "fa-headset", label: "Contact Agent", action: "chip_agent" },
-        { icon: "fa-house", label: "Main Menu", action: "chip_welcome" },
-      ]
+      `❌ <strong>Booking Cancelled</strong><br/>Cancelled visit for <strong>${name}</strong> on ${date} (${slot}).<br/>WhatsApp update sent to property team.`,
+      [{ icon: "fa-calendar-plus", label: "Book New Visit", action: "chip_book" }]
     );
   }, [lastBooking, addBotMessage]);
 
   const handleSend = useCallback(
     (displayText?: string, chipAction?: string) => {
-      if (chipAction === "chip_whatsapp") {
-        window.open("https://wa.me/919688889420?text=Hi!%20I'm%20interested%20in%20Vizhi%20Infragen%20properties", "_blank");
-        return;
-      }
-
       if (chipAction === "chip_cancel") {
         addUserMessage("Cancel Booking");
         handleBookingCancel();
@@ -457,32 +450,24 @@ export default function ChatbotWidget() {
       if (!prompt) return;
 
       setInput("");
+      setShowMentionMenu(false);
       addUserMessage(display);
 
       if (chipAction === "chip_book") {
         setIsTyping(true);
         setTimeout(() => {
           setIsTyping(false);
-          addBotMessage(
-            `📅 <strong>Schedule a Site Visit</strong><br/>${memory.location ? `We'll arrange a visit to our <em>${memory.location}</em> properties. ` : ""}Our Coimbatore advisor will coordinate the details.<br/><br/>Please fill in your details below:`,
-            undefined,
-            undefined,
-            "booking_form"
-          );
-        }, 400);
+          addBotMessage(`📅 <strong>Schedule a Site Visit</strong><br/>Please fill in your details below:`, undefined, undefined, "booking_form");
+        }, 300);
         return;
       }
+
       if (chipAction === "chip_agent") {
         setIsTyping(true);
         setTimeout(() => {
           setIsTyping(false);
-          addBotMessage(
-            "🙋 <strong>Connect with a Vizhi Property Advisor</strong><br/>Our Coimbatore team is available Mon–Sat, 9AM–7PM. Choose how you'd like to reach us:",
-            undefined,
-            undefined,
-            "handoff"
-          );
-        }, 400);
+          addBotMessage("🙋 <strong>Connect with a Vizhi Property Advisor</strong><br/>Our Coimbatore team is available Mon–Sat, 9AM–7PM.", undefined, undefined, "handoff");
+        }, 300);
         return;
       }
 
@@ -491,8 +476,6 @@ export default function ChatbotWidget() {
     },
     [input, memory, apiHistory, addUserMessage, addBotMessage, askGemini, handleBookingCancel]
   );
-
-  // ── Chat open/close ────────────────────────────────────────────────────────
 
   const openChatFresh = useCallback(() => {
     setIsOpen(true);
@@ -503,49 +486,23 @@ export default function ChatbotWidget() {
     setMemory({});
     setTimeout(() => {
       addBotMessage(
-        `👋 <strong>Welcome to Vizhi Infragen Realtors AI!</strong><br/><br/>I am your 24/7 Coimbatore real estate and property management assistant. I can help you:<br/>• 🏡 Search verified plots, villas & commercial land<br/>• 📜 Guidance on DTCP, RERA, Patta & Encumbrance Certificates<br/>• ✈️ Dedicated NRI Property Management services<br/>• 🏗️ Construction, Valuation & Land Conversion<br/>• 📅 Schedule site visits & speak with advisors<br/><br/>How can I assist you today?`,
+        `👋 <strong>Welcome to Vizhi Infragen Realtors AI!</strong><br/><br/>I am your 24/7 Coimbatore real estate assistant. What kind of property or service are you interested in?<br/>Choose an option or type a query using <code>@mentions</code>:`,
         [
-          { icon: "fa-magnifying-glass", label: "Search Properties", action: "chip_search" },
-          { icon: "fa-house", label: "Buy Property", action: "chip_buy" },
-          { icon: "fa-tag", label: "Sell Property", action: "chip_sell" },
-          { icon: "fa-key", label: "Rent / Manage", action: "chip_rent" },
-          { icon: "fa-globe", label: "NRI Services", action: "chip_nri" },
-          { icon: "fa-circle-question", label: "FAQ & Legal", action: "chip_faq" },
-          { icon: "fa-calendar-check", label: "Book Visit", action: "chip_book" },
-          { icon: "fa-headset", label: "Contact Agent", action: "chip_agent" },
+          { icon: "fa-map-location-dot", label: "🏡 Land & Plots for Sale", action: "chip_search" },
+          { icon: "fa-location-dot", label: "📍 Explore Locations", action: "chip_locations" },
+          { icon: "fa-globe", label: "✈️ NRI Services", action: "chip_nri" },
+          { icon: "fa-file-contract", label: "📜 DTCP & Legal FAQs", action: "chip_faq" },
+          { icon: "fa-calendar-check", label: "📅 Book Site Visit", action: "chip_book" },
+          { icon: "fa-headset", label: "🙋 Contact Agent", action: "chip_agent" },
         ]
       );
     }, 150);
   }, [addBotMessage]);
 
-  const minimizeChat = () => {
-    setIsOpen(false);
-    setIsMinimized(true);
-  };
-
-  const closeAndReset = () => {
-    setIsOpen(false);
-    setIsMinimized(false);
-    setMessages([]);
-    setApiHistory([]);
-    setMemory({});
-    setInput("");
-    setIsTyping(false);
-    setHasUnread(false);
-    setBName("");
-    setBPhone("");
-    setBEmail("");
-    setBDate("");
-    setBPropertyHint("");
-    setLastBooking(null);
-    setLName("");
-    setLPhone("");
-    setLEmail("");
-  };
-
   const toggleChat = () => {
     if (isOpen) {
-      minimizeChat();
+      setIsOpen(false);
+      setIsMinimized(true);
       return;
     }
     if (isMinimized) {
@@ -555,10 +512,6 @@ export default function ChatbotWidget() {
     }
     openChatFresh();
   };
-
-  // ── Form Submissions ───────────────────────────────────────────────────────
-
-  // ── Form Submissions (Real-Time Notification Dispatch) ──────────────────────
 
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -570,105 +523,31 @@ export default function ChatbotWidget() {
     const slot = bSlot;
     const property = bPropertyHint || memory.location || "Coimbatore Property";
 
-    setMemory((prev) => ({ ...prev, name, phone }));
-
-    // Store booking info for potential cancellation
     setLastBooking({ name, phone, date, slot, property });
+    const waMsg = `⚡ New Site Visit Booked!\n\nClient: ${name}\nPhone: ${phone}\nDate: ${date} (${slot})\nProperty: ${property}`;
+    window.open(`https://wa.me/919688889420?text=${encodeURIComponent(waMsg)}`, "_blank");
 
-    // Build WhatsApp message to the client (7402297479)
-    const waMsg = [
-      "⚡ New Site Visit Booked!",
-      "",
-      "🎉 Site Visit Confirmed!",
-      "",
-      "📋 Booking Details:",
-      `• Name: ${name}`,
-      `• Phone: ${phone}`,
-      `• Date & Time: ${date} (${slot})`,
-      `• Property: ${property}`,
-      "",
-      "Please contact this visitor within 2 hours!",
-      "- Vizhi Infragen AI System",
-    ].join("\n");
-
-    // Auto-open WhatsApp to client number 7402297479 with pre-filled message
-    window.open(
-      `https://wa.me/919688889420?text=${encodeURIComponent(waMsg)}`,
-      "_blank"
-    );
-
-    // Also record the lead in backend
     fetch("/api/lead", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        phone,
-        contactTime: `${date} (${slot})`,
-        type: "Site Visit Booking",
-        propertyInterest: property,
-      }),
+      body: JSON.stringify({ name, phone, contactTime: `${date} (${slot})`, type: "Site Visit Booking", propertyInterest: property }),
     }).catch(() => {});
 
     addBotMessage(
-      `⚡ <strong>Booking Sent via WhatsApp!</strong><br/><br/>` +
-        `🎉 <strong>Site Visit Confirmed for ${name}!</strong><br/><br/>` +
-        `📋 <strong>Booking Details:</strong><br/>` +
-        `• Name: ${name}<br/>` +
-        `• Phone: ${phone}<br/>` +
-        `• Date & Time: ${date} (${slot})<br/>` +
-        `• Property: ${property}<br/><br/>` +
-        `📲 <strong>WhatsApp notification</strong> has been sent to our property team! They will contact you within <strong>2 hours</strong>.`,
-      [
-        { icon: "fa-xmark", label: "Cancel Booking", action: "chip_cancel" },
-        { icon: "fa-magnifying-glass", label: "Browse More Properties", action: "chip_search" },
-      ]
+      `⚡ <strong>Booking Confirmed & WhatsApp Alert Sent!</strong><br/><br/>🎉 Site Visit Confirmed for <strong>${name}</strong>!<br/>Date & Time: ${date} (${slot})<br/>Property: ${property}`,
+      [{ icon: "fa-xmark", label: "Cancel Booking", action: "chip_cancel" }]
     );
     setBName("");
     setBPhone("");
     setBEmail("");
     setBDate("");
-    setBPropertyHint("");
   };
 
-  const handleLeadSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!lName || !lPhone) return;
-
-    const name = lName;
-    const phone = lPhone;
-    const time = lContactTime;
-
-    // Send real-time lead dispatch to backend
-    fetch("/api/lead", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        phone,
-        contactTime: time,
-        type: "General Enquiry",
-        propertyInterest: memory.propertyType || memory.location || "Coimbatore Real Estate",
-      }),
-    }).catch(() => {});
-
-    addBotMessage(
-      `⚡ <strong>Real-Time Notification Sent!</strong><br/><br/>✅ <strong>Thank you, ${name}!</strong><br/><br/>Your enquiry has been received and forwarded to our property advisor team in real time. We will contact you at <strong>${phone}</strong> during <strong>${time}</strong>.<br/><br/>We'll provide free, data-backed guidance. You can also connect with us live right now:`,
-      [
-        { icon: "fa-whatsapp", label: "⚡ Connect Real-Time on WhatsApp", action: "chip_whatsapp" },
-        { icon: "fa-house", label: "Main Menu", action: "chip_welcome" },
-      ]
-    );
-    setLName("");
-    setLPhone("");
-    setLEmail("");
-  };
-
-  // ── Render UI ──────────────────────────────────────────────────────────────
+  const filteredMentions = MENTION_OPTIONS.filter((m) => m.tag.includes(mentionFilter) || m.label.toLowerCase().includes(mentionFilter));
 
   return (
     <>
-      {/* ── Floating Trigger Button ──────────────────── */}
+      {/* Trigger Button */}
       <button
         onClick={toggleChat}
         aria-label="Open AI Property Assistant"
@@ -683,114 +562,148 @@ export default function ChatbotWidget() {
             1
           </span>
         )}
-        {isMinimized && (
-          <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center border-2 border-white z-20 shadow-lg">
-            <i className="fa-solid fa-chevron-up text-[9px]" />
-          </span>
-        )}
       </button>
 
-      {/* ── Minimized Preview Pill ──────────────────── */}
+      {/* Minimized Pill */}
       {isMinimized && (
         <button
           onClick={toggleChat}
           className="fixed bottom-[88px] right-6 z-[9997] bg-gradient-to-r from-[#1F0A10] to-[#3d1520] border border-[#c5a880]/50 text-white text-[11px] font-semibold px-4 py-2 rounded-full shadow-xl flex items-center gap-2.5 cursor-pointer hover:border-[#c5a880] transition-all duration-200"
         >
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-          <span className="text-[#c5a880] font-bold">Vizhi AI</span>
-          <span className="text-white/70">— tap to resume</span>
+          <span className="text-[#c5a880] font-bold">Vizhi AI ({mode === "rag" ? "RAG Mode" : "Keyword Mode"})</span>
           <i className="fa-solid fa-chevron-up text-[9px] text-[#c5a880]" />
         </button>
       )}
 
-      {/* ── Chat Window ──────────────────────────────── */}
+      {/* Chat Window */}
       <div
-        className={`fixed bottom-24 right-6 z-[9998] w-[420px] max-w-[calc(100vw-20px)] flex flex-col bg-white rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.22)] border border-stone-200/60 overflow-hidden transition-all duration-300 origin-bottom-right ${
+        className={`fixed bottom-24 right-6 z-[9998] w-[430px] max-w-[calc(100vw-20px)] flex flex-col bg-white rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.22)] border border-stone-200/60 overflow-hidden transition-all duration-300 origin-bottom-right ${
           isOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-90 pointer-events-none"
         }`}
-        style={{ height: "min(640px, calc(100vh - 110px))" }}
+        style={{ height: "min(650px, calc(100vh - 110px))" }}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#1A0810] via-[#2D1015] to-[#3d1520] px-4 py-3.5 flex items-center gap-3 shrink-0 shadow-lg">
-          <div className="relative shrink-0">
-            <div className="w-11 h-11 rounded-full bg-[#c5a880]/15 border-2 border-[#c5a880]/70 flex items-center justify-center text-[#c5a880]">
-              <i className="fa-solid fa-robot text-lg" />
+        <div className="bg-gradient-to-r from-[#1A0810] via-[#2D1015] to-[#3d1520] px-4 py-3 flex items-center justify-between shrink-0 shadow-lg border-b border-white/10">
+          <div className="flex items-center gap-2.5">
+            <div className="relative shrink-0">
+              <div className="w-10 h-10 rounded-full bg-[#c5a880]/15 border-2 border-[#c5a880]/70 flex items-center justify-center text-[#c5a880]">
+                <i className="fa-solid fa-robot text-base" />
+              </div>
+              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-[#2D1015]" />
             </div>
-            <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 border-2 border-[#2D1015]" />
+            <div>
+              <div className="font-bold text-[13px] text-white font-['Outfit',sans-serif] flex items-center gap-1.5">
+                Vizhi Real Estate AI
+                <span className="text-[8px] bg-[#c5a880] text-[#1F0A10] font-black px-1.5 py-0.5 rounded tracking-wide">
+                  COIMBATORE
+                </span>
+              </div>
+              <div className="text-[10px] text-emerald-400 font-['Inter',sans-serif]">
+                Online — RAG & Keyword Intelligent Bot
+              </div>
+            </div>
           </div>
-          <div className="flex-1 min-w-0">
-            <div className="font-bold text-[13.5px] text-white font-['Outfit',sans-serif] flex items-center gap-2">
-              Vizhi Real Estate AI
-              <span className="text-[9px] bg-[#c5a880] text-[#1F0A10] font-black px-2 py-0.5 rounded-full tracking-wide">
-                COIMBATORE
-              </span>
-            </div>
-            <div className="text-[11px] text-emerald-400 font-['Inter',sans-serif] flex items-center gap-1.5">
-              <span className="w-1 h-1 rounded-full bg-emerald-400 inline-block animate-pulse" />
-              Online — 24/7 AI Property Assistant
-            </div>
-          </div>
-          {Object.values(memory).filter(Boolean).length > 0 && (
-            <span
-              title={`Remembered: ${JSON.stringify(memory)}`}
-              className="text-[9px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-2 py-0.5 rounded-full font-semibold cursor-help shrink-0"
+
+          <div className="flex items-center gap-1.5">
+            {/* Document Upload Button */}
+            <button
+              onClick={() => setShowUploadModal(true)}
+              title="Upload custom document (PDF/TXT/DOCX)"
+              className="w-7 h-7 rounded-full bg-white/10 hover:bg-[#c5a880]/30 text-[#c5a880] flex items-center justify-center text-xs transition-all cursor-pointer"
             >
-              <i className="fa-solid fa-brain text-[8px] mr-1" />
-              {Object.values(memory).filter(Boolean).length} facts
-            </span>
-          )}
-          <button
-            onClick={minimizeChat}
-            aria-label="Minimize chat"
-            className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-white/70 hover:text-white flex items-center justify-center transition-all cursor-pointer"
-          >
-            <i className="fa-solid fa-window-minimize text-[10px]" />
-          </button>
-          <button
-            onClick={closeAndReset}
-            aria-label="Close chat"
-            className="w-7 h-7 rounded-full bg-white/10 hover:bg-red-500/80 text-white/70 hover:text-white flex items-center justify-center text-xs transition-all cursor-pointer"
-          >
-            <i className="fa-solid fa-xmark" />
-          </button>
+              <i className="fa-solid fa-paperclip" />
+            </button>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="w-7 h-7 rounded-full bg-white/10 hover:bg-red-500/80 text-white/70 hover:text-white flex items-center justify-center text-xs transition-all cursor-pointer"
+            >
+              <i className="fa-solid fa-xmark" />
+            </button>
+          </div>
         </div>
 
-        {/* Quick Action Bar (Exact options requested: Search, Buy, Sell, Rent, NRI, FAQ & Legal, Book Visit, Agent) */}
-        <div className="bg-[#1A0810] px-3 py-2 flex items-center gap-2 overflow-x-auto shrink-0 scrollbar-none border-b border-white/10">
+        {/* Dual Mode Switcher Bar */}
+        <div className="bg-[#15060A] px-3 py-1.5 flex items-center justify-between border-b border-white/10 shrink-0">
+          <span className="text-[10px] text-white/60 font-medium">Search Engine Mode:</span>
+          <div className="flex bg-black/40 p-0.5 rounded-lg border border-white/15">
+            <button
+              onClick={() => setMode("rag")}
+              className={`px-2.5 py-0.5 rounded-md text-[10px] font-bold transition-all ${
+                mode === "rag" ? "bg-[#c5a880] text-[#1F0A10] shadow-sm" : "text-white/70 hover:text-white"
+              }`}
+            >
+              ⚡ AI RAG Mode
+            </button>
+            <button
+              onClick={() => setMode("keyword")}
+              className={`px-2.5 py-0.5 rounded-md text-[10px] font-bold transition-all ${
+                mode === "keyword" ? "bg-[#c5a880] text-[#1F0A10] shadow-sm" : "text-white/70 hover:text-white"
+              }`}
+            >
+              🔍 Keyword Mode
+            </button>
+          </div>
+        </div>
+
+        {/* Quick Actions Scroll Bar */}
+        <div className="bg-[#1A0810] px-3 py-1.5 flex items-center gap-1.5 overflow-x-auto shrink-0 scrollbar-none border-b border-white/10">
           {[
-            { emoji: "🔍", label: "Search", action: "chip_search" },
-            { emoji: "🏡", label: "Buy", action: "chip_buy" },
-            { emoji: "🏷️", label: "Sell", action: "chip_sell" },
-            { emoji: "🔑", label: "Rent", action: "chip_rent" },
-            { emoji: "✈️", label: "NRI", action: "chip_nri" },
-            { emoji: "📋", label: "FAQ & Legal", action: "chip_faq" },
-            { emoji: "📅", label: "Book Visit", action: "chip_book" },
-            { emoji: "🙋", label: "Agent", action: "chip_agent" },
+            { label: "Search Land", action: "chip_search" },
+            { label: "Locations", action: "chip_locations" },
+            { label: "NRI Care", action: "chip_nri" },
+            { label: "Approvals", action: "chip_faq" },
+            { label: "Construction", action: "chip_construction" },
+            { label: "Valuation", action: "chip_valuation" },
+            { label: "Book Visit", action: "chip_book" },
+            { label: "Agent", action: "chip_agent" },
           ].map((btn) => (
             <button
               key={btn.action}
               onClick={() => handleSend(btn.label, btn.action)}
-              className="px-3 py-1 rounded-full text-[11px] bg-white/8 border border-white/15 text-white/85 hover:bg-[#c5a880] hover:text-[#1F0A10] hover:border-[#c5a880] font-medium shrink-0 transition-all duration-200 cursor-pointer"
+              className="px-2.5 py-1 rounded-full text-[10px] bg-white/8 border border-white/15 text-white/85 hover:bg-[#c5a880] hover:text-[#1F0A10] font-medium shrink-0 transition-all cursor-pointer"
             >
-              {btn.emoji} {btn.label}
+              {btn.label}
             </button>
           ))}
         </div>
 
-        {/* Messages List */}
-        <div className="flex-1 overflow-y-auto p-4 bg-gradient-to-b from-[#faf7f4] to-[#f5f0ea] space-y-4 font-['Inter',sans-serif]">
-          {messages.length === 0 && (
-            <div className="flex flex-col items-center justify-center h-full text-center gap-3 pb-8">
-              <div className="w-16 h-16 rounded-full bg-[#1F0A10]/10 flex items-center justify-center">
-                <i className="fa-solid fa-robot text-3xl text-[#c5a880]" />
-              </div>
-              <p className="text-stone-500 text-sm font-medium">Vizhi AI — Property Expert</p>
-              <p className="text-stone-400 text-xs max-w-[220px]">
-                Ask me anything about buying, selling, building, or managing property in Coimbatore.
-              </p>
+        {/* Upload Document Modal */}
+        {showUploadModal && (
+          <div className="p-3 bg-amber-50 border-b border-amber-200 text-stone-800 text-[11px] flex items-center justify-between shrink-0">
+            <div>
+              <p className="font-bold text-amber-900">📄 Upload Document (PDF / TXT)</p>
+              <p className="text-[10px] text-stone-600">Upload custom document to query with <code>@mentions</code></p>
             </div>
-          )}
+            <div className="flex gap-2">
+              <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept=".txt,.pdf,.docx" className="hidden" />
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="bg-[#1F0A10] text-[#c5a880] text-[10px] font-bold px-2.5 py-1 rounded cursor-pointer"
+              >
+                Browse File
+              </button>
+              <button onClick={() => setShowUploadModal(false)} className="text-stone-400 hover:text-stone-700">
+                <i className="fa-solid fa-xmark text-xs" />
+              </button>
+            </div>
+          </div>
+        )}
 
+        {/* Uploaded Documents Badges */}
+        {uploadedDocs.length > 0 && (
+          <div className="bg-stone-100 px-3 py-1.5 flex items-center gap-1.5 overflow-x-auto shrink-0 border-b border-stone-200 text-[10px]">
+            <span className="font-bold text-stone-600 shrink-0">Files:</span>
+            {uploadedDocs.map((doc) => (
+              <span key={doc.id} className="bg-stone-200 text-stone-800 px-2 py-0.5 rounded-full font-medium shrink-0 flex items-center gap-1">
+                <i className="fa-solid fa-file-text text-[9px] text-[#c5a880]" /> @{doc.fileName.replace(/\.[^/.]+$/, "")}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Messages List */}
+        <div className="flex-1 overflow-y-auto p-3.5 bg-gradient-to-b from-[#faf7f4] to-[#f5f0ea] space-y-3.5 font-['Inter',sans-serif]">
           {messages.map((m) => (
             <div key={m.id} className={`flex items-end gap-2 ${m.sender === "user" ? "flex-row-reverse" : ""}`}>
               {m.sender === "bot" && (
@@ -798,11 +711,11 @@ export default function ChatbotWidget() {
                   <i className="fa-solid fa-robot" />
                 </div>
               )}
-              <div className="max-w-[85%] space-y-2 min-w-0">
+              <div className="max-w-[88%] space-y-2 min-w-0">
                 {m.text && (
                   <div
                     dangerouslySetInnerHTML={{ __html: m.text }}
-                    className={`px-4 py-3 text-[12px] leading-relaxed rounded-2xl ${
+                    className={`px-3.5 py-2.5 text-[11.5px] leading-relaxed rounded-2xl ${
                       m.sender === "bot"
                         ? "bg-white text-stone-800 rounded-bl-md shadow-sm border border-stone-200/70"
                         : "bg-gradient-to-br from-[#2D1015] to-[#4a1c26] text-white rounded-br-md shadow-md"
@@ -810,36 +723,41 @@ export default function ChatbotWidget() {
                   />
                 )}
 
+                {/* Sources Attribution Badge (Inspired by rag-chat-bot-main) */}
+                {m.sources && m.sources.length > 0 && (
+                  <div className="flex flex-wrap gap-1 pt-0.5">
+                    {m.sources.map((src, idx) => (
+                      <span key={idx} className="text-[9px] bg-stone-200/80 text-stone-700 font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 border border-stone-300/50">
+                        <i className="fa-solid fa-book-bookmark text-[8px] text-[#c5a880]" />
+                        {src.length > 35 ? src.slice(0, 35) + "…" : src}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
                 {/* Property Listing Cards */}
                 {m.properties && m.properties.length > 0 && (
-                  <div className="space-y-2.5 pt-0.5">
+                  <div className="space-y-2 pt-0.5">
                     {m.properties.map((prop) => (
-                      <div
-                        key={prop.id}
-                        className="bg-white rounded-xl overflow-hidden border border-stone-200 shadow-md hover:shadow-lg transition-shadow"
-                      >
-                        <div className="relative h-32 w-full">
+                      <div key={prop.id} className="bg-white rounded-xl overflow-hidden border border-stone-200 shadow-sm">
+                        <div className="relative h-28 w-full">
                           <Image src={prop.image} alt={prop.title} fill className="object-cover" sizes="360px" />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                          <span className="absolute top-2 left-2 bg-[#1F0A10]/90 text-[#c5a880] text-[9px] font-extrabold px-2 py-0.5 rounded-md tracking-wide">
+                          <span className="absolute top-2 left-2 bg-[#1F0A10]/90 text-[#c5a880] text-[9px] font-bold px-2 py-0.5 rounded">
                             {prop.badge}
                           </span>
                         </div>
-                        <div className="p-3">
-                          <h5 className="font-bold text-[12px] text-[#1E293B] font-['Outfit',sans-serif] leading-tight">
-                            {prop.title}
-                          </h5>
-                          <p className="text-[10px] text-[#c5a880] font-semibold mt-0.5 flex items-center gap-1">
-                            <i className="fa-solid fa-location-dot text-[9px]" /> {prop.location}
+                        <div className="p-2.5">
+                          <h5 className="font-bold text-[12px] text-[#1E293B]">{prop.title}</h5>
+                          <p className="text-[10px] text-[#c5a880] font-semibold flex items-center gap-1 mt-0.5">
+                            <i className="fa-solid fa-location-dot" /> {prop.location}
                           </p>
-                          <p className="text-[10px] text-stone-500 mt-1 leading-snug">{prop.description}</p>
-                          <div className="flex gap-2 mt-2.5">
+                          <div className="flex gap-2 mt-2">
                             <button
                               onClick={() => {
                                 setBPropertyHint(prop.title);
                                 handleSend("Book Visit", "chip_book");
                               }}
-                              className="flex-1 bg-[#1F0A10] hover:bg-[#3d1520] text-[#c5a880] text-[10px] font-bold py-1.5 rounded-lg transition-colors cursor-pointer"
+                              className="flex-1 bg-[#1F0A10] text-[#c5a880] text-[10px] font-bold py-1 rounded transition cursor-pointer"
                             >
                               📅 Schedule Visit
                             </button>
@@ -847,7 +765,7 @@ export default function ChatbotWidget() {
                               href={`https://wa.me/919688889420?text=Hi!%20I'm%20interested%20in%20${encodeURIComponent(prop.title)}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="px-3 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-lg flex items-center justify-center transition-colors"
+                              className="px-2.5 bg-emerald-600 text-white text-[11px] font-bold rounded flex items-center justify-center"
                             >
                               <i className="fa-brands fa-whatsapp" />
                             </a>
@@ -860,20 +778,15 @@ export default function ChatbotWidget() {
 
                 {/* Booking Form Card */}
                 {m.cardType === "booking_form" && (
-                  <form
-                    onSubmit={handleBookingSubmit}
-                    className="bg-white rounded-xl p-4 border border-stone-200 shadow-md space-y-2.5"
-                  >
-                    <h4 className="text-[12px] font-bold text-[#1E293B] font-['Outfit',sans-serif]">
-                      📅 Visit Details
-                    </h4>
+                  <form onSubmit={handleBookingSubmit} className="bg-white rounded-xl p-3.5 border border-stone-200 shadow-md space-y-2">
+                    <h4 className="text-[11.5px] font-bold text-[#1E293B]">📅 Schedule Site Visit</h4>
                     <input
                       required
                       type="text"
                       placeholder="Full Name *"
                       value={bName}
                       onChange={(e) => setBName(e.target.value)}
-                      className="w-full bg-stone-50 border border-stone-300 rounded-lg px-3 py-2 text-[11px] outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880]/30 transition"
+                      className="w-full bg-stone-50 border border-stone-300 rounded px-2.5 py-1.5 text-[11px] outline-none"
                     />
                     <input
                       required
@@ -881,144 +794,57 @@ export default function ChatbotWidget() {
                       placeholder="Phone Number *"
                       value={bPhone}
                       onChange={(e) => setBPhone(e.target.value)}
-                      className="w-full bg-stone-50 border border-stone-300 rounded-lg px-3 py-2 text-[11px] outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880]/30 transition"
+                      className="w-full bg-stone-50 border border-stone-300 rounded px-2.5 py-1.5 text-[11px] outline-none"
                     />
-                    <input
-                      type="email"
-                      placeholder="Email Address (optional)"
-                      value={bEmail}
-                      onChange={(e) => setBEmail(e.target.value)}
-                      className="w-full bg-stone-50 border border-stone-300 rounded-lg px-3 py-2 text-[11px] outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880]/30 transition"
-                    />
-                    {bPropertyHint && (
-                      <input
-                        type="text"
-                        readOnly
-                        value={bPropertyHint}
-                        className="w-full bg-stone-100 border border-stone-200 rounded-lg px-3 py-2 text-[11px] text-stone-500"
-                      />
-                    )}
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-1.5">
                       <input
                         type="date"
                         value={bDate}
                         onChange={(e) => setBDate(e.target.value)}
                         min={new Date().toISOString().split("T")[0]}
-                        className="bg-stone-50 border border-stone-300 rounded-lg px-2 py-2 text-[11px] outline-none focus:border-[#c5a880] transition"
+                        className="bg-stone-50 border border-stone-300 rounded px-2 py-1.5 text-[10px] outline-none"
                       />
-                      <select
-                        value={bSlot}
-                        onChange={(e) => setBSlot(e.target.value)}
-                        className="bg-stone-50 border border-stone-300 rounded-lg px-2 py-2 text-[11px] outline-none focus:border-[#c5a880] transition"
-                      >
+                      <select value={bSlot} onChange={(e) => setBSlot(e.target.value)} className="bg-stone-50 border border-stone-300 rounded px-2 py-1.5 text-[10px]">
                         <option>10:00 AM</option>
                         <option>12:00 PM</option>
-                        <option>02:00 PM</option>
                         <option>04:00 PM</option>
-                        <option>05:30 PM</option>
                       </select>
                     </div>
-                    <button
-                      type="submit"
-                      className="w-full bg-[#1F0A10] hover:bg-[#3d1520] text-[#c5a880] font-extrabold py-2.5 rounded-lg text-[11px] transition-colors shadow-md cursor-pointer"
-                    >
-                      ✅ Confirm Site Visit
+                    <button type="submit" className="w-full bg-[#1F0A10] text-[#c5a880] font-extrabold py-2 rounded text-[11px] cursor-pointer">
+                      ✅ Confirm Booking
                     </button>
                   </form>
                 )}
 
-                {/* Lead Form Card */}
-                {m.cardType === "lead_form" && (
-                  <form
-                    onSubmit={handleLeadSubmit}
-                    className="bg-white rounded-xl p-4 border border-stone-200 shadow-md space-y-2.5"
-                  >
-                    <h4 className="text-[12px] font-bold text-[#1E293B] font-['Outfit',sans-serif]">
-                      📝 Property Enquiry
-                    </h4>
-                    <input
-                      required
-                      type="text"
-                      placeholder="Your Full Name *"
-                      value={lName}
-                      onChange={(e) => setLName(e.target.value)}
-                      className="w-full bg-stone-50 border border-stone-300 rounded-lg px-3 py-2 text-[11px] outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880]/30 transition"
-                    />
-                    <input
-                      required
-                      type="tel"
-                      placeholder="Phone Number *"
-                      value={lPhone}
-                      onChange={(e) => setLPhone(e.target.value)}
-                      className="w-full bg-stone-50 border border-stone-300 rounded-lg px-3 py-2 text-[11px] outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880]/30 transition"
-                    />
-                    <input
-                      type="email"
-                      placeholder="Email Address (optional)"
-                      value={lEmail}
-                      onChange={(e) => setLEmail(e.target.value)}
-                      className="w-full bg-stone-50 border border-stone-300 rounded-lg px-3 py-2 text-[11px] outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880]/30 transition"
-                    />
-                    <select
-                      value={lContactTime}
-                      onChange={(e) => setLContactTime(e.target.value)}
-                      className="w-full bg-stone-50 border border-stone-300 rounded-lg px-3 py-2 text-[11px] outline-none focus:border-[#c5a880] transition"
-                    >
-                      <option>Morning (9AM–12PM)</option>
-                      <option>Afternoon (12PM–4PM)</option>
-                      <option>Evening (4PM–7PM)</option>
-                    </select>
-                    <button
-                      type="submit"
-                      className="w-full bg-[#1F0A10] hover:bg-[#3d1520] text-[#c5a880] font-extrabold py-2.5 rounded-lg text-[11px] transition-colors shadow-md cursor-pointer"
-                    >
-                      📤 Submit Enquiry
-                    </button>
-                  </form>
-                )}
-
-                {/* Agent Handoff Card */}
+                {/* Handoff Card */}
                 {m.cardType === "handoff" && (
-                  <div className="bg-white rounded-xl p-3.5 border border-stone-200 shadow-md space-y-2">
+                  <div className="bg-white rounded-xl p-3 border border-stone-200 shadow-md space-y-1.5">
                     <a
                       href="https://wa.me/919688889420?text=Hi!%20I%20need%20help%20from%20a%20Vizhi%20property%20advisor"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-lg text-[11px] flex items-center justify-center gap-2.5 transition-colors shadow-sm"
+                      className="w-full bg-emerald-600 text-white font-bold py-2 px-3 rounded text-[11px] flex items-center justify-center gap-2"
                     >
-                      <i className="fa-brands fa-whatsapp text-sm" /> Chat on WhatsApp
+                      <i className="fa-brands fa-whatsapp" /> Chat on WhatsApp
                     </a>
-                    <a
-                      href="tel:+919688889420"
-                      className="w-full bg-[#1F0A10] hover:bg-[#3d1520] text-[#c5a880] font-bold py-2.5 px-4 rounded-lg text-[11px] flex items-center justify-center gap-2.5 transition-colors shadow-sm"
-                    >
-                      <i className="fa-solid fa-phone text-xs" /> Call: +91 96888 89420
+                    <a href="tel:+919688889420" className="w-full bg-[#1F0A10] text-[#c5a880] font-bold py-2 px-3 rounded text-[11px] flex items-center justify-center gap-2">
+                      <i className="fa-solid fa-phone" /> Call: +91 96888 89420
                     </a>
-                    <a
-                      href="mailto:vizhiinfragen@gmail.com"
-                      className="w-full bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold py-2.5 px-4 rounded-lg text-[11px] flex items-center justify-center gap-2.5 transition-colors"
-                    >
-                      <i className="fa-solid fa-envelope text-xs" /> Email Our Team
-                    </a>
-                    <div className="pt-1.5 border-t border-stone-200 text-center text-[10px] text-stone-400">
-                      📍 Shop No.24, Old Bus Stand, Sulur, Coimbatore — Mon–Sat 9AM–7PM
-                    </div>
                   </div>
                 )}
 
                 {/* Timestamp */}
-                <span className="text-[9px] text-stone-400 block text-right">{m.time}</span>
+                <span className="text-[8.5px] text-stone-400 block text-right">{m.time}</span>
 
-                {/* Chips Suggestions */}
+                {/* Chips */}
                 {m.chips && (
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-1">
                     {m.chips.map((c, i) => (
                       <button
                         key={i}
                         onClick={() => handleSend(c.label, c.action)}
-                        className="px-3 py-1.5 rounded-full text-[11px] border border-[#c5a880]/60 text-[#3d1520] bg-[#c5a880]/12 hover:bg-[#c5a880] hover:text-[#1F0A10] hover:border-[#c5a880] font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+                        className="px-2.5 py-1 rounded-full text-[10px] border border-[#c5a880]/60 text-[#3d1520] bg-[#c5a880]/12 hover:bg-[#c5a880] hover:text-[#1F0A10] font-medium transition cursor-pointer"
                       >
-                        <i className={`fa-solid ${c.icon} text-[9px]`} />
                         {c.label}
                       </button>
                     ))}
@@ -1028,14 +854,13 @@ export default function ChatbotWidget() {
             </div>
           ))}
 
-          {/* Typing Indicator */}
           {isTyping && (
             <div className="flex items-end gap-2">
               <div className="w-7 h-7 rounded-full bg-[#1F0A10] border border-[#c5a880]/60 text-[#c5a880] flex items-center justify-center text-[11px] shrink-0">
                 <i className="fa-solid fa-robot" />
               </div>
-              <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-md shadow-sm border border-stone-200 flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#c5a880] animate-bounce" style={{ animationDelay: "0ms" }} />
+              <div className="bg-white px-3 py-2 rounded-2xl rounded-bl-md shadow-sm border border-stone-200 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#c5a880] animate-bounce" />
                 <span className="w-1.5 h-1.5 rounded-full bg-[#c5a880] animate-bounce" style={{ animationDelay: "150ms" }} />
                 <span className="w-1.5 h-1.5 rounded-full bg-[#c5a880] animate-bounce" style={{ animationDelay: "300ms" }} />
               </div>
@@ -1044,21 +869,37 @@ export default function ChatbotWidget() {
           <div ref={endRef} />
         </div>
 
+        {/* Mention Autocomplete Popover */}
+        {showMentionMenu && filteredMentions.length > 0 && (
+          <div className="bg-white border-t border-stone-200 max-h-36 overflow-y-auto p-1 text-[11px] shadow-lg shrink-0">
+            <div className="px-2 py-1 text-[9px] font-bold text-stone-400 uppercase tracking-wider">Select Tag to Filter Knowledge:</div>
+            {filteredMentions.map((opt) => (
+              <button
+                key={opt.tag}
+                onClick={() => selectMention(opt.tag)}
+                className="w-full text-left px-2.5 py-1.5 hover:bg-stone-100 rounded flex items-center justify-between text-stone-800 font-medium cursor-pointer"
+              >
+                <span className="font-bold text-[#c5a880]">{opt.tag}</span>
+                <span className="text-[10px] text-stone-500">{opt.label}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Input Footer */}
-        <div className="px-3 py-3 bg-white border-t border-stone-200 flex items-center gap-2 shrink-0 shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
+        <div className="px-3 py-2.5 bg-white border-t border-stone-200 flex items-center gap-2 shrink-0 shadow-md">
           <input
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleInputChange}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            placeholder='Ask anything… e.g. "NRI property management", "DTCP plots"'
-            className="flex-1 bg-[#faf8f5] border border-stone-300 rounded-full px-4 py-2 text-[11.5px] outline-none focus:border-[#c5a880] focus:ring-2 focus:ring-[#c5a880]/20 font-['Inter',sans-serif] transition"
+            placeholder={mode === "rag" ? 'Type question or @tag (e.g. "@sulur", "@nri")…' : 'Type keywords (e.g. "Sulur plots", "DTCP")…'}
+            className="flex-1 bg-[#faf8f5] border border-stone-300 rounded-full px-3.5 py-1.5 text-[11.5px] outline-none focus:border-[#c5a880]"
           />
           <button
             onClick={() => handleSend()}
             disabled={isTyping || !input.trim()}
-            className="w-9 h-9 rounded-full bg-gradient-to-br from-[#1F0A10] to-[#3d1520] text-[#c5a880] hover:scale-105 flex items-center justify-center transition-transform shrink-0 shadow-md cursor-pointer border border-[#c5a880]/30 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
-            aria-label="Send Message"
+            className="w-8 h-8 rounded-full bg-[#1F0A10] text-[#c5a880] hover:scale-105 flex items-center justify-center transition shrink-0 border border-[#c5a880]/30 disabled:opacity-40"
           >
             <i className="fa-solid fa-paper-plane text-xs" />
           </button>

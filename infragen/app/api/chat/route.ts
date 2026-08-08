@@ -1,10 +1,7 @@
-// ── /api/chat — Vizhi Infragen AI Agent Route ────────────────────────────────
-// Calls Gemini 3.5 Flash with full conversation history + RAG Knowledge Injection.
-
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI, Content } from "@google/generative-ai";
 import { chatTools } from "@/lib/chatTools";
-import { searchKnowledge } from "@/lib/ragKnowledge";
+import { searchKnowledge, searchKnowledgeKeywordMode } from "@/lib/ragKnowledge";
 import { ChatRequest, ChatApiResponse } from "@/lib/types";
 
 const GEMINI_MODEL = "gemini-3.5-flash";
@@ -48,17 +45,52 @@ Remember: You represent Vizhi Infragen Realtors LLP. Answer only from the docume
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     const body = (await req.json()) as ChatRequest;
-    const { messages, sessionMemory, toolResult } = body;
+    const { messages, sessionMemory, toolResult, mode = "rag" } = body;
 
     // Extract last user message
     const lastUserMsg = messages[messages.length - 1]?.content || "";
 
-    // 1. Try querying the Python RAG Backend Server (http://localhost:8000/api/chat)
+    // ── Keyword Search Mode (Fast direct index search) ─────────────────────
+    if (mode === "keyword") {
+      try {
+        const pyRes = await fetch("http://localhost:8000/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: lastUserMsg, mode: "keyword" }),
+        });
+        if (pyRes.ok) {
+          const pyData = await pyRes.json();
+          if (pyData.success && pyData.answer) {
+            return NextResponse.json({
+              type: "message",
+              text: pyData.answer,
+              mode: "keyword",
+              sources: pyData.sources,
+              confidence: pyData.confidence,
+              category: pyData.category,
+            } as ChatApiResponse);
+          }
+        }
+      } catch {
+        // Python backend offline, use local TS keyword engine fallback
+      }
+
+      const kwRes = searchKnowledgeKeywordMode(lastUserMsg, 3);
+      return NextResponse.json({
+        type: "message",
+        text: kwRes.text,
+        mode: "keyword",
+        sources: kwRes.sources,
+      } as ChatApiResponse);
+    }
+
+    // ── RAG AI Mode ────────────────────────────────────────────────────────
+    // Try querying the Python RAG Backend Server first
     try {
       const pyRes = await fetch("http://localhost:8000/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: lastUserMsg }),
+        body: JSON.stringify({ query: lastUserMsg, mode: "rag" }),
       });
       if (pyRes.ok) {
         const pyData = await pyRes.json();
@@ -66,6 +98,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           return NextResponse.json({
             type: "message",
             text: pyData.answer,
+            mode: "rag",
+            sources: pyData.sources,
+            confidence: pyData.confidence,
+            category: pyData.category,
           } as ChatApiResponse);
         }
       }
@@ -80,7 +116,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       const fallbackText = ragChunks.length > 0 
         ? ragChunks[0].content 
         : "Vizhi Infragen Realtors LLP is a trusted real estate and property management company in Coimbatore. Call +91 96888 89420 or email vizhiinfragen@gmail.com for inquiries.";
-      return NextResponse.json({ type: "message", text: fallbackText } as ChatApiResponse);
+      return NextResponse.json({
+        type: "message",
+        text: fallbackText,
+        mode: "rag",
+        sources: ragChunks.map((c) => c.title),
+      } as ChatApiResponse);
     }
 
     const ragChunks = searchKnowledge(lastUserMsg, 3);
@@ -90,7 +131,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       .replace("{RAG_CONTEXT}", ragContextText || "General Vizhi Infragen company information.")
       .replace(
         "{SESSION_MEMORY}",
-        Object.keys(sessionMemory).length > 0
+        Object.keys(sessionMemory || {}).length > 0
           ? JSON.stringify(sessionMemory, null, 2)
           : "No facts captured yet."
       );
@@ -157,7 +198,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       );
     }
 
-    return NextResponse.json({ type: "message", text } as ChatApiResponse);
+    return NextResponse.json({
+      type: "message",
+      text,
+      mode: "rag",
+      sources: ragChunks.map((c) => c.title),
+    } as ChatApiResponse);
   } catch (err: unknown) {
     console.error("[/api/chat] Error:", err);
     const errorMessage = err instanceof Error ? err.message : "Unexpected error";
@@ -175,3 +221,4 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 }
+

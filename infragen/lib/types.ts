@@ -3,12 +3,20 @@
 export type CardType = "booking_form" | "lead_form" | "handoff";
 export type MessageRole = "user" | "model";
 export type MessageSender = "bot" | "user";
+export type ChatMode = "rag" | "keyword";
 
 export interface ChipItem {
   icon: string;
   label: string;
   action?: string;
   payload?: string;
+}
+
+export interface UploadedDocument {
+  id: string;
+  fileName: string;
+  chunks: string[];
+  uploadedAt: string;
 }
 
 export interface SessionMemory {
@@ -31,6 +39,10 @@ export interface MessageItem {
   properties?: import("@/data/properties").PropertyItem[];
   cardType?: CardType;
   isToolProgress?: boolean;
+  mode?: ChatMode;
+  sources?: string[];
+  category?: string;
+  confidence?: number;
 }
 
 // ── API payload shapes ────────────────────────────────────────────────────────
@@ -43,6 +55,8 @@ export interface ApiMessage {
 export interface ChatRequest {
   messages: ApiMessage[];
   sessionMemory: SessionMemory;
+  mode?: ChatMode;
+  mentions?: string[];
   toolResult?: {
     name: string;
     content: string;
@@ -58,6 +72,10 @@ export interface ToolCallResponse {
 export interface MessageResponse {
   type: "message";
   text: string;
+  mode?: ChatMode;
+  sources?: string[];
+  confidence?: number;
+  category?: string;
 }
 
 export type ChatApiResponse = ToolCallResponse | MessageResponse | { type: "error"; message: string };
