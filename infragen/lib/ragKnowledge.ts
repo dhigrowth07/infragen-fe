@@ -594,30 +594,62 @@ Talk to a Coimbatore Real Estate Expert Today. Contact Vizhi Infragen Realtors t
   },
 ];
 
-// ── RAG Search Function — Keyword + Phrase Matching ──────────────────────────
+// ── RAG & Keyword Search Functions — Tag Matching & Document Chunking ─────────
+
+export function parseFileMentions(query: string): { mentions: string[]; cleanQuery: string } {
+  const mentionRegex = /@([a-zA-Z0-9_-]+)/g;
+  const mentions: string[] = [];
+  let match;
+  while ((match = mentionRegex.exec(query)) !== null) {
+    mentions.push(match[1].toLowerCase());
+  }
+  const cleanQuery = query.replace(/@[a-zA-Z0-9_-]+/g, "").trim();
+  return { mentions, cleanQuery };
+}
+
+export function splitTextIntoChunks(text: string, chunkSize = 1000, overlap = 200): string[] {
+  const chunks: string[] = [];
+  let start = 0;
+  const cleanText = text.trim();
+  while (start < cleanText.length) {
+    const end = Math.min(start + chunkSize, cleanText.length);
+    chunks.push(cleanText.slice(start, end));
+    if (end === cleanText.length) break;
+    start = end - overlap;
+  }
+  return chunks;
+}
 
 export function searchKnowledge(query: string, topK = 3): KnowledgeChunk[] {
-  const q = query.toLowerCase().replace(/[^a-z0-9\s]/g, " ");
+  const { mentions, cleanQuery } = parseFileMentions(query);
+  const q = (cleanQuery || query).toLowerCase().replace(/[^a-z0-9\s]/g, " ");
   const queryWords = q.split(/\s+/).filter(w => w.length > 2);
 
-  if (queryWords.length === 0) return ragKnowledge.slice(0, topK);
+  if (queryWords.length === 0 && mentions.length === 0) return ragKnowledge.slice(0, topK);
 
   const scored = ragKnowledge.map(chunk => {
     const haystack = (
-      chunk.title + " " + chunk.content + " " + chunk.keywords.join(" ")
+      chunk.id + " " + chunk.category + " " + chunk.title + " " + chunk.content + " " + chunk.keywords.join(" ")
     ).toLowerCase();
 
     let score = 0;
 
-    // Exact keyword phrase match — highest priority
+    // Mention tag match — boost significantly
+    if (mentions.length > 0) {
+      if (mentions.some(m => haystack.includes(m))) {
+        score += 30;
+      }
+    }
+
+    // Exact keyword phrase match
     for (const kw of chunk.keywords) {
       if (q.includes(kw)) {
         score += kw.split(" ").length * 8;
       }
     }
 
-    // Full query found in title — very high boost
-    if (chunk.title.toLowerCase().includes(q)) score += 20;
+    // Full query found in title
+    if (chunk.title.toLowerCase().includes(q) && q.length > 3) score += 20;
 
     // Each query word in title
     for (const word of queryWords) {
@@ -655,6 +687,26 @@ export function searchKnowledge(query: string, topK = 3): KnowledgeChunk[] {
   return sorted.slice(0, topK).map(s => s.chunk);
 }
 
+export function searchKnowledgeKeywordMode(query: string, topK = 3): { text: string; sources: string[] } {
+  const chunks = searchKnowledge(query, topK);
+  if (chunks.length === 0) {
+    return {
+      text: "Vizhi Infragen Realtors LLP — Coimbatore Real Estate & Property Management. Call +91 96888 89420.",
+      sources: ["Vizhi Infragen Overview"],
+    };
+  }
+
+  const snippets = chunks.map(
+    c => `🔍 <strong>[${c.title}]</strong><br/>${c.content.replace(/\n\n/g, "<br/><br/>").replace(/\n/g, "<br/>")}`
+  );
+
+  return {
+    text: snippets.join("<br/><br/><hr className='my-3 border-stone-200'/><br/>") + "<br/><br/>📞 <em>Call / WhatsApp: +91 96888 89420</em>",
+    sources: chunks.map(c => c.title),
+  };
+}
+
 export function getKnowledgeByCategory(category: string): KnowledgeChunk[] {
   return ragKnowledge.filter(c => c.category === category);
 }
+
