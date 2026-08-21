@@ -27,6 +27,7 @@ export default function Navbar({ onOpenDrawer }: NavbarProps) {
 
   const isHome = pathname === "/";
   const isAbout = pathname === "/about-us";
+  const isServices = pathname === "/services";
   const isContact = pathname === "/contact";
 
   return (
@@ -93,8 +94,12 @@ export default function Navbar({ onOpenDrawer }: NavbarProps) {
 
             {/* Services */}
             <Link
-              href="/#services"
-              className="text-white hover:text-[#c5a880] hover:bg-white/10 text-[12px] lg:text-[13px] xl:text-[14.5px] font-['Inter',sans-serif] font-medium tracking-wide transition-all duration-300 px-3 lg:px-4 xl:px-8 h-[32px] flex items-center justify-center rounded-full whitespace-nowrap"
+              href="/services"
+              className={`text-[12px] lg:text-[13px] xl:text-[14.5px] font-['Inter',sans-serif] tracking-wide transition-all duration-300 px-3 lg:px-4 xl:px-8 h-[32px] flex items-center justify-center rounded-full font-medium whitespace-nowrap ${
+                isServices
+                  ? "bg-[#c5a880] text-[#231518] font-bold shadow-md"
+                  : "text-white hover:text-[#c5a880] hover:bg-white/10"
+              }`}
             >
               Services
             </Link>

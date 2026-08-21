@@ -194,3 +194,77 @@ body {
   opacity: 1;
   transform: translate(0) scale(1);
 }
+
+/* Service Main Page Animations */
+@keyframes heroZoom {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.075); }
+}
+
+.animate-hero-zoom {
+  animation: heroZoom 14s ease-in-out infinite;
+}
+
+@keyframes floatGlow {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.15) translateY(-18px); }
+}
+
+.animate-float-glow {
+  animation: floatGlow 8s ease-in-out infinite;
+}
+
+@keyframes ctaBgPan {
+  0% { transform: scale(1) translate(0, 0); }
+  50% { transform: scale(1.14) translate(-20px, -12px); }
+  100% { transform: scale(1.06) translate(18px, 12px); }
+}
+
+.animate-cta-bg-pan {
+  animation: ctaBgPan 18s ease-in-out infinite alternate;
+}
+
+@keyframes ctaContentFloat {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(4px); }
+}
+
+.animate-cta-float {
+  animation: ctaContentFloat 5s ease-in-out infinite alternate;
+}
+
+/* Land Sales Details Page Animations */
+@keyframes heroZoomInOut {
+  0% { transform: scale(1) translate(0, 0); }
+  50% { transform: scale(1.15) translate(-10px, -6px); }
+  100% { transform: scale(1.03) translate(8px, 5px); }
+}
+
+.animate-hero-zoom-in-out {
+  animation: heroZoomInOut 18s ease-in-out infinite alternate;
+}
+
+@keyframes lineFlowToStep {
+  0% {
+    width: 0%;
+    opacity: 0.2;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    width: 84%;
+    opacity: 1;
+  }
+  100% {
+    width: 84%;
+    opacity: 0;
+  }
+}
+
+.animate-line-flow {
+  animation: lineFlowToStep 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+
