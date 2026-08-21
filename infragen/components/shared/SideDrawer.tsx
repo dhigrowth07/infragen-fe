@@ -15,6 +15,7 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
 
   const isHome = pathname === "/";
   const isAbout = pathname === "/about-us";
+  const isServices = pathname === "/services";
   const isContact = pathname === "/contact";
 
   return (
@@ -83,9 +84,11 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
               Properties
             </Link>
             <Link
-              href="/#services"
+              href="/services"
               onClick={onClose}
-              className="drawer-link text-lg font-bold text-[#334155] hover:text-[#c5a880] transition-colors font-['Inter',sans-serif]"
+              className={`drawer-link text-lg font-bold transition-colors font-['Inter',sans-serif] ${
+                isServices ? "text-[#c5a880]" : "text-[#334155] hover:text-[#c5a880]"
+              }`}
             >
               Services
             </Link>
