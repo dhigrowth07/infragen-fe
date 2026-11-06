@@ -59,22 +59,32 @@ export default function Footer() {
         </div>
 
         {/* Col 3: Services Links */}
-        <div className="flex flex-col gap-2 items-start justify-start relative">
+        <div className="flex flex-col gap-1.5 items-start justify-start relative">
           <div className="text-[#ffffff] text-left font-['Inter',sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
             Services
           </div>
-          <Link href="/services#land-sales" className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
-            Land Sales &amp; Plots
-          </Link>
-          <Link href="/services#property-management" className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
-            Property Management
-          </Link>
-          <Link href="/services#nri-management" className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
-            NRI Property Shield
-          </Link>
-          <Link href="/services#approvals" className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
-            DTCP &amp; Legal Approvals
-          </Link>
+          {[
+            { name: "Land Sales & Acquisition", href: "/services/land-sales" },
+            { name: "Residential Property", href: "/services/purchase-assistance" },
+            { name: "Commercial Property", href: "/services/warehouse" },
+            { name: "Property Rental Services", href: "/services/rentals" },
+            { name: "NRI Property Management", href: "/services/nri-management" },
+            { name: "Land Approval Assistance", href: "/services/approvals" },
+            { name: "Land Conversion Assistance", href: "/services/conversion" },
+            { name: "Building Valuation Coordination", href: "/services/valuation" },
+            { name: "Building Construction", href: "/services/construction" },
+            { name: "Structural Works", href: "/services/construction" },
+            { name: "Warehouse Solutions", href: "/services/warehouse" },
+            { name: "Real Estate Investment Assistance", href: "/services/purchase-assistance" },
+          ].map((service) => (
+            <Link
+              key={service.name}
+              href={service.href}
+              className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[18px] font-normal"
+            >
+              {service.name}
+            </Link>
+          ))}
         </div>
 
         {/* Col 4: Contact Info */}
@@ -132,14 +142,8 @@ export default function Footer() {
           <a href={SITE_INFO.social.instagram} target="_blank" rel="noopener noreferrer" className="text-[#E4405F] hover:scale-125 transition-transform duration-300" aria-label="Instagram">
             <i className="fa-brands fa-instagram text-xl"></i>
           </a>
-          <a href={SITE_INFO.social.youtube} target="_blank" rel="noopener noreferrer" className="text-[#FF0000] hover:scale-125 transition-transform duration-300" aria-label="YouTube">
-            <i className="fa-brands fa-youtube text-xl"></i>
-          </a>
           <a href={SITE_INFO.social.whatsapp} target="_blank" rel="noopener noreferrer" className="text-[#25D366] hover:scale-125 transition-transform duration-300" aria-label="WhatsApp">
             <i className="fa-brands fa-whatsapp text-xl"></i>
-          </a>
-          <a href={SITE_INFO.social.twitter} target="_blank" rel="noopener noreferrer" className="text-[#1DA1F2] hover:scale-125 transition-transform duration-300" aria-label="Twitter">
-            <i className="fa-brands fa-twitter text-xl"></i>
           </a>
           <a href={SITE_INFO.social.facebook} target="_blank" rel="noopener noreferrer" className="text-[#1877F2] hover:scale-125 transition-transform duration-300" aria-label="Facebook">
             <i className="fa-brands fa-facebook-f text-xl"></i>
