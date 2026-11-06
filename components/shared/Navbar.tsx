@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { SITE_INFO } from "@/data/siteInfo";
 
 interface NavbarProps {
   onOpenDrawer?: () => void;
@@ -84,13 +85,13 @@ export default function Navbar({ onOpenDrawer }: NavbarProps) {
             </Link>
 
             {/* Properties Dropdown */}
-            <Link
+            {/* <Link
               href="/#projects"
               className="text-white hover:text-[#c5a880] hover:bg-white/10 text-[12px] lg:text-[13px] xl:text-[14.5px] font-['Inter',sans-serif] font-medium tracking-wide transition-all duration-300 px-3 lg:px-4 xl:px-8 h-[32px] flex items-center justify-center rounded-full gap-1.5 whitespace-nowrap"
             >
               <span>Properties</span>
               <i className="fa-solid fa-chevron-down text-[9.5px] opacity-75"></i>
-            </Link>
+            </Link> */}
 
             {/* Services */}
             <Link
@@ -105,12 +106,12 @@ export default function Navbar({ onOpenDrawer }: NavbarProps) {
             </Link>
 
             {/* Blog */}
-            <Link
+            {/* <Link
               href="/#trust-section"
               className="text-white hover:text-[#c5a880] hover:bg-white/10 text-[12px] lg:text-[13px] xl:text-[14.5px] font-['Inter',sans-serif] font-medium tracking-wide transition-all duration-300 px-3 lg:px-4 xl:px-8 h-[32px] flex items-center justify-center rounded-full whitespace-nowrap"
             >
               Blog
-            </Link>
+            </Link> */}
 
             {/* Contact Us */}
             <Link
@@ -131,7 +132,7 @@ export default function Navbar({ onOpenDrawer }: NavbarProps) {
             <div className="h-[42px] bg-white rounded-full px-3.5 sm:px-4 lg:px-4 xl:px-5 flex items-center space-x-3 sm:space-x-3.5 xl:space-x-4 text-stone-800 shadow-md border border-white/90 shrink-0">
               {/* WhatsApp */}
               <a
-                href="https://wa.me/919688889420?text=Hii!%20I'm%20interested%20Can%20i%20know%20about%20more%20details"
+                href={`${SITE_INFO.social.whatsappDirect}?text=Hii!%20I'm%20interested%20Can%20i%20know%20about%20more%20details`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#25D366] hover:scale-125 transition-transform duration-200 text-base sm:text-lg flex items-center justify-center"
@@ -145,7 +146,7 @@ export default function Navbar({ onOpenDrawer }: NavbarProps) {
 
               {/* Instagram */}
               <a
-                href="https://instagram.com"
+                href={SITE_INFO.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#c13584] hover:scale-125 transition-transform duration-200 text-base sm:text-lg flex items-center justify-center"
@@ -159,7 +160,7 @@ export default function Navbar({ onOpenDrawer }: NavbarProps) {
 
               {/* Facebook */}
               <a
-                href="https://facebook.com"
+                href={SITE_INFO.social.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#1877F2] hover:scale-125 transition-transform duration-200 text-sm sm:text-base flex items-center justify-center"

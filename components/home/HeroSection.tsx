@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import VideoModal from "@/components/shared/VideoModal";
+import { SITE_INFO, whatsappLink } from "@/data/siteInfo";
 
 interface HeroSectionProps {
   onOpenVideoModal?: () => void;
@@ -92,7 +93,7 @@ export default function HeroSection({ onOpenVideoModal }: HeroSectionProps) {
 
               <div className="pt-3 animate-float-up [animation-delay:600ms]">
                 <a
-                  href="https://wa.me/919688889420?text=Hii!%20I'm%20interested%20Can%20i%20know%20about%20more%20details"
+                  href={whatsappLink("Hii! I'm interested Can i know about more details")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-3 bg-white/10 hover:bg-[#c5a880] text-white hover:text-[#231518] font-bold px-8 py-4 rounded-xl text-base transition-all duration-300 border-2 border-[#c5a880] shadow-xl backdrop-blur-md transform hover:-translate-y-1"

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { SITE_INFO } from "@/data/siteInfo";
 
 export default function ContactEnquirySection() {
   const [name, setName] = useState("");
@@ -14,7 +15,7 @@ export default function ContactEnquirySection() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const constantToEmail = "srissa2006@gmail.com";
+    const constantToEmail = SITE_INFO.email;
     const defaultMsg = "Hii! I'm interested can I know about more details";
     const finalMsg = message && message.trim() !== "" ? message : defaultMsg;
 
@@ -73,7 +74,7 @@ export default function ContactEnquirySection() {
           </div>
 
           <a
-            href="tel:9688889420"
+            href={`tel:${SITE_INFO.phone1Raw}`}
             className="bg-[#8A1F36] hover:bg-[#a22c46] rounded-md border-none pt-[15px] pr-[28px] pb-[15px] pl-[28px] flex flex-row gap-2.5 items-center justify-start shrink-0 relative hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group shadow-lg"
           >
             <i className="fa-solid fa-arrow-right text-white text-sm group-hover:translate-x-1 transition-transform"></i>

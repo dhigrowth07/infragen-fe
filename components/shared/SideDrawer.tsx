@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { SITE_INFO } from "@/data/siteInfo";
 
 interface SideDrawerProps {
   isOpen: boolean;
@@ -76,13 +77,13 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
             >
               About Us
             </Link>
-            <Link
+            {/* <Link
               href="/#projects"
               onClick={onClose}
               className="drawer-link text-lg font-bold text-[#334155] hover:text-[#c5a880] transition-colors font-['Inter',sans-serif]"
             >
               Properties
-            </Link>
+            </Link> */}
             <Link
               href="/services"
               onClick={onClose}
@@ -92,13 +93,13 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
             >
               Services
             </Link>
-            <Link
+            {/* <Link
               href="/#why-trust-section"
               onClick={onClose}
               className="drawer-link text-lg font-bold text-[#334155] hover:text-[#c5a880] transition-colors font-['Inter',sans-serif]"
             >
               Blog
-            </Link>
+            </Link> */}
             <Link
               href="/contact"
               onClick={onClose}
@@ -117,23 +118,23 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
               <span>Vizhi Infragen Realtors</span>
             </div>
             <p className="text-xs text-stone-600 leading-relaxed max-w-[280px] mx-auto">
-              First Floor, Shop No.24, Old Bus Stand Complex, 24, Suganthi Nagar Rd, Sulur, Tamil Nadu 641402
+              {SITE_INFO.address}
             </p>
 
             <div className="pt-2 flex flex-col items-center gap-2 text-xs">
               <a
-                href="mailto:srissa2006@gmail.com?subject=Inquiry%20Regarding%20Coimbatore%20Real%20Estate%20Properties"
+                href={`mailto:${SITE_INFO.email}?subject=Inquiry%20Regarding%20Coimbatore%20Real%20Estate%20Properties`}
                 className="flex items-center gap-2 text-[#612124] hover:text-[#c5a880] font-semibold transition-colors"
               >
                 <i className="fa-solid fa-envelope text-[#c5a880]"></i>
-                <span>srissa2006@gmail.com</span>
+                <span>{SITE_INFO.email}</span>
               </a>
               <a
-                href="tel:9688889420"
+                href={`tel:${SITE_INFO.phone1Raw}`}
                 className="flex items-center gap-2 text-[#612124] hover:text-[#c5a880] font-semibold transition-colors"
               >
                 <i className="fa-solid fa-phone text-[#c5a880]"></i>
-                <span>+91 96888 89420</span>
+                <span>+91 {SITE_INFO.phone1} / {SITE_INFO.phone2}</span>
               </a>
             </div>
           </div>
@@ -141,7 +142,7 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
           {/* Social Icons */}
           <div className="flex items-center justify-center gap-3 pt-4 border-t border-stone-100 w-full">
             <a
-              href="https://facebook.com"
+              href={SITE_INFO.social.facebook}
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-stone-100 text-[#1877F2] hover:scale-110 shadow-sm flex items-center justify-center transition-all"
@@ -150,7 +151,7 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
               <i className="fa-brands fa-facebook-f text-lg"></i>
             </a>
             <a
-              href="https://twitter.com"
+              href={SITE_INFO.social.twitter}
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-stone-100 text-[#1DA1F2] hover:scale-110 shadow-sm flex items-center justify-center transition-all"
@@ -159,7 +160,7 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
               <i className="fa-brands fa-twitter text-lg"></i>
             </a>
             <a
-              href="https://youtube.com"
+              href={SITE_INFO.social.youtube}
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-stone-100 text-[#FF0000] hover:scale-110 shadow-sm flex items-center justify-center transition-all"
@@ -168,7 +169,7 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
               <i className="fa-brands fa-youtube text-lg"></i>
             </a>
             <a
-              href="https://instagram.com"
+              href={SITE_INFO.social.instagram}
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-stone-100 text-[#c13584] hover:scale-110 shadow-sm flex items-center justify-center transition-all"
@@ -177,7 +178,7 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
               <i className="fa-brands fa-instagram text-lg"></i>
             </a>
             <a
-              href="https://wa.me/919688889420"
+              href={SITE_INFO.social.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-stone-100 text-[#25D366] hover:scale-110 shadow-sm flex items-center justify-center transition-all"
@@ -189,7 +190,7 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
         </div>
 
         <div className="text-center pt-6 text-[11px] text-stone-400 font-medium">
-          &copy; 2026 Vizhi Infragen Realtors. All Rights Reserved.
+          &copy; {SITE_INFO.copyrightYear} {SITE_INFO.shortName}. All Rights Reserved.
         </div>
       </div>
     </>

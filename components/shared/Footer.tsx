@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { SITE_INFO } from "@/data/siteInfo";
 
 export default function Footer() {
   return (
@@ -81,14 +82,14 @@ export default function Footer() {
           <div className="text-[#ffffff] text-left font-['Inter',sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
             Contact Us
           </div>
-          <a href="mailto:srissa2006@gmail.com" className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal break-all">
-            srissa2006@gmail.com
+          <a href={`mailto:${SITE_INFO.email}`} className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal break-all">
+            {SITE_INFO.email}
           </a>
-          <a href="tel:+919688889420" className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
-            +91 96888 89420
+          <a href={`tel:${SITE_INFO.phone1Raw}`} className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
+            +91 {SITE_INFO.phone1} / {SITE_INFO.phone2}
           </a>
           <div className="text-[#9b98a1] text-left font-['Inter',sans-serif] text-xs leading-[18px] font-normal max-w-[220px]">
-            First Floor, Shop No.24, Old Bus Stand Complex, 24, Suganthi Nagar Rd, Sulur, TN 641402
+            {SITE_INFO.address}
           </div>
         </div>
 
@@ -100,7 +101,7 @@ export default function Footer() {
           <div className="rounded-xl border-solid border-[rgba(255,255,255,0.12)] border flex flex-col gap-0 items-start justify-center w-full max-w-[200px] shrink-0 h-[120px] relative overflow-hidden shadow-md">
             <div className="bg-[rgba(255,255,255,0.20)] w-full h-full relative overflow-hidden">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.483981881518!2d77.1235!3d11.0258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba85703730aa18b%3A0xc3457df7aa121d5a!2sOld%20Bus%20Stand%20Complex%2C%20Suganthi%20Nagar%20Rd%2C%20Sulur%2C%20Tamil%20Nadu%20641402!5e0!3m2!1sen!2sin!4v1721800000000"
+                src={SITE_INFO.mapsEmbed}
                 className="absolute inset-0 w-full h-full border-0 grayscale opacity-80 hover:opacity-100 hover:grayscale-0 transition-all duration-500"
                 allowFullScreen={false}
                 loading="lazy"
@@ -108,7 +109,7 @@ export default function Footer() {
               />
               <div className="bg-white rounded-sm px-2 py-1 flex items-center justify-start shrink-0 absolute left-2 top-2 z-10 shadow-md">
                 <a
-                  href="https://maps.google.com/?q=First+Floor,+Shop+No.24,+Old+Bus+Stand+Complex,+24,+Suganthi+Nagar+Rd,+Sulur,+Tamil+Nadu+641402"
+                  href={SITE_INFO.mapsLink}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex flex-row gap-1 items-center justify-start cursor-pointer group"
@@ -125,22 +126,22 @@ export default function Footer() {
       {/* Bottom Copyright Bar */}
       <div className="border-solid border-[rgba(255,255,255,0.1)] border-t py-6 px-6 sm:px-10 lg:px-16 flex flex-col sm:flex-row items-center justify-between w-full max-w-[1440px] gap-4 relative z-10 mx-auto">
         <div className="text-[#888888] text-center sm:text-left font-['Inter',sans-serif] text-xs font-normal">
-          © 2026 Vizhi Infragen Realtors LLP. All rights reserved.
+          © {SITE_INFO.copyrightYear} {SITE_INFO.name}. All rights reserved.
         </div>
         <div className="flex flex-row gap-7 sm:gap-8 items-center justify-start shrink-0">
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-[#E4405F] hover:scale-125 transition-transform duration-300" aria-label="Instagram">
+          <a href={SITE_INFO.social.instagram} target="_blank" rel="noopener noreferrer" className="text-[#E4405F] hover:scale-125 transition-transform duration-300" aria-label="Instagram">
             <i className="fa-brands fa-instagram text-xl"></i>
           </a>
-          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="text-[#FF0000] hover:scale-125 transition-transform duration-300" aria-label="YouTube">
+          <a href={SITE_INFO.social.youtube} target="_blank" rel="noopener noreferrer" className="text-[#FF0000] hover:scale-125 transition-transform duration-300" aria-label="YouTube">
             <i className="fa-brands fa-youtube text-xl"></i>
           </a>
-          <a href="https://wa.me/919688889420" target="_blank" rel="noopener noreferrer" className="text-[#25D366] hover:scale-125 transition-transform duration-300" aria-label="WhatsApp">
+          <a href={SITE_INFO.social.whatsapp} target="_blank" rel="noopener noreferrer" className="text-[#25D366] hover:scale-125 transition-transform duration-300" aria-label="WhatsApp">
             <i className="fa-brands fa-whatsapp text-xl"></i>
           </a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-[#1DA1F2] hover:scale-125 transition-transform duration-300" aria-label="Twitter">
+          <a href={SITE_INFO.social.twitter} target="_blank" rel="noopener noreferrer" className="text-[#1DA1F2] hover:scale-125 transition-transform duration-300" aria-label="Twitter">
             <i className="fa-brands fa-twitter text-xl"></i>
           </a>
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-[#1877F2] hover:scale-125 transition-transform duration-300" aria-label="Facebook">
+          <a href={SITE_INFO.social.facebook} target="_blank" rel="noopener noreferrer" className="text-[#1877F2] hover:scale-125 transition-transform duration-300" aria-label="Facebook">
             <i className="fa-brands fa-facebook-f text-xl"></i>
           </a>
         </div>

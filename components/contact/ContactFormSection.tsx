@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { SITE_INFO } from "@/data/siteInfo";
 
 export default function ContactFormSection() {
   const [firstName, setFirstName] = useState("");
@@ -19,7 +20,7 @@ export default function ContactFormSection() {
     if (!terms) return;
     setIsSubmitting(true);
 
-    const constantToEmail = "srissa2006@gmail.com";
+    const constantToEmail = SITE_INFO.email;
     const fullName = `${firstName} ${lastName}`.trim();
     const emailSubject = encodeURIComponent(`Contact Form: ${subject || "Inquiry"} - ${fullName}`);
     const emailBody = encodeURIComponent(

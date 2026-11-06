@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { SITE_INFO } from "@/data/siteInfo";
 
 export default function ContactCtaBanner() {
   return (
@@ -26,7 +27,7 @@ export default function ContactCtaBanner() {
 
             <div className="pt-2">
               <a
-                href="tel:9688889420"
+                href={`tel:${SITE_INFO.phone1Raw}`}
                 className="bg-[#c5a880] hover:bg-white text-[#381e23] hover:text-[#381e23] px-8 py-4 rounded-xl text-sm font-extrabold font-['Outfit',sans-serif] transition-all duration-300 inline-flex items-center gap-2 shadow-xl hover:shadow-2xl active:scale-[0.98]"
               >
                 <span>Get in Touch Today</span>

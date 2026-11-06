@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { SITE_INFO } from "@/data/siteInfo";
 
 export default function OfficeMapSection() {
   return (
@@ -12,7 +13,7 @@ export default function OfficeMapSection() {
           <div className="lg:col-span-7">
             <div className="relative w-full h-[380px] sm:h-[440px] rounded-3xl overflow-hidden shadow-2xl border border-stone-200 group">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.483981881518!2d77.1235!3d11.0258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba85703730aa18b%3A0xc3457df7aa121d5a!2sOld%20Bus%20Stand%20Complex%2C%20Suganthi%20Nagar%20Rd%2C%20Sulur%2C%20Tamil%20Nadu%20641402!5e0!3m2!1sen!2sin!4v1721800000000"
+                src={SITE_INFO.mapsEmbed}
                 className="w-full h-full border-0"
                 allowFullScreen={false}
                 loading="lazy"
@@ -38,16 +39,16 @@ export default function OfficeMapSection() {
 
               <div className="space-y-2">
                 <p className="text-stone-800 text-xs sm:text-sm font-semibold font-['Inter',sans-serif] leading-relaxed">
-                  First Floor, Shop No.24, Old Bus Stand Complex, 24, Suganthi Nagar Rd, Sulur, Tamil Nadu 641402
+                  {SITE_INFO.address}
                 </p>
                 <p className="text-stone-500 text-xs font-['Inter',sans-serif]">
-                  Opening Hours: 9:00 AM - 10:00 PM (Daily)
+                  Opening Hours: {SITE_INFO.officeHours} (Daily)
                 </p>
               </div>
 
               <div className="pt-4">
                 <a
-                  href="https://maps.google.com/?q=First+Floor,+Shop+No.24,+Old+Bus+Stand+Complex,+24,+Suganthi+Nagar+Rd,+Sulur,+Tamil+Nadu+641402"
+                  href={SITE_INFO.mapsLink}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-[#4E1421] hover:bg-[#612124] text-white px-8 py-3.5 rounded-lg text-sm font-bold font-['Outfit',sans-serif] transition-all duration-300 inline-flex items-center gap-2 shadow-lg hover:shadow-xl active:scale-[0.98]"
