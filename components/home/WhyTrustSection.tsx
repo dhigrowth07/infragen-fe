@@ -103,7 +103,7 @@ export default function WhyTrustSection() {
             </div>
 
             <p className="text-stone-300 font-medium text-base sm:text-lg leading-relaxed font-['Inter',sans-serif] max-w-xl">
-              As a trusted real estate company in Coimbatore, we have built our reputation on honesty and follow-through rather than sales pressure. Here's what sets us apart:
+              As a trusted real estate company in Coimbatore, we have built our reputation on honesty and follow-through rather than sales pressure. Here&apos;s what sets us apart:
             </p>
 
             <div className="pt-2">

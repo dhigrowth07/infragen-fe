@@ -3,9 +3,10 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { SITE_INFO } from "@/data/siteInfo";
+import { useSiteSettings } from "@/lib/context/SiteSettingsContext";
 
 export default function Footer() {
+  const { siteInfo } = useSiteSettings();
   return (
     <footer className="bg-[#121212] pt-16 pb-8 px-6 sm:px-10 lg:px-16 flex flex-col items-center justify-start relative overflow-hidden">
       <div className="pb-10 w-full shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 max-w-[1440px] px-6 sm:px-10 lg:px-16 relative z-10 mx-auto">
@@ -50,6 +51,12 @@ export default function Footer() {
           <Link href="/services" className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
             Our Services
           </Link>
+          <Link href="/properties/land" className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
+            Land Sales &amp; Plots
+          </Link>
+          <Link href="/properties/building" className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
+            Villas &amp; Buildings
+          </Link>
           <Link href="/#projects" className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
             Projects
           </Link>
@@ -92,14 +99,14 @@ export default function Footer() {
           <div className="text-[#ffffff] text-left font-['Inter',sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
             Contact Us
           </div>
-          <a href={`mailto:${SITE_INFO.email}`} className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal break-all">
-            {SITE_INFO.email}
+          <a href={`mailto:${siteInfo.email}`} className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal break-all">
+            {siteInfo.email}
           </a>
-          <a href={`tel:${SITE_INFO.phone1Raw}`} className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
-            +91 {SITE_INFO.phone1} / {SITE_INFO.phone2}
+          <a href={`tel:${siteInfo.phone1Raw}`} className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
+            +91 {siteInfo.phone1} / {siteInfo.phone2}
           </a>
           <div className="text-[#9b98a1] text-left font-['Inter',sans-serif] text-xs leading-[18px] font-normal max-w-[220px]">
-            {SITE_INFO.address}
+            {siteInfo.address}
           </div>
         </div>
 
@@ -111,7 +118,7 @@ export default function Footer() {
           <div className="rounded-xl border-solid border-[rgba(255,255,255,0.12)] border flex flex-col gap-0 items-start justify-center w-full max-w-[200px] shrink-0 h-[120px] relative overflow-hidden shadow-md">
             <div className="bg-[rgba(255,255,255,0.20)] w-full h-full relative overflow-hidden">
               <iframe
-                src={SITE_INFO.mapsEmbed}
+                src={siteInfo.mapsEmbed}
                 className="absolute inset-0 w-full h-full border-0 grayscale opacity-80 hover:opacity-100 hover:grayscale-0 transition-all duration-500"
                 allowFullScreen={false}
                 loading="lazy"
@@ -119,7 +126,7 @@ export default function Footer() {
               />
               <div className="bg-white rounded-sm px-2 py-1 flex items-center justify-start shrink-0 absolute left-2 top-2 z-10 shadow-md">
                 <a
-                  href={SITE_INFO.mapsLink}
+                  href={siteInfo.mapsLink}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex flex-row gap-1 items-center justify-start cursor-pointer group"
@@ -136,16 +143,16 @@ export default function Footer() {
       {/* Bottom Copyright Bar */}
       <div className="border-solid border-[rgba(255,255,255,0.1)] border-t py-6 px-6 sm:px-10 lg:px-16 flex flex-col sm:flex-row items-center justify-between w-full max-w-[1440px] gap-4 relative z-10 mx-auto">
         <div className="text-[#888888] text-center sm:text-left font-['Inter',sans-serif] text-xs font-normal">
-          © {SITE_INFO.copyrightYear} {SITE_INFO.name}. All rights reserved.
+          © {siteInfo.copyrightYear} {siteInfo.name}. All rights reserved.
         </div>
         <div className="flex flex-row gap-7 sm:gap-8 items-center justify-start shrink-0">
-          <a href={SITE_INFO.social.instagram} target="_blank" rel="noopener noreferrer" className="text-[#E4405F] hover:scale-125 transition-transform duration-300" aria-label="Instagram">
+          <a href={siteInfo.social.instagram} target="_blank" rel="noopener noreferrer" className="text-[#E4405F] hover:scale-125 transition-transform duration-300" aria-label="Instagram">
             <i className="fa-brands fa-instagram text-xl"></i>
           </a>
-          <a href={SITE_INFO.social.whatsapp} target="_blank" rel="noopener noreferrer" className="text-[#25D366] hover:scale-125 transition-transform duration-300" aria-label="WhatsApp">
+          <a href={siteInfo.social.whatsapp} target="_blank" rel="noopener noreferrer" className="text-[#25D366] hover:scale-125 transition-transform duration-300" aria-label="WhatsApp">
             <i className="fa-brands fa-whatsapp text-xl"></i>
           </a>
-          <a href={SITE_INFO.social.facebook} target="_blank" rel="noopener noreferrer" className="text-[#1877F2] hover:scale-125 transition-transform duration-300" aria-label="Facebook">
+          <a href={siteInfo.social.facebook} target="_blank" rel="noopener noreferrer" className="text-[#1877F2] hover:scale-125 transition-transform duration-300" aria-label="Facebook">
             <i className="fa-brands fa-facebook-f text-xl"></i>
           </a>
         </div>

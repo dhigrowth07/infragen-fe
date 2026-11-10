@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import VideoModal from "@/components/shared/VideoModal";
-import { SITE_INFO, whatsappLink } from "@/data/siteInfo";
+import { useSiteSettings } from "@/lib/context/SiteSettingsContext";
 
 interface HeroSectionProps {
   onOpenVideoModal?: () => void;
@@ -33,6 +33,7 @@ const slides = [
 ];
 
 export default function HeroSection({ onOpenVideoModal }: HeroSectionProps) {
+  const { whatsappLink } = useSiteSettings();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 

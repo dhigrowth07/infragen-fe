@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { SITE_INFO, whatsappLink } from "@/data/siteInfo";
+import { whatsappLink } from "@/data/siteInfo";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {

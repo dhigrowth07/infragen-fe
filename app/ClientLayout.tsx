@@ -4,13 +4,13 @@ import React, { useState } from "react";
 import Navbar from "@/components/shared/Navbar";
 import SideDrawer from "@/components/shared/SideDrawer";
 import Footer from "@/components/shared/Footer";
-import ChatbotWidget from "@/components/shared/ChatbotWidget";
+import { SiteSettingsProvider } from "@/lib/context/SiteSettingsContext";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   return (
-    <>
+    <SiteSettingsProvider>
       <Navbar onOpenDrawer={() => setIsDrawerOpen(true)} />
       <SideDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
       <main className="flex-1">
@@ -19,6 +19,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
       <Footer />
       {/* <ChatbotWidget /> */}
-    </>
+    </SiteSettingsProvider>
   );
 }

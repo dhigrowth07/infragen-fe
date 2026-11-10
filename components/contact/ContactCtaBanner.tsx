@@ -1,9 +1,10 @@
 "use client";
 
 import React from "react";
-import { SITE_INFO } from "@/data/siteInfo";
+import { useSiteSettings } from "@/lib/context/SiteSettingsContext";
 
 export default function ContactCtaBanner() {
+  const { siteInfo } = useSiteSettings();
   return (
     <section className="bg-[#381e23] text-white py-16 sm:py-20 px-6 sm:px-10 lg:px-16 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#c5a880]/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -18,7 +19,7 @@ export default function ContactCtaBanner() {
             </span>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-['Outfit',sans-serif] tracking-tight leading-tight">
-              Let's Build Something <span className="text-[#c5a880]">Extraordinary</span> Together
+              Let&apos;s Build Something <span className="text-[#c5a880]">Extraordinary</span> Together
             </h2>
 
             <p className="text-stone-300 text-xs sm:text-sm font-['Inter',sans-serif]">
@@ -27,7 +28,7 @@ export default function ContactCtaBanner() {
 
             <div className="pt-2">
               <a
-                href={`tel:${SITE_INFO.phone1Raw}`}
+                href={`tel:${siteInfo.phone1Raw}`}
                 className="bg-[#c5a880] hover:bg-white text-[#381e23] hover:text-[#381e23] px-8 py-4 rounded-xl text-sm font-extrabold font-['Outfit',sans-serif] transition-all duration-300 inline-flex items-center gap-2 shadow-xl hover:shadow-2xl active:scale-[0.98]"
               >
                 <span>Get in Touch Today</span>

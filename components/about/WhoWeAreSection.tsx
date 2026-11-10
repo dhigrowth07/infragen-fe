@@ -12,13 +12,6 @@ export default function WhoWeAreSection() {
     "NRIs",
   ];
 
-  const credentials = [
-    { icon: "fa-solid fa-bullseye", label: "National Champion Shooter" },
-    { icon: "fa-solid fa-medal", label: "State-Level Karate Champion" },
-    { icon: "fa-solid fa-handshake", label: "BNI Member" },
-    { icon: "fa-solid fa-user-tie", label: "JCI Secretary" },
-  ];
-
   return (
     <div className="relative bg-white pb-20 sm:pb-28 z-20">
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16">

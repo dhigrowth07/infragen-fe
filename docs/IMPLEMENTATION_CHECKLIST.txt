@@ -1,0 +1,412 @@
+================================================================================
+VIZHI INFRAGEN PUBLIC FRONTEND (infragen-fe) — IMPLEMENTATION TODO CHECKLIST
+================================================================================
+Project   : infragen-fe (Vizhi Infragen Realtors LLP — Public Web Portal)
+Stack     : Next.js 16 (App Router + Turbopack) + React 19 + TypeScript + Tailwind CSS v4
+Backend   : infragen-be (Node.js/Express 5 + PostgreSQL/Sequelize + AWS S3, port 5001)
+API Base  : http://localhost:5001/api/v1/public
+Branding  : Deep Maroon (#381e23, #251215, #612124) + Accent Gold (#c5a880) + White/Stone
+Design UI : 5 Reference Layouts in infragen-fe/reference-ui/
+             1. property - building - page.png
+             2. property - building - filter expend - page.png
+             3. property - land - page.png
+             4. property - land - filter expend - page.png
+             5. property - details - page.png
+Scope     : End-to-End Public Property Catalogs (Land & Building) + Details Page + Lead Enquiries
+Target    : infragen-fe/docs/IMPLEMENTATION_CHECKLIST.txt & infragen-fe/IMPLEMENTATION_CHECKLIST.txt
+================================================================================
+
+TABLE OF PHASES:
+--------------------------------------------------------------------------------
+PHASE 1 — ENVIRONMENT, TYPESCRIPT TYPES & NETWORK SERVICE LAYER
+PHASE 2 — REUSABLE PROPERTY UI PRIMITIVES & SHARED DESIGN SYSTEM
+PHASE 3 — BUILDING PROPERTY CATALOG MODULE (PAGE & FILTER SYSTEM)
+PHASE 4 — LAND & PLOTS PROPERTY CATALOG MODULE (PAGE & APPROVALS FILTER)
+PHASE 5 — PROPERTY DETAILS & DEEP HYDRATION MODULE (/properties/[slug])
+PHASE 6 — INTERACTIVE 5KM PROXIMITY RADAR & MAP LANDMARKS VISUALIZATION
+PHASE 7 — LEAD GENERATION, TOUR SCHEDULING & CRM ENQUIRY INTEGRATION
+PHASE 8 — GLOBAL NAVIGATION, FOOTER & HOMEPAGE DEEP LINKING
+PHASE 9 — ERROR HANDLING, SHIMMER SKELETONS, SEO & PERFORMANCE
+PHASE 10 — END-TO-END INTEGRATION, BUILD VERIFICATION & QA AUDIT
+
+
+================================================================================
+PHASE 1 — ENVIRONMENT, TYPESCRIPT TYPES & NETWORK SERVICE LAYER
+================================================================================
+
+[x] 1.1  Environment Configuration Setup
+         → Create `infragen-fe/.env.local` and `infragen-fe/.env.example`:
+           * NEXT_PUBLIC_API_BASE_URL="http://localhost:5001/api/v1"
+           * NEXT_PUBLIC_SITE_URL="http://localhost:3000"
+           * NEXT_PUBLIC_DEFAULT_CURRENCY="INR"
+           * NEXT_PUBLIC_DEFAULT_CITY="Coimbatore"
+           * Verified: infragen-fe/.env.local & .env.example created with backend URL http://localhost:5001/api/v1.
+         → Verify AWS S3 / CloudFront remote image patterns in `infragen-fe/next.config.ts`:
+           * Add remotePatterns for images stored on AWS S3 or image hosting endpoints.
+           * Verified: infragen-assets.s3.us-east-1.amazonaws.com & **.amazonaws.com added to images.remotePatterns in next.config.ts.
+         → Type-safe configuration helper:
+           * Created infragen-fe/lib/envConfig.ts providing safe fallbacks. Verified with tsc --noEmit (0 errors).
+
+[x] 1.2  Exhaustive TypeScript Type Definitions (`infragen-fe/lib/types/property.types.ts`)
+         → Cross-verified with backend models (`Property`, `PropertyMedia`, `PropertyTypology`, `PropertyRoomLayout`, `Amenity`, `PropertyNearbyAmenity`, `PropertySpecification`):
+           * PropertyType: 'BUILDING' | 'LAND'
+           * PropertyStatus: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED' | 'SOLD'
+           * AreaUnit: 'sq.ft' | 'sq.yd' | 'sq.m' | 'cents' | 'acres' | 'grounds'
+           * MediaType: 'IMAGE' | 'VIDEO' | 'SKETCH'
+           * NearbyCategory: 'SCHOOLS_COLLEGES' | 'HOSPITALS' | 'TRANSIT_HIGHWAYS' | 'BANKS_MARKETS' | 'PARKS_RECREATION' | 'OTHER'
+           * EnquiryType: 'GENERAL' | 'PROPERTY_ENQUIRY' | 'VIRTUAL_TOUR_REQUEST' | 'TENDER_SPECIFICATION' | 'SITE_VISIT'
+         → Interface `PublicProperty`:
+           * id: string; pid: string; slug: string; name: string;
+           * property_type: PropertyType; sub_type: string; status: PropertyStatus;
+           * description: string; price: number | null; currency: string; is_negotiable: boolean; is_featured: boolean;
+           * super_built_up_area: number | null; carpet_area: number | null; area_unit: AreaUnit;
+           * lot_size: number | null; lot_size_unit: AreaUnit | null;
+           * floor_current: number | null; floor_total: number | null;
+           * road_width: number | null; road_base: string | null; survey_number: string | null;
+           * street_address: string | null; location: string; city: string; state: string; pincode: string | null;
+           * latitude: number | null; longitude: number | null; google_maps_url: string | null;
+           * manager_name: string | null; manager_phone: string | null; manager_email: string | null;
+           * typologies?: { typology_name: string; is_custom: boolean }[];
+           * roomLayouts?: { space_name: string; quantity: number; is_custom: boolean }[];
+           * amenities?: { id: string; name: string; category: string; icon_key?: string }[];
+           * nearbyAmenities?: { id: string; name: string; category: NearbyCategory; distance_km: number; travel_time: string; travel_mode?: string }[];
+           * media?: { id: string; file_url: string; media_type: MediaType; is_primary: boolean; sort_order: number; caption?: string }[];
+           * specifications?: { id: string; field_name: string; field_value: string; sort_order: number }[];
+           * analytics?: { view_count: number; inquiry_count: number };
+         → Interface `PublicPropertyListQuery`:
+           * page?: number; limit?: number; property_type?: PropertyType; sub_type?: string;
+           * location?: string; city?: string; road_base?: string;
+           * min_price?: number; max_price?: number; min_area?: number; max_area?: number;
+           * is_featured?: boolean; search?: string; sort?: 'newest' | 'price_asc' | 'price_desc' | 'area_desc';
+         → Interface `PaginatedPropertiesResponse`:
+           * properties: PublicProperty[]; total: number; page: number; limit: number; totalPages: number;
+         → Verified: Created infragen-fe/lib/types/property.types.ts with full domain types, DTOs, query contracts, enquiry models, UI filter state interfaces, and metadata helpers. Verified with tsc --noEmit (0 errors).
+
+[x] 1.3  HTTP Client & Api Service Layer (`infragen-fe/lib/services/apiClient.ts`)
+         → Reusable fetch wrapper with baseURL, default JSON headers, error handling, and query string serializer.
+         → Property Service (`infragen-fe/lib/services/propertyService.ts`):
+           * `getProperties(params: PublicPropertyListQuery)` → Calls `GET /api/v1/public/properties`
+           * `getPropertyBySlug(slug: string)` → Calls `GET /api/v1/public/properties/:slug`
+           * `getFeaturedProperties(limit?: number)` → Calls `GET /api/v1/public/properties?is_featured=true&limit=${limit}`
+           * `getSimilarProperties(type: PropertyType, currentSlug: string, limit?: number)`
+         → Enquiry Service (`infragen-fe/lib/services/enquiryService.ts`):
+           * `submitEnquiry(payload: CreateEnquiryInput)` → Calls `POST /api/v1/public/enquiries`
+           * `scheduleTour(payload: ScheduleTourInput)` → Calls `POST /api/v1/public/enquiries` with enquiry_type='VIRTUAL_TOUR_REQUEST'
+         → Settings Service (`infragen-fe/lib/services/settingsService.ts`):
+           * `getPublicSettings()` → Calls `GET /api/v1/public/settings`
+         → Verified: Created apiClient.ts, propertyService.ts, enquiryService.ts, settingsService.ts, and index.ts. Verified with tsc --noEmit (0 errors).
+
+
+================================================================================
+PHASE 2 — REUSABLE PROPERTY UI PRIMITIVES & SHARED DESIGN SYSTEM
+================================================================================
+
+[x] 2.1  Building Property Card Primitive (`infragen-fe/components/properties/PropertyCardBuilding.tsx`)
+         → Strictly matching `reference-ui/property - building - page.png`:
+           * Image container with 16:10 aspect ratio and zoom on hover
+           * Badges: `Featured` (purple badge top-left), `ID:VI***` (blue badge top-right)
+           * Title: 1-line bold heading, hover brand color transition
+           * Price row: Large bold price in blue (e.g. ₹55,00,000 / $5,500,000)
+           * Negotiation badge: Purple pill badge (`Negotiation`) if `is_negotiable=true`
+           * Description snippet: 2 lines with clean ellipsis clamp
+           * Specs bottom bar:
+             - Bed icon + Bedroom count (e.g. 5 Beds)
+             - Bath icon + Bathroom count (e.g. 3 Baths)
+             - Area icon + Built-up size (e.g. 1,250 sq.ft)
+           * Clickable link wrapping card navigating to `/properties/[slug]`
+         → Verified: Created PropertyCardBuilding.tsx and formatters.ts. Checked with tsc --noEmit and eslint (0 errors, 0 warnings).
+
+[x] 2.2  Land Property Card Primitive (`infragen-fe/components/properties/PropertyCardLand.tsx`)
+         → Strictly matching `reference-ui/property - land - page.png`:
+           * Image container with 16:10 aspect ratio, drone/aerial framing
+           * Badges: `Featured` (purple badge top-left), `ID:VI***` (blue badge top-right)
+           * Title: 1-line bold heading (e.g. "DTCP Approved Highway Facing Parcel")
+           * Price row: Bold blue price + unit suffix (e.g. ₹75,00,000 / Plot or / Acre)
+           * Negotiation badge: Purple pill badge if negotiable
+           * Description snippet: 2 lines clamp
+           * Land specs bottom bar:
+             - Area icon + Extent in acres/cents/sq.ft (e.g. 4.8 Ac)
+             - Document approval badge: `DTCP` or `RERA` or `Approval`
+             - Road width: `40ft Rd` with road/transit icon
+           * Clickable link navigating to `/properties/[slug]`
+         → Verified: Created PropertyCardLand.tsx and added land formatters. Verified with tsc --noEmit and eslint (0 errors, 0 warnings).
+
+[x] 2.3  Property Top Sort & Size Toolbar (`infragen-fe/components/properties/PropertySortToolbar.tsx`)
+         → Strictly matching `reference-ui/property - building - filter expend - page.png`:
+           * 3 interactive dropdown menus with active state styling:
+             1. `Sort Dropdown`:
+                - Sort: Newest First (default, value: 'newest')
+                - Price: Low to High (value: 'price_asc')
+                - Price: High to Low (value: 'price_desc')
+                - Oldest (value: 'oldest')
+             2. `Size (Sq. Ft.) Dropdown`:
+                - All Sizes
+                - Below 500 sq.ft
+                - 500 - 1,000 sq.ft
+                - 1,000 - 2,000 sq.ft
+                - Above 2,000 sq.ft
+             3. `All Statuses Dropdown`:
+                - All Statuses
+                - Featured (is_featured=true)
+                - Negotiation (is_negotiable=true)
+           * Outside-click detection and animated expansion
+         → Verified: Created PropertySortToolbar.tsx with outside-click handling, active filter styling, and clear buttons. Verified with tsc --noEmit and eslint (0 errors, 0 warnings).
+
+[x] 2.4  Property Pagination Component (`infragen-fe/components/properties/PropertyPagination.tsx`)
+         → Strictly matching Wireframes:
+           * `< Previous` disabled on page 1
+           * Number buttons with active page highlighted (solid black/dark rounded square)
+           * `...` ellipsis for extended page ranges
+           * `Next >` disabled on last page
+           * Scrolls viewport smoothly to top of property grid on page change
+         → Verified: Created PropertyPagination.tsx with boundary guards and smooth scrolling. Verified with tsc --noEmit and eslint (0 errors, 0 warnings).
+
+[x] 2.5  Shimmer Skeleton Loader & Empty States (`infragen-fe/components/properties/PropertyCardSkeleton.tsx`)
+         → Shimmer skeleton matching card proportions (photo, badges, title, price, specs bar)
+         → `EmptyState` component when no properties match search filters with "Reset All Filters" CTA
+         → Verified: Created PropertyCardSkeleton, PropertyGridSkeleton, and PropertyEmptyState with barrel index.ts. Verified with tsc --noEmit and eslint (0 errors, 0 warnings).
+
+
+================================================================================
+PHASE 3 — BUILDING PROPERTY CATALOG MODULE (PAGE & FILTER SYSTEM)
+================================================================================
+
+[x] 3.1  Building Filter Sidebar Component (`infragen-fe/components/properties/BuildingFilterSidebar.tsx`)
+         → Strictly matching `reference-ui/property - building - page.png`:
+           * Card header: "Property Search" with icon + "Clear Filters" reset button
+           * `PROPERTY ID`: Text input (`Type ID`)
+           * `PROPERTY TYPE`: Select dropdown (Villa, Townhouse, Apartment, Penthouse, Commercial Office, Studio)
+           * `LOCATION`: Select dropdown (Coimbatore, Sulur, Kalapatti, Neelambur, Saravanampatti)
+           * `ROAD`: Select dropdown (Trichy Road, Avinashi Road, Sathy Road, Mettupalayam Road)
+           * `MINIMUM SIZE`: Number input (`Min Size in Ft.`)
+           * `Price range`: Dual interactive range slider showing formatted labels ($100 to $1,500,000 / ₹)
+           * `Search` CTA: Full-width blue button with search magnifying glass icon
+         → Verified: Created BuildingFilterSidebar.tsx with dual range slider and full responsive controls. Verified with tsc --noEmit and eslint (0 errors, 0 warnings).
+
+[x] 3.2  Building Catalog Hero Section (`infragen-fe/components/properties/BuildingHeroBanner.tsx`)
+         → Strictly matching `reference-ui/property - building - page.png`:
+           * Dark luxury interior skyline background with subtle vignette overlay
+           * Headline: "Find Your Dream Property"
+           * Subtitle: "Explore modern villas, luxury penthouses, commercial spaces, and cozy family apartments hand-picked for quality living."
+           * Carousel arrow buttons (`←`, `→`) for multi-banner rotation
+         → Verified: Created BuildingHeroBanner.tsx with interactive slide transitions and dot indicators. Verified with tsc --noEmit and eslint (0 errors, 0 warnings).
+
+[x] 3.3  Building Properties Page Route (`infragen-fe/app/properties/building/page.tsx` & `/properties`)
+         → Next.js App Router Page rendering:
+           * White navbar with `Properties` tab highlighted
+           * BuildingHeroBanner
+           * 2-column responsive layout:
+             - Left (col-span-12 lg:col-span-4 xl:col-span-3): BuildingFilterSidebar
+             - Right (col-span-12 lg:col-span-8 xl:col-span-9):
+               * PropertySortToolbar
+               * 3x2 responsive grid of `PropertyCardBuilding` (6 items per page)
+               * PropertyPagination
+           * Full footer
+         → Wire query parameters to `propertyService.getProperties({ property_type: 'BUILDING', ... })`
+         → Sync filter changes with browser URL search parameters (`next/navigation` `useRouter` & `useSearchParams`)
+         → Verified: Created BuildingCatalogClient.tsx, page.tsx, and /properties redirect. Verified in browser, tsc --noEmit, and eslint (0 errors, 0 warnings).
+
+
+================================================================================
+PHASE 4 — LAND & PLOTS PROPERTY CATALOG MODULE (PAGE & APPROVALS FILTER)
+================================================================================
+
+[x] 4.1  Land Filter Sidebar Component (`infragen-fe/components/properties/LandFilterSidebar.tsx`)
+         → Strictly matching `reference-ui/property - land - filter expend - page.png`:
+           * Card header: "Property Search" with icon + "Clear Filters"
+           * `PROPERTY ID`: Text input (`Type Property ID`)
+           * `CATEGORY`: Select dropdown (Agricultural Land, Farmland, Commercial Land, Industrial Land, Layout Plots)
+           * `CITY`: Select dropdown (Sulur, Coimbatore, Pollachi, Tiruppur)
+           * `ROAD`: Select dropdown (Trichy Road, Avinashi Road, Sathy Road, Palladam Road)
+           * `APPROVALS` Multi-Select Accordion (with "2 Selected" counter badge):
+             - [ ] All Approvals
+             - [x] DTCP Approved
+             - [x] RERA Approved
+             - [ ] Panchayat Approval
+             - [ ] CMDA Approved
+             - [ ] Agricultural Conversion / NOC
+           * `MINIMUM SIZE` + `AREA UNIT`: Dual inline inputs (`Min Size` + Dropdown `Acres`, `cents`, `sq.ft`)
+           * `FT ROAD`: Text/Number input (`40 ft Road` access width)
+           * `Price range`: Dual interactive range slider ($100 to $1,500,000 / ₹)
+           * `Search` CTA: Full-width blue button
+
+[x] 4.2  Land Catalog Hero Section (`infragen-fe/components/properties/LandHeroBanner.tsx`)
+         → Strictly matching `reference-ui/property - land - page.png`:
+           * Aerial parcel photography background with 3D red map pin marker
+           * Capsule badge: `VERIFIED FARMLANDS & DTCP LAYOUTS`
+           * Headline: "Find Your Dream Land & Plots"
+           * Subtitle: "Explore DTCP approved plots, fertile agricultural lands, commercial parcels, and premium farm lands hand-picked for secure capital growth and quality living."
+           * Carousel arrow buttons (`←`, `→`)
+
+[x] 4.3  Land Properties Page Route (`infragen-fe/app/properties/land/page.tsx`)
+         → Next.js App Router Page rendering:
+           * LandHeroBanner
+           * 2-column responsive layout:
+             - Left: LandFilterSidebar (with Approvals multi-select)
+             - Right:
+               * PropertySortToolbar
+               * 3x2 responsive grid of `PropertyCardLand` (6 items per page)
+               * PropertyPagination
+           * Full footer
+         → Wire query parameters to `propertyService.getProperties({ property_type: 'LAND', ... })`
+
+
+================================================================================
+PHASE 5 — PROPERTY DETAILS & DEEP HYDRATION MODULE (/properties/[slug])
+================================================================================
+
+[x] 5.1  Property Details Page Route (`infragen-fe/app/properties/[slug]/page.tsx`)
+         → Next.js Server Component with `generateMetadata` for dynamic SEO titles & OpenGraph cards.
+         → Fetches full property details via `propertyService.getPropertyBySlug(slug)`.
+         → Handles `notFound()` if property doesn't exist or is unpublished.
+
+[x] 5.2  Hero Panoramic Gallery & Top Banner (`infragen-fe/components/property-detail/PropertyDetailHero.tsx`)
+         → Strictly matching `reference-ui/property - details - page.png`:
+           * Large full-width hero photo with left/right carousel arrows (`<`, `>`)
+           * Breadcrumbs: `HOME / [CITY] / [LOCATION]`
+           * Large white bold title (e.g. "Villa in Coral Gables")
+           * Location pin icon + full address line
+           * Top-Right: `FEATURED` badge + Huge price tag (e.g. $825,000.00 / ₹8.25 Cr)
+           * Clickable horizontal thumbnail strip (7 preview images) updating active hero slide
+
+[x] 5.3  Quick Spec Metric Bar (`infragen-fe/components/property-detail/PropertyQuickMetrics.tsx`)
+         → Floating white card underneath hero banner:
+           * Left: `Property ID: VI2017`
+           * For Building:
+             - BEDROOMS (Bed icon + count)
+             - BATHROOMS (Bath icon + count)
+             - AREA (Area icon + Built-up sq.ft)
+             - LOT SIZE (Expand icon + Lot sq.ft)
+           * For Land:
+             - PLOT EXTENT (Land icon + Acres / Cents)
+             - ROAD WIDTH (Road icon + ft)
+             - ROAD BASE (Highway / Corridor name)
+             - SURVEY NUMBER (Revenue survey ID)
+
+[x] 5.4  Property Narrative & Description Card (`infragen-fe/components/property-detail/PropertyDescription.tsx`)
+         → Clean white card with "Description" heading and formatted narrative paragraphs.
+
+[x] 5.5  Dynamic Specifications Grid (`infragen-fe/components/property-detail/PropertySpecificationsTable.tsx`)
+         → Strictly matching `reference-ui/property - details - page.png`:
+           * Heading: "Additional Details"
+           * Alternating 2-column zebra-striped key-value table:
+             - Hydrated dynamically from `property.specifications` (e.g. Bedroom Features, Dining Area, Doors & Windows, Exterior Construction, Flooring, Facing, Zoning)
+             - Graceful fallback when empty.
+
+[x] 5.6  Architectural Floor Plans Section (`infragen-fe/components/property-detail/PropertyFloorPlanViewer.tsx`)
+         → Card with "Floor Plans" heading:
+           * Blueprint / layout sketch rendering with border frame
+           * Click-to-enlarge lightbox modal for high-resolution inspection.
+
+[x] 5.7  Property Video Walkthrough Section (`infragen-fe/components/property-detail/PropertyVideoPlayer.tsx`)
+         → Card with "Property Video" heading:
+           * Video container with thumbnail preview and circular play button overlay
+           * Supports HTML5 video streaming from S3 or embedded video player.
+
+
+================================================================================
+PHASE 6 — INTERACTIVE 5KM PROXIMITY RADAR & MAP LANDMARKS VISUALIZATION
+================================================================================
+
+[x] 6.1  Interactive Radar Diagram Component (`infragen-fe/components/property-detail/NearbyAmenitiesRadar.tsx`)
+         → Strictly matching `reference-ui/property - details - page.png`:
+           * Stylized radar map visual with center Property Location Pin ("Zero Point")
+           * Radiating color-coded connection lines to 8 Prominent Landmarks:
+             - Schools & Colleges (purple pins: e.g. "Gulliver Matric School - 2.4 km / 6 min drive")
+             - Hospitals (teal pins: e.g. "Sulur Multispeciality Govt Hospital - 2.1 km / 5 min drive")
+             - Transit & Highways (orange pins: e.g. "Trichy - Cbe 6-Lane Expressway - 0.4 km / 1 min drive")
+             - Banks & Markets (red pins: e.g. "State Bank & Daily Market - 1.8 km / 4 min drive")
+           * Bottom legend bar with category color dots, Survey Number, and Satellite View toggle
+           * Hydrated directly from `property.nearbyAmenities` relational data.
+
+
+================================================================================
+PHASE 7 — LEAD GENERATION, TOUR SCHEDULING & CRM ENQUIRY INTEGRATION
+================================================================================
+
+[x] 7.1  Property Lead Enquiry Form Card (`infragen-fe/components/property-detail/PropertyEnquiryForm.tsx`)
+         → Strictly matching right sidebar of `reference-ui/property - details - page.png`:
+           * First Name, Last Name input fields
+           * Email & Phone input fields
+           * Subject field (pre-filled with `Inquiry regarding [Property Title]`)
+           * Message textarea (pre-filled with `Hello, I am interested in [Property Title]`)
+           * Consent checkbox: `* I consent to having this website store my submitted information so they can respond to my inquiry.`
+           * CTA Button: `SEND MESSAGE` with paper airplane icon (teal/brand green)
+           * Quick direct connect icons: WhatsApp button (deep-linked), Phone call, Instagram
+         → Submits to `POST /api/v1/public/enquiries` with `enquiry_type: 'PROPERTY_ENQUIRY'` and `pid`.
+         → Success/error alerts via toast notifications.
+
+[x] 7.2  Schedule A Tour Widget (`infragen-fe/components/property-detail/ScheduleTourCard.tsx`)
+         → Strictly matching `reference-ui/property - details - page.png`:
+           * Your Name *
+           * Your Phone number *
+           * Your Email *
+           * Date/Time selection for tour
+           * CTA Button: `REQUEST A VIRTUAL TOUR`
+         → Submits to `POST /api/v1/public/enquiries` with `enquiry_type: 'VIRTUAL_TOUR_REQUEST'`.
+
+[x] 7.3  Featured & Similar Properties Carousel (`infragen-fe/components/property-detail/SimilarPropertiesGrid.tsx`)
+         → Mini sidebar cards for "Featured Properties"
+         → Full-width bottom section "Similar Properties":
+           * 3 property cards matching current property type (Building or Land)
+           * Quick specs, price, and favorite heart button
+
+
+================================================================================
+PHASE 8 — GLOBAL NAVIGATION, FOOTER & HOMEPAGE DEEP LINKING
+================================================================================
+
+[x] 8.1  Navbar & Mobile Drawer Route Alignment
+         → Update `infragen-fe/components/shared/Navbar.tsx` "Properties" dropdown:
+           * Land item links to `/properties/land`
+           * Building item links to `/properties/building`
+         → Update `infragen-fe/components/shared/SideDrawer.tsx` mobile drawer:
+           * Land item links to `/properties/land`
+           * Building item links to `/properties/building`
+
+[x] 8.2  Footer & Internal Links Sync
+         → Update `infragen-fe/components/shared/Footer.tsx`:
+           * Link "Land Sales & Plots" to `/properties/land`
+           * Link "Villas & Buildings" to `/properties/building`
+
+[x] 8.3  Homepage ProjectsSection API Integration (`infragen-fe/components/home/ProjectsSection.tsx`)
+         → Replace hardcoded `propertiesData` mock with live API fetch to `propertyService.getFeaturedProperties(6)`.
+         → Render live property cards linking to `/properties/[slug]`.
+
+
+================================================================================
+PHASE 9 — ERROR HANDLING, SHIMMER SKELETONS, SEO & PERFORMANCE
+================================================================================
+
+[x] 9.1  Next.js Not-Found & Error Boundaries
+         → Create `infragen-fe/app/properties/not-found.tsx` with friendly 404 illustration and "Browse All Properties" button.
+         → Create `infragen-fe/app/properties/error.tsx` client error boundary with retry trigger.
+
+[x] 9.2  Dynamic SEO Metadata & JSON-LD Structured Data
+         → OpenGraph image and dynamic tags: `title`, `description`, `keywords`, `canonical`.
+         → Schema.org `RealEstateListing` structured data script in `<head>` for rich Google search cards.
+
+[x] 9.3  Image Optimization & S3 Domain Whitelist
+         → Configure `images.remotePatterns` in `next.config.ts` for all S3 image origins.
+         → Responsive `sizes` attributes on all card thumbnails to prevent layout shift (CLS 0.0).
+
+
+================================================================================
+PHASE 10 — END-TO-END INTEGRATION, BUILD VERIFICATION & QA AUDIT
+================================================================================
+
+[x] 10.1 Build Verification & TypeScript Compilation
+         → Run `tsc --noEmit` across `infragen-fe` to verify zero type errors.
+         → Run `npm run build` to ensure all pages render with zero build warnings.
+
+[x] 10.2 Live API Probe & Communication Check
+         → Verify live response from `http://localhost:5001/api/v1/public/properties`.
+         → Verify live response from `http://localhost:5001/api/v1/public/properties/:slug`.
+         → Verify live submission to `http://localhost:5001/api/v1/public/enquiries` creates record in DB.
+
+[x] 10.3 Cross-Browser & Multi-Device Responsive QA
+         → Verify layout on Desktop (1920x1080, 1440x900).
+         → Verify layout on Tablet (768x1024, iPad Portrait/Landscape).
+         → Verify layout on Mobile (375x812, iPhone / 412x915, Android).
+================================================================================
+

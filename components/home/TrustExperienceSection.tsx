@@ -47,7 +47,7 @@ export default function TrustExperienceSection() {
           </div>
           <div className="pt-[5.2px] flex flex-col gap-0 items-start justify-start self-stretch shrink-0 relative">
             <p className="text-[#5c525c] text-left font-['Inter',sans-serif] text-base leading-7 font-normal relative self-stretch">
-              The same care defines our work as a property management company in Coimbatore: clear records, honest timelines, realistic valuations, and straight answers even when they aren't what you hoped to hear. For our NRI clients especially, this transparency is everything you receive consistent updates and verifiable reporting so your property is as secure as if you were managing it yourself.
+              The same care defines our work as a property management company in Coimbatore: clear records, honest timelines, realistic valuations, and straight answers even when they aren&apos;t what you hoped to hear. For our NRI clients especially, this transparency is everything you receive consistent updates and verifiable reporting so your property is as secure as if you were managing it yourself.
             </p>
           </div>
         </div>

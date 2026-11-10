@@ -1,9 +1,10 @@
 "use client";
 
 import React from "react";
-import { SITE_INFO } from "@/data/siteInfo";
+import { useSiteSettings } from "@/lib/context/SiteSettingsContext";
 
 export default function OfficeMapSection() {
+  const { siteInfo } = useSiteSettings();
   return (
     <section className="py-16 sm:py-24 px-6 sm:px-10 lg:px-16 bg-[#FDFBF7] border-t border-stone-200">
       <div className="max-w-[1440px] mx-auto">
@@ -13,7 +14,7 @@ export default function OfficeMapSection() {
           <div className="lg:col-span-7">
             <div className="relative w-full h-[380px] sm:h-[440px] rounded-3xl overflow-hidden shadow-2xl border border-stone-200 group">
               <iframe
-                src={SITE_INFO.mapsEmbed}
+                src={siteInfo.mapsEmbed}
                 className="w-full h-full border-0"
                 allowFullScreen={false}
                 loading="lazy"
@@ -39,16 +40,16 @@ export default function OfficeMapSection() {
 
               <div className="space-y-2">
                 <p className="text-stone-800 text-xs sm:text-sm font-semibold font-['Inter',sans-serif] leading-relaxed">
-                  {SITE_INFO.address}
+                  {siteInfo.address}
                 </p>
                 <p className="text-stone-500 text-xs font-['Inter',sans-serif]">
-                  Opening Hours: {SITE_INFO.officeHours} (Daily)
+                  Opening Hours: {siteInfo.officeHours} (Daily)
                 </p>
               </div>
 
               <div className="pt-4">
                 <a
-                  href={SITE_INFO.mapsLink}
+                  href={siteInfo.mapsLink}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-[#4E1421] hover:bg-[#612124] text-white px-8 py-3.5 rounded-lg text-sm font-bold font-['Outfit',sans-serif] transition-all duration-300 inline-flex items-center gap-2 shadow-lg hover:shadow-xl active:scale-[0.98]"

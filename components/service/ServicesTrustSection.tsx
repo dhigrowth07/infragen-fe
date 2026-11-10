@@ -47,7 +47,7 @@ export default function ServicesTrustSection() {
               Local expertise
             </b>
             <span className="text-[0.82rem] font-inter text-[#d7c7b7] block">
-              Knowledge grounded in Coimbatore's real micro-markets.
+              Knowledge grounded in Coimbatore&apos;s real micro-markets.
             </span>
           </div>
 

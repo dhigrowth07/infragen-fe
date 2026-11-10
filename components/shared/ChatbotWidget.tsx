@@ -5,7 +5,7 @@ import Image from "next/image";
 import { propertiesData, PropertyItem } from "@/data/properties";
 import { searchKnowledge, searchKnowledgeKeywordMode, parseFileMentions, splitTextIntoChunks } from "@/lib/ragKnowledge";
 import { ChatMode, UploadedDocument, MessageItem, CardType, ChipItem, SessionMemory } from "@/lib/types";
-import { SITE_INFO, whatsappLink } from "@/data/siteInfo";
+import { useSiteSettings } from "@/lib/context/SiteSettingsContext";
 
 // ── Mentions Catalogue for Autocomplete ───────────────────────────────────────
 
@@ -214,6 +214,7 @@ const CHIP_ROUTES: Record<string, { display: string; prompt: string }> = {
 };
 
 export default function ChatbotWidget() {
+  const { siteInfo, whatsappLink } = useSiteSettings();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [hasUnread, setHasUnread] = useState(true);
@@ -429,7 +430,7 @@ export default function ChatbotWidget() {
       `❌ <strong>Booking Cancelled</strong><br/>Cancelled visit for <strong>${name}</strong> on ${date} (${slot}).<br/>WhatsApp update sent to property team.`,
       [{ icon: "fa-calendar-plus", label: "Book New Visit", action: "chip_book" }]
     );
-  }, [lastBooking, addBotMessage]);
+  }, [lastBooking, addBotMessage, whatsappLink]);
 
   const handleSend = useCallback(
     (displayText?: string, chipAction?: string) => {
@@ -828,8 +829,8 @@ export default function ChatbotWidget() {
                     >
                       <i className="fa-brands fa-whatsapp" /> Chat on WhatsApp
                     </a>
-                    <a href={`tel:+91${SITE_INFO.phone1Raw}`} className="w-full bg-[#1F0A10] text-[#c5a880] font-bold py-2 px-3 rounded text-[11px] flex items-center justify-center gap-2">
-                      <i className="fa-solid fa-phone" /> Call: +91 {SITE_INFO.phone1}
+                    <a href={`tel:+91${siteInfo.phone1Raw}`} className="w-full bg-[#1F0A10] text-[#c5a880] font-bold py-2 px-3 rounded text-[11px] flex items-center justify-center gap-2">
+                      <i className="fa-solid fa-phone" /> Call: +91 {siteInfo.phone1}
                     </a>
                   </div>
                 )}
