@@ -1,0 +1,143 @@
+name: Deploy Frontend Staging to EC2
+
+on:
+  push:
+    branches:
+      - staging
+  workflow_dispatch:
+
+# ========================================================
+# Frontend Environment Variables (Hardcoded for Staging)
+# ========================================================
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: 375291783713.dkr.ecr.us-east-1.amazonaws.com/infragen-staging
+  DEPLOY_DIR: /home/${{ secrets.EC2_USER }}/infragen-staging
+  PORT: "3000"
+  NODE_ENV: "production"
+  HOSTNAME: "0.0.0.0"
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  # ==========================================
+  # Stage 1: Build & Push Docker Image to ECR
+  # ==========================================
+  build:
+    name: Build & Push to ECR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, Tag & Push Docker Image
+        run: |
+          echo "==> Building Docker image for linux/amd64..."
+          docker build --platform linux/amd64 -f Dockerfile.staging \
+            --build-arg PORT=${{ env.PORT }} \
+            --build-arg NODE_ENV=${{ env.NODE_ENV }} \
+            -t ${{ env.ECR_REPOSITORY }}:latest \
+            -t ${{ env.ECR_REPOSITORY }}:${{ github.sha }} .
+
+          echo "==> Pushing Docker image to AWS ECR..."
+          docker push ${{ env.ECR_REPOSITORY }}:latest
+          docker push ${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+
+  # ==========================================
+  # Stage 2: Deploy to EC2 via Docker Compose
+  # ==========================================
+  deploy:
+    name: Deploy to EC2
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Copy docker-compose.staging.yml to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: ${{ secrets.EC2_PORT || 22 }}
+          source: "docker-compose.staging.yml"
+          target: "${{ env.DEPLOY_DIR }}"
+          overwrite: true
+
+      - name: Execute Docker Compose on EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          DEPLOY_DIR: ${{ env.DEPLOY_DIR }}
+          ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
+          AWS_REGION: ${{ env.AWS_REGION }}
+          PORT: ${{ env.PORT }}
+          NODE_ENV: ${{ env.NODE_ENV }}
+          HOSTNAME: ${{ env.HOSTNAME }}
+          NEXT_TELEMETRY_DISABLED: ${{ env.NEXT_TELEMETRY_DISABLED }}
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: ${{ secrets.EC2_PORT || 22 }}
+          envs: DEPLOY_DIR,ECR_REPOSITORY,AWS_REGION,PORT,NODE_ENV,HOSTNAME,NEXT_TELEMETRY_DISABLED
+          script: |
+            set -e
+            echo "==> Navigating to $DEPLOY_DIR..."
+            mkdir -p "$DEPLOY_DIR"
+            cd "$DEPLOY_DIR"
+
+            # Generate .env file directly from workflow hardcoded environment variables
+            echo "==> Generating .env file on EC2..."
+            cat <<EOF > .env
+            PORT=$PORT
+            NODE_ENV=$NODE_ENV
+            HOSTNAME=$HOSTNAME
+            NEXT_TELEMETRY_DISABLED=$NEXT_TELEMETRY_DISABLED
+            EOF
+
+            # Authenticate with AWS ECR to pull the updated image
+            echo "==> Authenticating Docker with AWS ECR..."
+            aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPOSITORY || true
+
+            # Pull the newly pushed image from ECR
+            echo "==> Pulling latest image from ECR..."
+            docker pull $ECR_REPOSITORY:latest
+
+            # Docker Compose Down
+            echo "==> Stopping running containers..."
+            if docker compose version > /dev/null 2>&1; then
+              docker compose -f docker-compose.staging.yml down --remove-orphans || true
+            else
+              docker-compose -f docker-compose.staging.yml down --remove-orphans || true
+            fi
+
+            # Docker Compose Up
+            echo "==> Starting containers..."
+            if docker compose version > /dev/null 2>&1; then
+              docker compose -f docker-compose.staging.yml up -d
+            else
+              docker-compose -f docker-compose.staging.yml up -d
+            fi
+
+            # Clean up old/unused images
+            echo "==> Pruning unused Docker images..."
+            docker image prune -f
+
+            # Verify container status
+            echo "==> Verifying running containers..."
+            sleep 5
+            docker ps --filter "name=infragen_staging"
+            echo "==> Frontend deployment to EC2 completed successfully!"

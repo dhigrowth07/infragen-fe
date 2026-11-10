@@ -1,0 +1,24 @@
+services:
+  # ==========================================
+  # InfraGen Frontend Web (Staging Environment)
+  # Next.js Application
+  # ==========================================
+  frontend:
+    image: 375291783713.dkr.ecr.us-east-1.amazonaws.com/infragen-staging:latest
+    container_name: infragen_staging
+    restart: unless-stopped
+    ports:
+      - "5004:3000"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+    networks:
+      - infragen_fe_network_staging
+
+networks:
+  infragen_fe_network_staging:
+    driver: bridge
