@@ -11,7 +11,7 @@ export default function LandSalesHero({ data = landSalesDetailData }: Props) {
   const { hero } = data;
 
   return (
-    <section className="relative mt-[96px] min-h-[580px] sm:min-h-[720px] lg:min-h-[780px] flex items-center justify-center overflow-hidden bg-[#140b0e] text-center text-white isolate">
+    <section className="relative w-full pt-0 min-h-[580px] sm:min-h-[720px] lg:min-h-[780px] flex items-center justify-center overflow-hidden bg-[#140b0e] text-center text-white isolate">
       {/* Overlay Gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0e0709]/68 via-[#160a0e]/58 to-[#0e0709]/86 z-10" />
 
@@ -22,7 +22,7 @@ export default function LandSalesHero({ data = landSalesDetailData }: Props) {
       />
 
       {/* Hero Inner Content */}
-      <div className="relative z-20 py-[100px] sm:py-[130px] px-6 w-full max-w-[1000px] mx-auto flex flex-col items-center justify-center animate-cta-float">
+      <div className="relative z-20 pt-36 sm:pt-44 pb-20 sm:pb-28 px-6 w-full max-w-[1000px] mx-auto flex flex-col items-center justify-center animate-cta-float">
         {/* Top Tagline with Gold Lines and Dots */}
         <div className="inline-flex items-center gap-3 sm:gap-4 mb-6">
           <span className="w-[30px] sm:w-[50px] h-[1px] bg-[#c5a880] opacity-85" />

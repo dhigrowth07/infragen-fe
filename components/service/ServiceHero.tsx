@@ -4,7 +4,7 @@ import React from "react";
 
 export default function ServiceHero() {
   return (
-    <section className="relative mt-[96px] min-h-[560px] flex items-center justify-center overflow-hidden bg-[#180d0f] text-center text-white isolate">
+    <section className="relative w-full pt-0 min-h-[560px] sm:min-h-[640px] flex items-center justify-center overflow-hidden bg-[#180d0f] text-center text-white isolate">
       {/* Dark Overlay Gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0f080a]/76 via-[#1a0c10]/68 to-[#0f080a]/88 -z-10" />
 
@@ -14,7 +14,7 @@ export default function ServiceHero() {
       />
 
       {/* Content Container */}
-      <div className="py-[70px] px-6 w-full max-w-[880px] mx-auto flex flex-col items-center justify-center">
+      <div className="pt-36 sm:pt-40 pb-20 sm:pb-24 px-6 w-full max-w-[880px] mx-auto flex flex-col items-center justify-center">
         {/* Subtitle */}
         <span className="text-[#c5a880] font-outfit text-sm leading-[22px] font-bold tracking-[0.28em] uppercase block mb-3">
           OUR SERVICES

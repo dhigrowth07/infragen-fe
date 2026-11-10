@@ -1,8 +1,10 @@
 "use client";
 
 import React from "react";
+import { useSiteSettings } from "@/lib/context/SiteSettingsContext";
 
 export default function OtherWaysToConnect() {
+  const { siteInfo } = useSiteSettings();
   return (
     <section className="py-16 px-6 sm:px-10 lg:px-16 bg-[#FAF7F2] border-t border-stone-200">
       <div className="max-w-[1440px] mx-auto text-center space-y-12">
@@ -24,10 +26,10 @@ export default function OtherWaysToConnect() {
               <i className="fa-solid fa-phone"></i>
             </div>
             <h3 className="text-lg font-bold text-[#1E293B] font-['Outfit',sans-serif] mb-2">Call Us</h3>
-            <a href="tel:9688889420" className="text-stone-700 hover:text-[#4E1421] font-bold text-xs sm:text-sm font-['Inter',sans-serif] block mb-1">
-              +91 96888 89420
+            <a href={`tel:${siteInfo.phone1Raw}`} className="text-stone-700 hover:text-[#4E1421] font-bold text-xs sm:text-sm font-['Inter',sans-serif] block mb-1">
+              +91 {siteInfo.phone1}
             </a>
-            <p className="text-stone-400 text-xs font-['Inter',sans-serif]">Mon - Sun: 9.00 AM - 10.00 PM</p>
+            <p className="text-stone-400 text-xs font-['Inter',sans-serif]">{siteInfo.officeHoursDays}: {siteInfo.officeHours}</p>
           </div>
 
           {/* Card 2: Email Us */}
@@ -36,8 +38,8 @@ export default function OtherWaysToConnect() {
               <i className="fa-solid fa-envelope"></i>
             </div>
             <h3 className="text-lg font-bold text-[#1E293B] font-['Outfit',sans-serif] mb-2">Email Us</h3>
-            <a href="mailto:srissa2006@gmail.com" className="text-stone-700 hover:text-[#4E1421] font-bold text-xs sm:text-sm font-['Inter',sans-serif] block mb-1 break-all">
-              srissa2006@gmail.com
+            <a href={`mailto:${siteInfo.email}`} className="text-stone-700 hover:text-[#4E1421] font-bold text-xs sm:text-sm font-['Inter',sans-serif] block mb-1 break-all">
+              {siteInfo.email}
             </a>
             <p className="text-stone-400 text-xs font-['Inter',sans-serif]">We respond within 24 hrs</p>
           </div>
@@ -49,7 +51,7 @@ export default function OtherWaysToConnect() {
             </div>
             <h3 className="text-lg font-bold text-[#1E293B] font-['Outfit',sans-serif] mb-2">Visit Us</h3>
             <p className="text-stone-700 font-bold text-xs leading-relaxed font-['Inter',sans-serif] mb-1">
-              Shop No.24, Old Bus Stand Complex, Suganthi Nagar Rd, Sulur, TN 641402
+              {siteInfo.addressShort}
             </p>
           </div>
 
@@ -60,7 +62,7 @@ export default function OtherWaysToConnect() {
             </div>
             <h3 className="text-lg font-bold text-[#1E293B] font-['Outfit',sans-serif] mb-2">Office Hours</h3>
             <p className="text-stone-700 font-bold text-xs sm:text-sm font-['Inter',sans-serif] mb-1">
-              Mon - Sun: 9.00 AM - 10.00 PM
+              {siteInfo.officeHoursDays}: {siteInfo.officeHours}
             </p>
             <p className="text-stone-400 text-xs font-['Inter',sans-serif]">Open Everyday</p>
           </div>

@@ -28,7 +28,7 @@ export default function ContactHero() {
           
           {/* Badge */}
           <span className="text-[#c5a880] font-['Inter',sans-serif] text-xs sm:text-sm font-extrabold tracking-[0.35em] uppercase block drop-shadow-md">
-            LET'S CONNECT
+            LET&apos;S CONNECT
           </span>
 
           {/* Gold Line Above Heading */}
@@ -52,7 +52,7 @@ export default function ContactHero() {
 
           {/* Lead Paragraph */}
           <p className="text-stone-200 text-sm sm:text-base leading-relaxed font-['Inter',sans-serif] max-w-xl mx-auto font-normal opacity-90">
-            We're here to help with all your real estate needs in Coimbatore. Reach out to our team for expert guidance and personalised solutions. We value your trust and look forward to working with you.
+            We&apos;re here to help with all your real estate needs in Coimbatore. Reach out to our team for expert guidance and personalised solutions. We value your trust and look forward to working with you.
           </p>
 
           {/* 3 Trust Badges Centered */}

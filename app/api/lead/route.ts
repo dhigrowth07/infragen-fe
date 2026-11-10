@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { whatsappLink } from "@/data/siteInfo";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
@@ -31,7 +32,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     // Fallback WhatsApp URL for the Vizhi team
     const textMsg = `Hi Vizhi Infragen Team! New Real-Time Enquiry:\nName: ${name}\nPhone: ${phone}\nContact Time: ${contactTime || "Anytime"}`;
-    const whatsappUrl = `https://wa.me/919688889420?text=${encodeURIComponent(textMsg)}`;
+    const whatsappUrl = whatsappLink(textMsg);
 
     return NextResponse.json({
       success: true,

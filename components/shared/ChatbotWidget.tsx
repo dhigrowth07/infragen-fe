@@ -5,6 +5,7 @@ import Image from "next/image";
 import { propertiesData, PropertyItem } from "@/data/properties";
 import { searchKnowledge, searchKnowledgeKeywordMode, parseFileMentions, splitTextIntoChunks } from "@/lib/ragKnowledge";
 import { ChatMode, UploadedDocument, MessageItem, CardType, ChipItem, SessionMemory } from "@/lib/types";
+import { useSiteSettings } from "@/lib/context/SiteSettingsContext";
 
 // ── Mentions Catalogue for Autocomplete ───────────────────────────────────────
 
@@ -213,6 +214,7 @@ const CHIP_ROUTES: Record<string, { display: string; prompt: string }> = {
 };
 
 export default function ChatbotWidget() {
+  const { siteInfo, whatsappLink } = useSiteSettings();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [hasUnread, setHasUnread] = useState(true);
@@ -421,14 +423,14 @@ export default function ChatbotWidget() {
     const rescheduleTime = `${tomorrow.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" })} at 10:00 AM`;
 
     const waMsg = `❌ Site Visit Cancelled\n\nBooking for ${name} (${phone}) on ${date} at ${slot} has been cancelled.\nReschedule target: ${rescheduleTime}.`;
-    window.open(`https://wa.me/919688889420?text=${encodeURIComponent(waMsg)}`, "_blank");
+    window.open(whatsappLink(waMsg), "_blank");
 
     setLastBooking(null);
     addBotMessage(
       `❌ <strong>Booking Cancelled</strong><br/>Cancelled visit for <strong>${name}</strong> on ${date} (${slot}).<br/>WhatsApp update sent to property team.`,
       [{ icon: "fa-calendar-plus", label: "Book New Visit", action: "chip_book" }]
     );
-  }, [lastBooking, addBotMessage]);
+  }, [lastBooking, addBotMessage, whatsappLink]);
 
   const handleSend = useCallback(
     (displayText?: string, chipAction?: string) => {
@@ -525,7 +527,7 @@ export default function ChatbotWidget() {
 
     setLastBooking({ name, phone, date, slot, property });
     const waMsg = `⚡ New Site Visit Booked!\n\nClient: ${name}\nPhone: ${phone}\nDate: ${date} (${slot})\nProperty: ${property}`;
-    window.open(`https://wa.me/919688889420?text=${encodeURIComponent(waMsg)}`, "_blank");
+    window.open(whatsappLink(waMsg), "_blank");
 
     fetch("/api/lead", {
       method: "POST",
@@ -762,7 +764,7 @@ export default function ChatbotWidget() {
                               📅 Schedule Visit
                             </button>
                             <a
-                              href={`https://wa.me/919688889420?text=Hi!%20I'm%20interested%20in%20${encodeURIComponent(prop.title)}`}
+                              href={whatsappLink(`Hi! I'm interested in ${prop.title}`)}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="px-2.5 bg-emerald-600 text-white text-[11px] font-bold rounded flex items-center justify-center"
@@ -820,15 +822,15 @@ export default function ChatbotWidget() {
                 {m.cardType === "handoff" && (
                   <div className="bg-white rounded-xl p-3 border border-stone-200 shadow-md space-y-1.5">
                     <a
-                      href="https://wa.me/919688889420?text=Hi!%20I%20need%20help%20from%20a%20Vizhi%20property%20advisor"
+                      href={whatsappLink("Hi! I need help from a Vizhi property advisor")}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full bg-emerald-600 text-white font-bold py-2 px-3 rounded text-[11px] flex items-center justify-center gap-2"
                     >
                       <i className="fa-brands fa-whatsapp" /> Chat on WhatsApp
                     </a>
-                    <a href="tel:+919688889420" className="w-full bg-[#1F0A10] text-[#c5a880] font-bold py-2 px-3 rounded text-[11px] flex items-center justify-center gap-2">
-                      <i className="fa-solid fa-phone" /> Call: +91 96888 89420
+                    <a href={`tel:+91${siteInfo.phone1Raw}`} className="w-full bg-[#1F0A10] text-[#c5a880] font-bold py-2 px-3 rounded text-[11px] flex items-center justify-center gap-2">
+                      <i className="fa-solid fa-phone" /> Call: +91 {siteInfo.phone1}
                     </a>
                   </div>
                 )}

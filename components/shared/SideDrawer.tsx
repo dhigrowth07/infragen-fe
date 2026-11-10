@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useSiteSettings } from "@/lib/context/SiteSettingsContext";
 
 interface SideDrawerProps {
   isOpen: boolean;
@@ -11,7 +12,9 @@ interface SideDrawerProps {
 }
 
 export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
+  const { siteInfo } = useSiteSettings();
   const pathname = usePathname();
+  const [propertiesOpen, setPropertiesOpen] = React.useState(false);
 
   const isHome = pathname === "/";
   const isAbout = pathname === "/about-us";
@@ -76,13 +79,42 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
             >
               About Us
             </Link>
-            <Link
-              href="/#projects"
-              onClick={onClose}
-              className="drawer-link text-lg font-bold text-[#334155] hover:text-[#c5a880] transition-colors font-['Inter',sans-serif]"
-            >
-              Properties
-            </Link>
+            {/* Properties Accordion */}
+            <div className="flex flex-col items-center w-full">
+              <button
+                type="button"
+                onClick={() => setPropertiesOpen((prev) => !prev)}
+                className="drawer-link text-lg font-bold text-[#334155] hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] flex items-center gap-2 cursor-pointer"
+                aria-expanded={propertiesOpen}
+              >
+                <span>Properties</span>
+                <i
+                  className={`fa-solid fa-chevron-down text-xs transition-transform duration-200 ${
+                    propertiesOpen ? "rotate-180 text-[#c5a880]" : "text-stone-400"
+                  }`}
+                ></i>
+              </button>
+              {propertiesOpen && (
+                <div className="flex flex-col gap-1.5 mt-2.5 w-full max-w-[220px] p-2 bg-[#251215]/95 rounded-2xl border border-white/15 shadow-md">
+                  <Link
+                    href="/properties/land"
+                    onClick={onClose}
+                    className="text-sm font-semibold text-white hover:text-[#c5a880] hover:bg-white/10 transition-colors flex items-center gap-2.5 px-3 py-2 rounded-xl"
+                  >
+                    <i className="fa-solid fa-map-location-dot text-[#c5a880] text-xs"></i>
+                    <span>Land</span>
+                  </Link>
+                  <Link
+                    href="/properties/building"
+                    onClick={onClose}
+                    className="text-sm font-semibold text-white hover:text-[#c5a880] hover:bg-white/10 transition-colors flex items-center gap-2.5 px-3 py-2 rounded-xl"
+                  >
+                    <i className="fa-solid fa-city text-[#c5a880] text-xs"></i>
+                    <span>Building</span>
+                  </Link>
+                </div>
+              )}
+            </div>
             <Link
               href="/services"
               onClick={onClose}
@@ -92,13 +124,13 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
             >
               Services
             </Link>
-            <Link
+            {/* <Link
               href="/#why-trust-section"
               onClick={onClose}
               className="drawer-link text-lg font-bold text-[#334155] hover:text-[#c5a880] transition-colors font-['Inter',sans-serif]"
             >
               Blog
-            </Link>
+            </Link> */}
             <Link
               href="/contact"
               onClick={onClose}
@@ -117,23 +149,23 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
               <span>Vizhi Infragen Realtors</span>
             </div>
             <p className="text-xs text-stone-600 leading-relaxed max-w-[280px] mx-auto">
-              First Floor, Shop No.24, Old Bus Stand Complex, 24, Suganthi Nagar Rd, Sulur, Tamil Nadu 641402
+              {siteInfo.address}
             </p>
 
             <div className="pt-2 flex flex-col items-center gap-2 text-xs">
               <a
-                href="mailto:srissa2006@gmail.com?subject=Inquiry%20Regarding%20Coimbatore%20Real%20Estate%20Properties"
+                href={`mailto:${siteInfo.email}?subject=Inquiry%20Regarding%20Coimbatore%20Real%20Estate%20Properties`}
                 className="flex items-center gap-2 text-[#612124] hover:text-[#c5a880] font-semibold transition-colors"
               >
                 <i className="fa-solid fa-envelope text-[#c5a880]"></i>
-                <span>srissa2006@gmail.com</span>
+                <span>{siteInfo.email}</span>
               </a>
               <a
-                href="tel:9688889420"
+                href={`tel:${siteInfo.phone1Raw}`}
                 className="flex items-center gap-2 text-[#612124] hover:text-[#c5a880] font-semibold transition-colors"
               >
                 <i className="fa-solid fa-phone text-[#c5a880]"></i>
-                <span>+91 96888 89420</span>
+                <span>+91 {siteInfo.phone1} / {siteInfo.phone2}</span>
               </a>
             </div>
           </div>
@@ -141,7 +173,7 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
           {/* Social Icons */}
           <div className="flex items-center justify-center gap-3 pt-4 border-t border-stone-100 w-full">
             <a
-              href="https://facebook.com"
+              href={siteInfo.social.facebook}
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-stone-100 text-[#1877F2] hover:scale-110 shadow-sm flex items-center justify-center transition-all"
@@ -150,7 +182,7 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
               <i className="fa-brands fa-facebook-f text-lg"></i>
             </a>
             <a
-              href="https://twitter.com"
+              href={siteInfo.social.twitter}
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-stone-100 text-[#1DA1F2] hover:scale-110 shadow-sm flex items-center justify-center transition-all"
@@ -159,7 +191,7 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
               <i className="fa-brands fa-twitter text-lg"></i>
             </a>
             <a
-              href="https://youtube.com"
+              href={siteInfo.social.youtube}
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-stone-100 text-[#FF0000] hover:scale-110 shadow-sm flex items-center justify-center transition-all"
@@ -168,7 +200,7 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
               <i className="fa-brands fa-youtube text-lg"></i>
             </a>
             <a
-              href="https://instagram.com"
+              href={siteInfo.social.instagram}
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-stone-100 text-[#c13584] hover:scale-110 shadow-sm flex items-center justify-center transition-all"
@@ -177,7 +209,7 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
               <i className="fa-brands fa-instagram text-lg"></i>
             </a>
             <a
-              href="https://wa.me/919688889420"
+              href={siteInfo.social.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-stone-100 text-[#25D366] hover:scale-110 shadow-sm flex items-center justify-center transition-all"
@@ -189,7 +221,7 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
         </div>
 
         <div className="text-center pt-6 text-[11px] text-stone-400 font-medium">
-          &copy; 2026 Vizhi Infragen Realtors. All Rights Reserved.
+          &copy; {siteInfo.copyrightYear} {siteInfo.shortName}. All Rights Reserved.
         </div>
       </div>
     </>
