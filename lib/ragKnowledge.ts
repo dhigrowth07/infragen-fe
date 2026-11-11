@@ -666,13 +666,9 @@ export function searchKnowledge(query: string, topK = 3): KnowledgeChunk[] {
       }
     }
 
-    // Category boosts
+    // Category boosts for specific domain intents
     if (chunk.category === "contact" && (q.includes("contact") || q.includes("phone") || q.includes("call") || q.includes("email") || q.includes("address") || q.includes("office"))) {
       score += 15;
-    }
-    if (chunk.category === "faq") {
-      const faqWords = ["what", "how", "why", "when", "can", "do you", "are you", "is it"];
-      if (faqWords.some(fw => q.includes(fw))) score += 3;
     }
     if (chunk.category === "nri" && (q.includes("nri") || q.includes("abroad") || q.includes("overseas") || q.includes("foreign"))) {
       score += 10;
@@ -682,10 +678,10 @@ export function searchKnowledge(query: string, topK = 3): KnowledgeChunk[] {
   });
 
   const sorted = scored
-    .filter(s => s.score > 0)
+    .filter(s => s.score >= 8)
     .sort((a, b) => b.score - a.score);
 
-  if (sorted.length === 0) return ragKnowledge.slice(0, 2);
+  if (sorted.length === 0) return [];
   return sorted.slice(0, topK).map(s => s.chunk);
 }
 
