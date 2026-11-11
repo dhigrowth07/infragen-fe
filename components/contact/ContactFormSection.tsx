@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { enquiryService } from "@/lib/services/enquiryService";
 
 export default function ContactFormSection() {
   const [firstName, setFirstName] = useState("");
@@ -13,25 +14,31 @@ export default function ContactFormSection() {
   const [terms, setTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!terms) return;
+    setErrorMessage(null);
+
+    if (message.trim().length < 10) {
+      setErrorMessage("Message must be at least 10 characters");
+      return;
+    }
+
     setIsSubmitting(true);
 
-    const constantToEmail = "srissa2006@gmail.com";
     const fullName = `${firstName} ${lastName}`.trim();
-    const emailSubject = encodeURIComponent(`Contact Form: ${subject || "Inquiry"} - ${fullName}`);
-    const emailBody = encodeURIComponent(
-      `Name: ${fullName}\nPhone: ${phone}\nEmail: ${email}\n\nMessage:\n${message}`
-    );
+    try {
+      await enquiryService.submitEnquiry({
+        name: fullName,
+        email: email.trim().toLowerCase(),
+        phone: phone.trim(),
+        subject: subject.trim() || `Contact Inquiry from ${fullName}`,
+        message: message.trim(),
+        enquiry_type: "GENERAL",
+      });
 
-    const mailtoUrl = `mailto:${constantToEmail}?subject=${emailSubject}&body=${emailBody}`;
-
-    window.location.href = mailtoUrl;
-
-    setTimeout(() => {
-      setIsSubmitting(false);
       setShowToast(true);
       setFirstName("");
       setLastName("");
@@ -43,8 +50,17 @@ export default function ContactFormSection() {
 
       setTimeout(() => {
         setShowToast(false);
-      }, 4000);
-    }, 1000);
+      }, 5000);
+    } catch (err: unknown) {
+      console.error("[ContactFormSection] Submission error:", err);
+      setErrorMessage(
+        err instanceof Error
+          ? err.message
+          : "Failed to submit enquiry. Please try again or contact us directly."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -130,9 +146,12 @@ export default function ContactFormSection() {
                 <textarea
                   rows={4}
                   required
-                  placeholder="Your Message *"
+                  placeholder="Your Message * (Min 10 characters)"
                   value={message}
-                  onChange={(e) => setMessage(e.target.value)}
+                  onChange={(e) => {
+                    setMessage(e.target.value);
+                    if (errorMessage) setErrorMessage(null);
+                  }}
                   className="w-full bg-white border border-stone-200 rounded-lg pl-10 pr-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880] transition-all shadow-sm font-['Inter',sans-serif] resize-none"
                 ></textarea>
                 <i className="fa-solid fa-pen absolute left-3.5 top-4 text-stone-400 text-xs"></i>
@@ -159,9 +178,9 @@ export default function ContactFormSection() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-[#4E1421] hover:bg-[#612124] text-white px-8 py-3.5 rounded-lg text-sm font-bold font-['Outfit',sans-serif] transition-all duration-300 inline-flex items-center gap-2 shadow-lg hover:shadow-xl active:scale-[0.98] cursor-pointer"
+                  className="bg-[#4E1421] hover:bg-[#612124] text-white px-8 py-3.5 rounded-lg text-sm font-bold font-['Outfit',sans-serif] transition-all duration-300 inline-flex items-center gap-2 shadow-lg hover:shadow-xl active:scale-[0.98] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  <span>{isSubmitting ? "Opening Mail..." : "Send Message"}</span>
+                  <span>{isSubmitting ? "Submitting..." : "Send Message"}</span>
                   <i className="fa-solid fa-arrow-right text-xs"></i>
                 </button>
               </div>
@@ -230,6 +249,30 @@ export default function ContactFormSection() {
           </div>
         </div>
       </div>
+
+      {/* Error Toast */}
+      {errorMessage && (
+        <div className="fixed bottom-6 right-6 z-50 max-w-sm">
+          <div className="bg-red-600 text-white rounded-xl shadow-2xl p-5 border border-red-500/30 flex items-start gap-4">
+            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 text-white text-lg">
+              <i className="fas fa-exclamation-circle"></i>
+            </div>
+            <div className="flex-1">
+              <h4 className="font-bold text-sm">Submission Failed</h4>
+              <p className="text-white/80 text-xs mt-1 leading-relaxed">
+                {errorMessage}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setErrorMessage(null)}
+              className="text-white/80 hover:text-white cursor-pointer"
+            >
+              <i className="fas fa-times text-xs"></i>
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

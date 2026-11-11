@@ -3,6 +3,7 @@ import { GoogleGenerativeAI, Content } from "@google/generative-ai";
 import { chatTools } from "@/lib/chatTools";
 import { searchKnowledge, searchKnowledgeKeywordMode } from "@/lib/ragKnowledge";
 import { ChatRequest, ChatApiResponse } from "@/lib/types";
+import { SITE_INFO } from "@/data/siteInfo";
 
 const GEMINI_MODEL = "gemini-3.5-flash";
 
@@ -16,7 +17,7 @@ ANSWER SOURCE RULE — CRITICAL:
 • You MUST answer ONLY using the information provided in the RAG CONTEXT below.
 • Do NOT invent, assume, or add any information that is not present in the RAG CONTEXT.
 • If the user's question cannot be answered from the RAG CONTEXT, respond with:
-  "I'm sorry, I don't have specific information on that. Please contact our team directly at <strong>+91 96888 89420</strong> or email <strong>vizhiinfragen@gmail.com</strong> for accurate assistance."
+  "I'm sorry, I don't have specific information on that. Please contact our team directly at <strong>+91 ${SITE_INFO.phone1}</strong> or email <strong>${SITE_INFO.email}</strong> for accurate assistance."
 • Do NOT answer questions about general real estate laws, prices, or market data unless they are explicitly stated in the RAG CONTEXT.
 
 SCOPE RULE:
@@ -115,7 +116,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       const ragChunks = searchKnowledge(lastUserMsg, 2);
       const fallbackText = ragChunks.length > 0 
         ? ragChunks[0].content 
-        : "Vizhi Infragen Realtors LLP is a trusted real estate and property management company in Coimbatore. Call +91 96888 89420 or email vizhiinfragen@gmail.com for inquiries.";
+        : `${SITE_INFO.name} is a trusted real estate and property management company in Coimbatore. Call +91 ${SITE_INFO.phone1} or email ${SITE_INFO.email} for inquiries.`;
       return NextResponse.json({
         type: "message",
         text: fallbackText,

@@ -2,6 +2,8 @@
 // Content extracted WORD-FOR-WORD from official website documents.
 // The AI chatbot answers ONLY from this knowledge — English only.
 
+import { SITE_INFO } from "@/data/siteInfo";
+
 export interface KnowledgeChunk {
   id: string;
   category: string;
@@ -580,12 +582,12 @@ Step 5: Final Handover — You receive complete, verified documents ready for us
     id: "contact_info",
     category: "contact",
     title: "Contact Vizhi Infragen Realtors LLP — Get in Touch",
-    content: `Vizhi Infragen Realtors LLP — Your Trusted Partner in Real Estate & Property Management in Coimbatore.
+    content: `${SITE_INFO.name} — Your Trusted Partner in Real Estate & Property Management in Coimbatore.
 
-📞 Phone / WhatsApp: +91 96888 89420
-📧 Email: vizhiinfragen@gmail.com
-📍 Office: Shop No.24, Old Bus Stand, Sulur, Coimbatore, Tamil Nadu
-🕒 Office Hours: Monday to Saturday, 9:00 AM – 7:00 PM
+📞 Phone / WhatsApp: +91 ${SITE_INFO.phone1} / ${SITE_INFO.phone2}
+📧 Email: ${SITE_INFO.email}
+📍 Office: ${SITE_INFO.addressShort}
+🕒 Office Hours: ${SITE_INFO.officeHoursDays}, ${SITE_INFO.officeHours}
 
 Whether you are investing in land, selling a property, managing an asset from overseas, or planning to build, Vizhi Infragen Realtors LLP is your trusted partner for real estate and property management in Coimbatore.
 
@@ -691,7 +693,7 @@ export function searchKnowledgeKeywordMode(query: string, topK = 3): { text: str
   const chunks = searchKnowledge(query, topK);
   if (chunks.length === 0) {
     return {
-      text: "Vizhi Infragen Realtors LLP — Coimbatore Real Estate & Property Management. Call +91 96888 89420.",
+      text: `${SITE_INFO.name} — Coimbatore Real Estate & Property Management. Call +91 ${SITE_INFO.phone1}.`,
       sources: ["Vizhi Infragen Overview"],
     };
   }
@@ -701,7 +703,7 @@ export function searchKnowledgeKeywordMode(query: string, topK = 3): { text: str
   );
 
   return {
-    text: snippets.join("<br/><br/><hr className='my-3 border-stone-200'/><br/>") + "<br/><br/>📞 <em>Call / WhatsApp: +91 96888 89420</em>",
+    text: snippets.join("<br/><br/><hr className='my-3 border-stone-200'/><br/>") + `<br/><br/>📞 <em>Call / WhatsApp: +91 ${SITE_INFO.phone1} / ${SITE_INFO.phone2}</em>`,
     sources: chunks.map(c => c.title),
   };
 }

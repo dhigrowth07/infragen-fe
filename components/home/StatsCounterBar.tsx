@@ -9,7 +9,7 @@ interface StatConfig {
 }
 
 const statsList: StatConfig[] = [
-  { target: 5, suffix: "+", label: "YEARS OF EXPERIENCE" },
+  { target: 6, suffix: "+", label: "YEARS OF EXPERIENCE" },
   { target: 127, suffix: "+", label: "HAPPY CLIENTS" },
   { target: 105, suffix: "+", label: "PROJECTS COMPLETED" },
   { target: 100, suffix: "%", label: "TRANSPARENCY" },
