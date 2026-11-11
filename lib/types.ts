@@ -6,10 +6,11 @@ export type MessageSender = "bot" | "user";
 export type ChatMode = "rag" | "keyword";
 
 export interface ChipItem {
-  icon: string;
+  icon?: string;
   label: string;
   action?: string;
   payload?: string;
+  link?: string;
 }
 
 export interface UploadedDocument {

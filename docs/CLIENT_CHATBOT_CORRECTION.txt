@@ -1,0 +1,10 @@
+CHATBOT:
+1. headers -> remove Search Engine Mode > AI RAG Mode, Keyword Mode
+2. top header ui - remove attach icon
+3. header link -> remove NRI Care, Approvals,Construction, Valuation, add services only(then follow :9. Services option)
+4. Agent -> Whatsapp number with redirection only
+5. Search land(change as "Search Property") -> land or building options -> on choose. show “View Property” to redirect to property page
+6. View location button -> options(Thricy road, sathy road, Avinashi road) with redirection page with applied filters
+7. Further details(Connect with team[user type any manual quries]) -> Call button
+8. Schedule a meeting -> get details from booking form(hidding query for admin- this is comes from chatbot) -> show in admin panel
+9. Services option -> list options(all services) -> on click , show that page data(minimal) then show redirect button to that respective page
