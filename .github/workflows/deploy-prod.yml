@@ -18,9 +18,9 @@ env:
   HOSTNAME: "0.0.0.0"
   NEXT_TELEMETRY_DISABLED: "1"
   # Backend API Base URL
-  NEXT_PUBLIC_API_BASE_URL: "https://prod-api.vizhiinfragenrealtor.com/api/v1"
+  NEXT_PUBLIC_API_BASE_URL: "https://api.vizhiinfragenrealtor.com/api/v1"
   # Public Website URL
-  NEXT_PUBLIC_SITE_URL: "https://prod.vizhiinfragenrealtor.com"
+  NEXT_PUBLIC_SITE_URL: "https://vizhiinfragenrealtor.com"
   # Default Currency & Localization
   NEXT_PUBLIC_DEFAULT_CURRENCY: "INR"
   NEXT_PUBLIC_DEFAULT_CITY: "Coimbatore"
