@@ -1,0 +1,207 @@
+================================================================================
+VIZHI INFRAGEN REALTORS - CHATBOT IMPLEMENTATION CHECKLIST
+Architecture: No-AI Guided Interactive Concierge (100% Deterministic & Instant)
+Based on: CLIENT_CHATBOT_CORRECTION.txt
+Target Component: infragen-fe/components/shared/ChatbotWidget.tsx
+Last Updated: 11-Nov-2026
+================================================================================
+
+ARCHITECTURAL PRINCIPLES:
+1. ZERO EXTERNAL AI DEPENDENCY
+   - No Google Gemini API key required.
+   - No Python microservice required (port 8000).
+   - No network latency (0ms instant responses).
+   - No AI hallucinations or unpredictable wording.
+
+2. PURE CONVERSION-DRIVEN CONCIERGE
+   - All responses guide visitors directly to properties, services, and live bookings.
+   - Hot leads captured directly into the PostgreSQL database via infragen-be.
+   - Immediate visibility in infragen-admin under "Contact Enquiries".
+   - 1-click WhatsApp and direct telephone calling for high-intent clients.
+
+--------------------------------------------------------------------------------
+CHECKLIST OF IMPLEMENTATION PHASES:
+--------------------------------------------------------------------------------
+
+[X] PHASE 1: HEADER & TOP UI CLEANUP (Client Items 1 & 2)
+    ----------------------------------------------------------------------------
+    [X] 1.1 Remove Dual Search Mode Switcher Bar
+        - Location: ChatbotWidget.tsx
+        - Action: Deleted the toggle bar UI ("⚡ AI RAG Mode" vs "🔍 Keyword Mode").
+        - Action: Removed 'mode' and 'setMode' states from component.
+        - Action: Updated header subtitle to: "Vizhi Property Assistant — Online".
+        - Action: Updated minimized floating pill text to: "Vizhi Concierge Assistant".
+
+    [X] 1.2 Remove Attachment & Document Upload Feature
+        - Location: ChatbotWidget.tsx
+        - Action: Deleted paperclip button (<i className="fa-solid fa-paperclip" />).
+        - Action: Deleted Document Upload Modal markup and fileInputRef.
+        - Action: Deleted uploaded files badge strip.
+        - Action: Removed unused states (uploadedDocs, showUploadModal) and import splitTextIntoChunks.
+        - Result: Top header is clean and professional (Avatar, Name, Subtitle, Close Button).
+
+[X] PHASE 2: REMOVE EXTERNAL AI CALLS & STREAMLINE LOCAL ENGINE
+    ----------------------------------------------------------------------------
+    [X] 2.1 Remove fetch("/api/chat") Network Calls
+        - Location: ChatbotWidget.tsx
+        - Action: Replaced askGemini() with pure instant local router handleLocalQuery().
+        - Action: Removed apiHistory state and external /api/chat dependencies.
+        - Benefit: Zero latency (0ms), zero external API errors, zero quota limits.
+
+    [X] 2.2 Retain Local Knowledge Base for Manual Search
+        - Action: searchKnowledge() from lib/ragKnowledge.ts is fully retained for manual user queries.
+        - Result: If users type terms like "DTCP", "Patta", "Sulur", or "Registration", the bot instantly pulls the official company snippet from ragKnowledge.ts in 0ms.
+
+[X] PHASE 3: TOP QUICK ACTIONS CAROUSEL RESTRUCTURING (Client Item 3)
+    ----------------------------------------------------------------------------
+    [X] 3.1 Update Carousel Quick Action Buttons
+        - Location: ChatbotWidget.tsx
+        - Action: Replaced the previous 8 carousel buttons with the 5 client-approved buttons:
+            1. "Search Property"   (action: "chip_search_prop")
+            2. "Locations"         (action: "chip_locations")
+            3. "Services"          (action: "chip_services")
+            4. "Schedule Meeting"  (action: "chip_book")
+            5. "Agent"             (action: "chip_agent")
+        - Action: Removed standalone buttons for "NRI Care", "Approvals", "Construction", and "Valuation".
+        - Action: Aligned welcome chips and CHIP_ROUTES to the same 5 primary options.
+
+[X] PHASE 4: "SEARCH PROPERTY" GUIDED FLOW (Client Item 5)
+    ----------------------------------------------------------------------------
+    [X] 4.1 Implement Category Selection Prompt
+        - Action: Clicking "Search Property" displays: "🏡 Explore Coimbatore Properties - Which asset type would you like to view?"
+        - Options presented:
+            * "🏡 Land & Plots" (action: "chip_prop_land")
+            * "🏢 Buildings & Villas" (action: "chip_prop_building")
+
+    [X] 4.2 Land Selection Handler
+        - Action: Selecting Land presents DTCP/RERA plot overview.
+        - Action: Renders high-visibility "View Land Properties" button linking to /properties/land.
+
+    [X] 4.3 Building Selection Handler
+        - Action: Selecting Building presents villas, turnkey commercial & industrial overview.
+        - Action: Renders high-visibility "View Building Properties" button linking to /properties/building.
+
+[X] PHASE 5: "LOCATIONS" GUIDED CORRIDOR FLOW (Client Item 6)
+    ----------------------------------------------------------------------------
+    [X] 5.1 Restructure Location Corridor Options
+        - Action: When user clicks "Locations" or queries locations/areas:
+        - Bot Response:
+            "📍 <strong>Coimbatore High-Growth Real Estate Corridors</strong><br/><br/>Select a prime corridor to view active verified listings:"
+        - Options presented:
+            1. "📍 Trichy Road Corridor"   (action: "chip_loc_trichy")
+            2. "📍 Sathy Road Belt"        (action: "chip_loc_sathy")
+            3. "📍 Avinashi Road Hub"      (action: "chip_loc_avinashi")
+
+    [X] 5.2 Implement Corridor Highlight + Filtered Page Redirection
+        - Action for Trichy Road:
+            * Brief Info: Fast-growing highway connectivity through Sulur, commercial growth, and expressway access.
+            * Button: [ 🔗 Explore Trichy Road Properties ] -> Redirects to /properties/building?road=Trichy+Road (and land option)
+        - Action for Sathy Road:
+            * Brief Info: Established educational and residential corridor connecting Saravanampatti tech hub.
+            * Button: [ 🔗 Explore Sathy Road Properties ] -> Redirects to /properties/building?road=Sathy+Road
+        - Action for Avinashi Road:
+            * Brief Info: Premier commercial corridor near Coimbatore International Airport, Neelambur bypass & IT parks.
+            * Button: [ 🔗 Explore Avinashi Road Properties ] -> Redirects to /properties/building?road=Avinashi+Road
+
+[X] PHASE 6: "SERVICES" DIRECTORY & DETAIL REDIRECTION (Client Item 9)
+    ----------------------------------------------------------------------------
+    [X] 6.1 Display Complete Services Selector (10 Core Services)
+        - Action: When user clicks "Services" or queries company services:
+        - Bot displays prompt with all 10 official website services:
+            1. 🏡 Land Sales
+            2. 🤝 Land Purchase Assistance
+            3. 🏢 Property Management
+            4. ✈️ NRI Property Management
+            5. 🏗️ Building Construction
+            6. 📊 Building Valuation
+            7. 📜 Land Approvals & Documentation
+            8. 🔄 Land Conversion Services
+            9. 🔑 Rental Services
+            10. 🏭 Warehouse & Corporate Solutions
+
+    [X] 6.2 Display Service Summary & Direct Page Link
+        - Action: On selecting any of the 10 services:
+            * Bot shows a concise 2-sentence summary explaining the service.
+            * Bot provides an instant redirection button to its respective page:
+                1. Land Sales               -> /services/land-sales
+                2. Purchase Assistance      -> /services/purchase-assistance
+                3. Property Management      -> /services/property-management
+                4. NRI Property Care        -> /services/nri-management
+                5. Building Construction    -> /services/construction
+                6. Building Valuation       -> /services/valuation
+                7. Approvals & DTCP         -> /services/approvals
+                8. Land Conversion          -> /services/conversion
+                9. Rental Services          -> /services/rentals
+                10. Warehouse & Corporate   -> /services/warehouse
+
+[X] PHASE 7: "AGENT" DIRECT WHATSAPP REDIRECTION (Client Item 4)
+    ----------------------------------------------------------------------------
+    [X] 7.1 Instant 1-Click WhatsApp Redirection
+        - Location: ChatbotWidget.tsx (chip_agent handler)
+        - Action: When user clicks "Agent", displays the advisory connection message first.
+        - Action: Renders high-visibility WhatsApp button with dynamic WhatsApp link:
+            "Hi Vizhi Infragen! I am interested in property in Coimbatore and would like to speak to an advisor."
+        - Action: User clicks the WhatsApp button to navigate directly to WhatsApp.
+        - Dynamic Integration: Uses whatsappLink() from SiteSettingsContext (dynamically reflects admin phone settings).
+
+[X] PHASE 8: "SCHEDULE MEETING" & ADMIN PANEL INTEGRATION (Client Item 8)
+    ----------------------------------------------------------------------------
+    [X] 8.1 Wire In-Chat Booking Form to PostgreSQL Backend
+        - Location: ChatbotWidget.tsx (handleBookingSubmit)
+        - Action: Replace old localhost:8000/api/leads with enquiryService.submitEnquiry().
+        - Target Endpoint: POST /api/v1/public/enquiries (infragen-be running on port 5001).
+        - Payload Structure:
+            {
+                name: bName.trim(),
+                phone: bPhone.trim(),
+                email: bEmail.trim() || `${bPhone.trim().replace(/\D/g, '')}@vizhi-visitor.in`,
+                enquiry_type: "SITE_VISIT",
+                subject: `Site Visit / Meeting Scheduled via Chatbot (${bSlot})`,
+                message: `Client requested site visit/meeting on ${bDate || "Next Available Date"} at ${bSlot}. Property/Area hint: ${bPropertyHint || "General Inquiry"}.`,
+                scheduled_at: bDate ? new Date(`${bDate} 10:00:00`).toISOString() : undefined
+            }
+
+    [X] 8.2 Verify Real-Time Admin Panel Display
+        - Verification Step:
+            * Submit test booking in Chatbot.
+            * Check http://localhost:8001/enquiries in infragen-admin.
+            * Confirm entry appears in Contact Enquiries table with "SITE_VISIT" badge.
+            * Confirm unread counter in Topbar and Sidebar updates.
+
+    [X] 8.3 Mobile WhatsApp Alert to Sales Desk
+        - Action: Also trigger WhatsApp link so the company advisor receives an immediate mobile alert with the client's name, phone, date, and preferred slot.
+
+[X] PHASE 9: MANUAL QUERIES & DIRECT CALL CTA (Client Item 7)
+    ----------------------------------------------------------------------------
+    [X] 9.1 Local Knowledge Search for Manual Queries
+        - Action: When a user types a custom question (e.g. "DTCP rules", "patta documents", "office timings"):
+        - Use local searchKnowledge() against official ragKnowledge.ts (0ms latency).
+        - Display official factual answer.
+
+    [X] 9.2 Render "Call Team" Button for Further Details
+        - Action: At the bottom of every manual answer and "Connect with team" request, render:
+            * Button: [ 📞 Call Team: +91 [phone] ] (href="tel:+91${siteInfo.phone1Raw}")
+            * Button: [ 💬 WhatsApp Us ] (href=whatsappLink(...))
+        - Dynamic Integration: Binds directly to siteInfo.phone1 from SiteSettingsContext.
+
+[X] PHASE 10: CODE CLEANUP, LINTING & TESTING
+    ----------------------------------------------------------------------------
+    [X] 10.1 Dead Code Cleanup
+        - Remove unused states: lName, setLName, lPhone, setLPhone, lEmail, setLEmail, lContactTime, setLContactTime.
+        - Remove unused imports: parseFileMentions, searchKnowledgeKeywordMode.
+        - Fix icon class typo at line 383 ("fa-[#c5a880]").
+
+    [X] 10.2 Typecheck & Build Validation
+        - Run: node infragen-fe/node_modules/typescript/bin/tsc --project infragen-fe/tsconfig.json --noEmit
+        - Run: npm --prefix infragen-fe run lint
+        - Ensure 0 errors.
+
+    [X] 10.3 Live Browser Flow Validation
+        - Verify Header has no technical mode switcher and no paperclip.
+        - Verify Search Property -> Land / Building -> "View Property" page redirect.
+        - Verify Locations -> Trichy / Sathy / Avinashi Road -> Filtered catalog redirect.
+        - Verify Services -> 10 services -> 2-sentence summary -> Page redirect.
+        - Verify Agent -> WhatsApp redirect.
+        - Verify Schedule Meeting -> Shows in infragen-admin under Contact Enquiries.
+        - Verify Manual Queries -> Call Button triggers telephone dialer.
+================================================================================

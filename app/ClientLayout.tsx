@@ -5,6 +5,8 @@ import Navbar from "@/components/shared/Navbar";
 import SideDrawer from "@/components/shared/SideDrawer";
 import Footer from "@/components/shared/Footer";
 import { SiteSettingsProvider } from "@/lib/context/SiteSettingsContext";
+import ChatbotWidget from "@/components/shared/ChatbotWidget";
+
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -18,7 +20,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       </main>
 
       <Footer />
-      {/* <ChatbotWidget /> */}
+      <ChatbotWidget />
     </SiteSettingsProvider>
   );
 }
