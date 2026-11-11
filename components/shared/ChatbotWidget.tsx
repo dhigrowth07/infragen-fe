@@ -340,15 +340,19 @@ function localAI(
   else if (/\b(commercial|office|shop|warehouse|godown)\b/.test(lo)) memoryUpdates.propertyType = "COMMERCIAL SITES";
 
   // Greetings & Interactive Flow Init
-  if (/\b(hi|hello|hey|good morning|start|namaste|menu|options|help)\b/.test(lo)) {
+  const isGreeting = /\b(hi|hello|hey|good morning|good afternoon|good evening|start|namaste|vanakkam|menu|options|help|how are you|how r u|how are u|how do you do|what's up|whats up|sup)\b/i.test(lo);
+  if (isGreeting) {
+    const isHowAreYou = /how (are|r) (you|u)|how do you do|what'?s up|sup/i.test(lo);
     return {
-      text: `👋 <strong>Welcome to Vizhi Infragen Realtors Assistant!</strong><br/><br/>How can we assist your Coimbatore real estate journey today?<br/>Select an option below:`,
+      text: isHowAreYou
+        ? `😊 <strong>I'm doing great, thank you for asking!</strong><br/><br/>I am your 24/7 Coimbatore property concierge. How can we assist your real estate journey today?<br/>Choose an option below or ask any property question:`
+        : `👋 <strong>Welcome to Vizhi Infragen Realtors Assistant!</strong><br/><br/>How can we assist your Coimbatore real estate journey today?<br/>Select an option below:`,
       chips: [
         { icon: "fa-solid fa-map-location-dot", label: "Search Property", action: "chip_search_prop" },
         { icon: "fa-solid fa-location-dot", label: "Locations & Corridors", action: "chip_locations" },
         { icon: "fa-solid fa-layer-group", label: "Real Estate Services", action: "chip_services" },
         { icon: "fa-solid fa-calendar-check", label: "Schedule Meeting", action: "chip_book" },
-        { icon: "fa-brands fa-whatsapp", label: "Chat on WhatsApp", action: "chip_agent" },
+        { icon: "fa-brands fa-whatsapp", label: "Connect on WhatsApp", action: "chip_agent" },
       ],
       memoryUpdates,
     };
@@ -562,11 +566,14 @@ function localAI(
   }
 
   const defaultWaUrl = whatsappLink
-    ? whatsappLink(`Hi Vizhi Infragen! I would like to speak to an advisor about Coimbatore real estate.`)
+    ? whatsappLink(`Hi Vizhi Infragen! I have an enquiry: ${input.trim()}`)
     : `https://wa.me/91${phoneRaw}`;
 
+  const queryTrimmed = input.trim();
+  const queryDisplay = queryTrimmed.length > 0 ? ` regarding "<strong>${queryTrimmed}</strong>"` : "";
+
   return {
-    text: `ℹ️ <strong>Vizhi Infragen Realtors LLP — Coimbatore</strong><br/><br/>We provide end-to-end transparent real estate advisory and property management services across Coimbatore (Pattanam, Sulur, Neelambur, Kalapatti, Sathy Road, Avinashi Road).<br/><br/><em>For further details or immediate guidance, connect directly with our advisory desk:</em>`,
+    text: `📞 <strong>Further Details & Direct Advisory</strong><br/><br/>For personalized guidance, verified property listings, or customized details${queryDisplay}, connect directly with our Coimbatore property advisory team.<br/><br/><em>Call our on-call property desk directly or connect on WhatsApp:</em>`,
     chips: [
       { icon: "fa-solid fa-phone", label: `Call Team: +91 ${phoneDisplay}`, link: `tel:+91${phoneRaw}` },
       { icon: "fa-brands fa-whatsapp", label: "WhatsApp Us", link: defaultWaUrl },
@@ -643,6 +650,7 @@ export default function ChatbotWidget() {
   const [bDate, setBDate] = useState("");
   const [bSlot, setBSlot] = useState("10:00 AM");
   const [bPropertyHint, setBPropertyHint] = useState("");
+  const [lastUserQuery, setLastUserQuery] = useState("");
   const [isBookingSubmitting, setIsBookingSubmitting] = useState(false);
 
   const [lastBooking, setLastBooking] = useState<{
@@ -785,6 +793,9 @@ export default function ChatbotWidget() {
       setInput("");
       setShowMentionMenu(false);
       addUserMessage(display);
+      if (!chipAction) {
+        setLastUserQuery(prompt);
+      }
 
       if (chipAction === "chip_search_prop") {
         setIsTyping(true);
@@ -1024,6 +1035,15 @@ export default function ChatbotWidget() {
 
     setLastBooking({ name, phone, date, slot, property });
 
+    const bookingMessage = [
+      `Client requested site visit/meeting on ${date} at ${slot}.`,
+      `Property/Area hint: ${property}.`,
+      lastUserQuery ? `User Inquiry: "${lastUserQuery}".` : null,
+      `(Source: Chatbot Interactive Concierge)`,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
     // Submit directly to PostgreSQL backend (POST /api/v1/public/enquiries)
     try {
       await enquiryService.submitEnquiry({
@@ -1031,8 +1051,8 @@ export default function ChatbotWidget() {
         phone,
         email,
         enquiry_type: "SITE_VISIT",
-        subject: `Site Visit / Meeting Scheduled via Chatbot (${slot})`,
-        message: `Client requested site visit/meeting on ${date} at ${slot}. Property/Area hint: ${property}. (Source: Chatbot Interactive Concierge)`,
+        subject: `[Chatbot Enquiry] Meeting / Site Visit (${slot})`,
+        message: bookingMessage,
         scheduled_at: scheduledIso,
       });
     } catch (err) {
