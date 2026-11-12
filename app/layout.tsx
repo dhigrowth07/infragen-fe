@@ -10,8 +10,16 @@ export const metadata: Metadata = {
     "Coimbatore real estate, property management Coimbatore, NRI property management, buy land Coimbatore, land approvals DTCP, construction company Coimbatore",
   authors: [{ name: "Vizhi Infragen Realtors" }],
   icons: {
-    icon: "/vizhi-infragen-realtors-logo.png",
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({
