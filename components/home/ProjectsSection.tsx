@@ -81,13 +81,25 @@ export default function ProjectsSection() {
     async function loadFeatured() {
       try {
         const res = await propertyService.getFeaturedProperties(6);
-        let list = res?.data || [];
-        if (list.length === 0) {
-          const allRes = await propertyService.getProperties({ limit: 6 });
-          list = allRes?.data || [];
+        const list: PublicProperty[] = res?.data ? [...res.data] : [];
+
+        // If not 6 featured properties, backfill with normal published properties to always show 6 cards
+        if (list.length < 6) {
+          const allRes = await propertyService.getProperties({ limit: 12 });
+          const allList: PublicProperty[] = allRes?.data || [];
+          const existingIds = new Set(list.map((p) => p.id));
+
+          for (const item of allList) {
+            if (!existingIds.has(item.id)) {
+              list.push(item);
+              existingIds.add(item.id);
+              if (list.length >= 6) break;
+            }
+          }
         }
+
         if (isMounted) {
-          setProperties(list);
+          setProperties(list.slice(0, 6));
         }
       } catch (err) {
         console.error("[ProjectsSection] Failed to load featured properties:", err);
@@ -124,7 +136,7 @@ export default function ProjectsSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full max-w-6xl mx-auto items-stretch relative">
           {loading ? (
             // Shimmer Loading Skeletons
-            [...Array(3)].map((_, i) => (
+            [...Array(6)].map((_, i) => (
               <div
                 key={i}
                 className="bg-[#f6f4f0] border border-stone-200/80 rounded-none overflow-hidden animate-pulse flex flex-col h-[420px]"

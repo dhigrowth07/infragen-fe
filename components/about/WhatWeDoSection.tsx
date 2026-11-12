@@ -7,14 +7,15 @@ import Link from "next/link";
 interface SecondaryService {
   title: string;
   img: string;
+  slug: string;
 }
 
 const secondaryServices: SecondaryService[] = [
-  { title: "Building Construction", img: "/assets/images/service-5.jpg" },
-  { title: "Building Valuation", img: "/assets/images/service-6.jpg" },
-  { title: "Land Approvals", img: "/assets/images/service-7.jpg" },
-  { title: "Rental Services", img: "/assets/images/service-8.jpg" },
-  { title: "Warehouse & Corporate", img: "/assets/images/service-9.jpg" },
+  { title: "Building Construction", img: "/assets/images/service-5.jpg", slug: "construction" },
+  { title: "Building Valuation", img: "/assets/images/service-6.jpg", slug: "valuation" },
+  { title: "Land Approvals", img: "/assets/images/service-7.jpg", slug: "approvals" },
+  { title: "Rental Services", img: "/assets/images/service-8.jpg", slug: "rentals" },
+  { title: "Warehouse & Corporate", img: "/assets/images/service-9.jpg", slug: "warehouse" },
 ];
 
 export default function WhatWeDoSection() {
@@ -40,7 +41,7 @@ export default function WhatWeDoSection() {
           
           {/* Left Column: Tall Card - Land Sales */}
           <Link
-            href="/#services"
+            href="/services/land-sales"
             className="relative overflow-hidden rounded-2xl cursor-pointer group h-[360px] md:h-[440px] shadow-lg border border-stone-200/60"
           >
             <Image
@@ -73,7 +74,7 @@ export default function WhatWeDoSection() {
           <div className="flex flex-col gap-5 h-[360px] md:h-[440px]">
             {/* Top Card: Purchase Assistance */}
             <Link
-              href="/#services"
+              href="/services/purchase-assistance"
               className="relative overflow-hidden rounded-2xl cursor-pointer group flex-1 shadow-lg border border-stone-200/60"
             >
               <Image
@@ -104,7 +105,7 @@ export default function WhatWeDoSection() {
 
             {/* Bottom Card: NRI Property Shield */}
             <Link
-              href="/#services"
+              href="/services/nri-management"
               className="relative overflow-hidden rounded-2xl cursor-pointer group flex-1 shadow-lg border border-stone-200/60"
             >
               <Image
@@ -136,7 +137,7 @@ export default function WhatWeDoSection() {
 
           {/* Right Column: Tall Card - Property Management */}
           <Link
-            href="/#services"
+            href="/services/property-management"
             className="relative overflow-hidden rounded-2xl cursor-pointer group h-[360px] md:h-[440px] shadow-lg border border-stone-200/60"
           >
             <Image
@@ -171,7 +172,7 @@ export default function WhatWeDoSection() {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {secondaryServices.map((item, idx) => (
             <Link
-              href="/#services"
+              href={`/services/${item.slug}`}
               key={idx}
               className="relative overflow-hidden rounded-2xl cursor-pointer group h-[165px] shadow-md border border-stone-200/60"
             >
