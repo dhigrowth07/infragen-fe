@@ -65,7 +65,7 @@ export default function AboutSection() {
 
             <div className="pt-2">
               <Link
-                href="#contact"
+                href="/contact"
                 className="inline-block border-2 border-[#612124] text-[#612124] hover:bg-[#612124] hover:text-white px-8 py-3.5 rounded-none font-bold text-xs tracking-[0.2em] transition-all duration-300 uppercase shadow-sm hover:shadow-md hover:-translate-y-0.5 font-['Inter',sans-serif]"
               >
                 READ OUR STORY
