@@ -25,13 +25,15 @@ export interface SiteInfoState {
   addressShort: string;
   officeHours: string;
   officeHoursDays: string;
+  officeHoursNote?: string;
+  isOpenEveryday: boolean;
   social: {
     whatsapp: string;
     whatsappDirect: string;
     instagram: string;
     facebook: string;
-    twitter: string;
-    youtube: string;
+    twitter?: string;
+    youtube?: string;
     linkedin?: string;
   };
   mapsEmbed: string;
@@ -39,12 +41,112 @@ export interface SiteInfoState {
   copyrightYear: string;
 }
 
+export function parseOfficeHours(rawOfficeHours?: string | null): {
+  days: string;
+  hours: string;
+  isOpenEveryday: boolean;
+} {
+  const raw = rawOfficeHours?.trim();
+  if (!raw) {
+    return {
+      days: SITE_INFO.officeHoursDays,
+      hours: SITE_INFO.officeHours,
+      isOpenEveryday: true,
+    };
+  }
+
+  let days = '';
+  let hours = '';
+
+  // Case 1: Time with parentheses for days: "09:00 AM – 09:00 PM (Monday to Sunday)"
+  const parenMatch = raw.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
+  if (parenMatch && parenMatch[1] && parenMatch[2]) {
+    const part1 = parenMatch[1].trim();
+    const part2 = parenMatch[2].trim();
+    if (/mon|tue|wed|thu|fri|sat|sun|daily|everyday/i.test(part2)) {
+      hours = part1;
+      days = part2;
+    } else if (/mon|tue|wed|thu|fri|sat|sun|daily|everyday/i.test(part1)) {
+      days = part1;
+      hours = part2;
+    }
+  }
+
+  // Case 2: Days : Hours, e.g. "Monday - Saturday: 9:00 AM - 7:00 PM IST" or "Monday - Friday: 9:00 AM - 6:00 PM"
+  if (!days && raw.includes(':')) {
+    const colonIndex = raw.indexOf(':');
+    const beforeColon = raw.slice(0, colonIndex).trim();
+    const afterColon = raw.slice(colonIndex + 1).trim();
+
+    if (/^(monday|mon|tuesday|tue|wednesday|wed|thursday|thu|friday|fri|saturday|sat|sunday|sun|everyday|daily)[\s\w\-–—to]*$/i.test(beforeColon)) {
+      days = beforeColon;
+      hours = afterColon;
+    }
+  }
+
+  // Fallback: If no explicit day was found in the string, use default day range
+  if (!days) {
+    days = SITE_INFO.officeHoursDays;
+    hours = raw;
+  }
+
+  // Determine if it is open every day
+  const daysLower = days.toLowerCase();
+  const rawLower = raw.toLowerCase();
+
+  // If days mentions Saturday or Friday, but NOT Sunday, it's NOT open everyday
+  const isExplicitlyPartialWeek =
+    /saturday|sat|friday|fri/i.test(daysLower) &&
+    !/sunday|sun/i.test(daysLower);
+
+  const isOpenEveryday =
+    !isExplicitlyPartialWeek &&
+    (
+      ((daysLower.includes('sunday') || daysLower.includes('sun')) && (daysLower.includes('monday') || daysLower.includes('mon'))) ||
+      daysLower.includes('everyday') ||
+      daysLower.includes('daily') ||
+      rawLower.includes('monday to sunday') ||
+      rawLower.includes('monday - sunday')
+    );
+
+  return {
+    days,
+    hours,
+    isOpenEveryday,
+  };
+}
+
 export function mergeSettingsWithSiteInfo(
   settings?: PublicSettingsDictionary | Record<string, string> | null
 ): SiteInfoState {
   if (!settings) return SITE_INFO;
 
-  // Split phone numbers if formatted as "num1 / num2" or "+91 num1 / num2"
+  // Helper to normalize phone numbers (e.g., "+91 96888 89420" or "9688889420" -> formatted: "96888 89420", raw: "9688889420")
+  const cleanPhone = (input: string, fallbackFormatted: string, fallbackRaw: string) => {
+    if (!input || !input.trim()) return { formatted: fallbackFormatted, raw: fallbackRaw };
+    const allDigits = input.replace(/\D/g, "");
+    let pureDigits = allDigits;
+    if (pureDigits.startsWith("91") && pureDigits.length === 12) {
+      pureDigits = pureDigits.slice(2);
+    } else if (pureDigits.startsWith("0") && pureDigits.length === 11) {
+      pureDigits = pureDigits.slice(1);
+    }
+
+    if (pureDigits.length === 10) {
+      return {
+        formatted: `${pureDigits.slice(0, 5)} ${pureDigits.slice(5)}`,
+        raw: pureDigits,
+      };
+    }
+
+    const cleaned = input.replace(/^\+91\s*/, "").trim();
+    return {
+      formatted: cleaned || fallbackFormatted,
+      raw: allDigits || fallbackRaw,
+    };
+  };
+
+  // Split phone numbers if formatted as "num1 / num2", "num1, num2", etc.
   const rawPhone = settings.COMPANY_PHONE || "";
   let phone1: string = SITE_INFO.phone1;
   let phone2: string = SITE_INFO.phone2;
@@ -52,14 +154,19 @@ export function mergeSettingsWithSiteInfo(
   let phone2Raw: string = SITE_INFO.phone2Raw;
 
   if (rawPhone.trim()) {
-    const parts = rawPhone.split("/").map((p) => p.trim());
+    const parts = rawPhone.split(/[/,&|]+/).map((p) => p.trim()).filter(Boolean);
     if (parts[0]) {
-      phone1 = parts[0].replace(/^\+91\s*/, "");
-      phone1Raw = phone1.replace(/\D/g, "");
+      const p1 = cleanPhone(parts[0], SITE_INFO.phone1, SITE_INFO.phone1Raw);
+      phone1 = p1.formatted;
+      phone1Raw = p1.raw;
     }
     if (parts[1]) {
-      phone2 = parts[1].replace(/^\+91\s*/, "");
-      phone2Raw = phone2.replace(/\D/g, "");
+      const p2 = cleanPhone(parts[1], SITE_INFO.phone2, SITE_INFO.phone2Raw);
+      phone2 = p2.formatted;
+      phone2Raw = p2.raw;
+    } else if (parts.length === 1 && !rawPhone.includes("/") && !rawPhone.includes(",")) {
+      phone2 = "";
+      phone2Raw = "";
     }
   }
 
@@ -89,12 +196,12 @@ export function mergeSettingsWithSiteInfo(
   const twitterUrl =
     settings.TWITTER_URL && settings.TWITTER_URL.trim()
       ? settings.TWITTER_URL.trim()
-      : SITE_INFO.social.twitter;
+      : undefined;
 
   const youtubeUrl =
     settings.YOUTUBE_URL && settings.YOUTUBE_URL.trim()
       ? settings.YOUTUBE_URL.trim()
-      : SITE_INFO.social.youtube;
+      : undefined;
 
   const mapsLink =
     settings.GOOGLE_MAPS_LINK && settings.GOOGLE_MAPS_LINK.trim()
@@ -116,6 +223,14 @@ export function mergeSettingsWithSiteInfo(
     ? address.split(",").slice(0, 3).join(", ")
     : SITE_INFO.addressShort;
 
+  const rawOfficeHours =
+    (settings.OFFICE_HOURS && settings.OFFICE_HOURS.trim()) ||
+    SITE_INFO.officeHours;
+  const officeHoursNote =
+    (settings.OFFICE_HOURS_NOTE && settings.OFFICE_HOURS_NOTE.trim()) ||
+    SITE_INFO.officeHoursNote;
+  const parsedOfficeHours = parseOfficeHours(rawOfficeHours);
+
   return {
     name: (settings.COMPANY_NAME && settings.COMPANY_NAME.trim()) || SITE_INFO.name,
     shortName: SITE_INFO.shortName,
@@ -127,8 +242,10 @@ export function mergeSettingsWithSiteInfo(
     email: (settings.COMPANY_EMAIL && settings.COMPANY_EMAIL.trim()) || SITE_INFO.email,
     address,
     addressShort,
-    officeHours: (settings.OFFICE_HOURS && settings.OFFICE_HOURS.trim()) || SITE_INFO.officeHours,
-    officeHoursDays: SITE_INFO.officeHoursDays,
+    officeHours: parsedOfficeHours.hours,
+    officeHoursDays: parsedOfficeHours.days,
+    officeHoursNote,
+    isOpenEveryday: parsedOfficeHours.isOpenEveryday,
     social: {
       whatsapp: whatsappUrl,
       whatsappDirect,

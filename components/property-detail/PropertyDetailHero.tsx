@@ -10,6 +10,7 @@ import {
   Maximize2,
   Share2,
   Check,
+  ExternalLink,
 } from 'lucide-react'
 import type { PublicProperty } from '@/lib/types/property.types'
 import {
@@ -80,15 +81,29 @@ export default function PropertyDetailHero({ property }: PropertyDetailHeroProps
     }
   }
 
-  const fullAddress = [
+  // Deduplicate address parts to avoid repeating locality names (e.g. Sulur, Sulur)
+  const addressParts: string[] = []
+  const rawParts = [
     property.street_address,
     property.location,
     property.city,
     property.state,
     property.pincode,
-  ]
-    .filter(Boolean)
-    .join(', ')
+  ].filter(Boolean) as string[]
+
+  for (const part of rawParts) {
+    const trimmed = part.trim()
+    if (!trimmed) continue
+    const isDuplicate = addressParts.some(
+      (existing) =>
+        existing.toLowerCase() === trimmed.toLowerCase() ||
+        existing.toLowerCase().includes(trimmed.toLowerCase())
+    )
+    if (!isDuplicate) {
+      addressParts.push(trimmed)
+    }
+  }
+  const fullAddress = addressParts.join(', ')
 
   const priceSuffix =
     property.property_type === 'LAND' ? resolveLandPriceSuffix(property) : ''
@@ -174,24 +189,45 @@ export default function PropertyDetailHero({ property }: PropertyDetailHeroProps
                       HOME
                     </Link>
                   </li>
-                  <li>/</li>
-                  <li>
-                    <Link
-                      href={
-                        property.property_type === 'LAND'
-                          ? '/properties/land'
-                          : '/properties/building'
-                      }
-                      className="hover:text-white transition-colors"
-                    >
-                      {property.city || property.property_type}
-                    </Link>
-                  </li>
+                  {property.city && property.city.toLowerCase() !== property.location?.toLowerCase() && (
+                    <>
+                      <li>/</li>
+                      <li>
+                        <Link
+                          href={
+                            property.property_type === 'LAND'
+                              ? '/properties/land'
+                              : '/properties/building'
+                          }
+                          className="hover:text-white transition-colors"
+                        >
+                          {property.city}
+                        </Link>
+                      </li>
+                    </>
+                  )}
                   {property.location && (
                     <>
                       <li>/</li>
                       <li className="text-white/95 truncate">
                         {property.location}
+                      </li>
+                    </>
+                  )}
+                  {!property.city && !property.location && (
+                    <>
+                      <li>/</li>
+                      <li>
+                        <Link
+                          href={
+                            property.property_type === 'LAND'
+                              ? '/properties/land'
+                              : '/properties/building'
+                          }
+                          className="hover:text-white transition-colors"
+                        >
+                          {property.property_type}
+                        </Link>
                       </li>
                     </>
                   )}
@@ -203,10 +239,24 @@ export default function PropertyDetailHero({ property }: PropertyDetailHeroProps
                 {property.name}
               </h1>
 
-              {/* Address Line with Location Pin */}
-              <div className="flex items-center gap-2 mt-2.5 text-white/85 text-xs sm:text-sm">
-                <MapPin className="w-4 h-4 text-[#20b2aa] shrink-0" />
-                <span className="truncate">{fullAddress}</span>
+              {/* Address Line with Location Pin & Map Link */}
+              <div className="flex flex-wrap items-center gap-2.5 mt-2.5 text-white/85 text-xs sm:text-sm">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <MapPin className="w-4 h-4 text-[#20b2aa] shrink-0" />
+                  <span className="truncate">{fullAddress}</span>
+                </div>
+                {property.google_maps_url && (
+                  <a
+                    href={property.google_maps_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/15 hover:bg-white/25 text-white border border-white/20 transition-all hover:border-[#20b2aa] shrink-0"
+                    title="Open in Google Maps"
+                  >
+                    <span>View on Map</span>
+                    <ExternalLink className="w-3 h-3 text-[#20b2aa]" />
+                  </a>
+                )}
               </div>
             </div>
 

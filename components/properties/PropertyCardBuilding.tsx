@@ -125,7 +125,7 @@ export default function PropertyCardBuilding({
           <div className="flex items-center gap-1.5 min-w-0">
             <Bed className="w-4 h-4 text-stone-400 shrink-0" />
             <span className="text-xs font-medium truncate">
-              {bedrooms !== null
+              {bedrooms && bedrooms > 0
                 ? `${bedrooms} ${bedrooms === 1 ? 'Bed' : 'Beds'}`
                 : '—'}
             </span>
@@ -135,7 +135,7 @@ export default function PropertyCardBuilding({
           <div className="flex items-center gap-1.5 min-w-0">
             <Bath className="w-4 h-4 text-stone-400 shrink-0" />
             <span className="text-xs font-medium truncate">
-              {bathrooms !== null
+              {bathrooms && bathrooms > 0
                 ? `${bathrooms} ${bathrooms === 1 ? 'Bath' : 'Baths'}`
                 : '—'}
             </span>

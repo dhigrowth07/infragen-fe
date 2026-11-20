@@ -66,11 +66,11 @@ function MiniFeaturedCard({ property }: { property: PublicProperty }) {
         <div className="flex items-center gap-4 text-xs text-stone-600 pb-3 border-b border-stone-100">
           <div className="flex items-center gap-1">
             <Bed className="w-3.5 h-3.5 text-stone-400" />
-            <span>{bedrooms ?? 2}</span>
+            <span>{bedrooms && bedrooms > 0 ? bedrooms : '—'}</span>
           </div>
           <div className="flex items-center gap-1">
             <Bath className="w-3.5 h-3.5 text-stone-400" />
-            <span>{bathrooms ?? 2}</span>
+            <span>{bathrooms && bathrooms > 0 ? bathrooms : '—'}</span>
           </div>
           <div className="flex items-center gap-1">
             <Maximize2 className="w-3.5 h-3.5 text-stone-400" />

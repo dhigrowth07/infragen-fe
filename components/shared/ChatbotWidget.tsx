@@ -38,6 +38,7 @@ import {
 } from "react-icons/fa6";
 import { propertiesData, PropertyItem } from "@/data/properties";
 import { searchKnowledge } from "@/lib/ragKnowledge";
+import { SITE_INFO } from "@/data/siteInfo";
 import { MessageItem, CardType, ChipItem, SessionMemory } from "@/lib/types";
 import { useSiteSettings, SiteInfoState } from "@/lib/context/SiteSettingsContext";
 import { enquiryService } from "@/lib/services/enquiryService";
@@ -553,8 +554,19 @@ function localAI(
       ? whatsappLink(`Hi Vizhi Infragen! I have a question regarding: ${top.title}`)
       : `https://wa.me/91${phoneRaw}`;
 
+    let dynamicContent = top.content;
+    if (siteInfo?.email) {
+      dynamicContent = dynamicContent.replaceAll(SITE_INFO.email, siteInfo.email);
+    }
+    if (siteInfo?.phone1) {
+      dynamicContent = dynamicContent.replaceAll(SITE_INFO.phone1, siteInfo.phone1);
+    }
+    if (siteInfo?.phone2) {
+      dynamicContent = dynamicContent.replaceAll(SITE_INFO.phone2, siteInfo.phone2);
+    }
+
     return {
-      text: `📋 <strong>${top.title}</strong><br/><br/>${top.content.replace(/\n\n/g, "<br/><br/>").replace(/\n/g, "<br/>")}<br/><br/><em>Need further details or customized guidance? Connect directly with our on-call property team:</em>`,
+      text: `📋 <strong>${top.title}</strong><br/><br/>${dynamicContent.replace(/\n\n/g, "<br/><br/>").replace(/\n/g, "<br/>")}<br/><br/><em>Need further details or customized guidance? Connect directly with our on-call property team:</em>`,
       chips: [
         { icon: "fa-solid fa-phone", label: `Call Team: +91 ${phoneDisplay}`, link: `tel:+91${phoneRaw}` },
         { icon: "fa-brands fa-whatsapp", label: "WhatsApp Us", link: waUrl },

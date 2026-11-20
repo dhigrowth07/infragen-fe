@@ -30,7 +30,7 @@ export default function Footer() {
             </p>
           </div>
           <Link
-            href="/contact"
+            href="/properties"
             className="bg-[#c99b4a] hover:bg-[#b98c3b] hover:scale-[1.02] active:scale-[0.98] rounded-full border-none py-1.5 px-3.5 flex flex-row gap-2 items-center justify-start shrink-0 relative transition-all duration-300 group shadow-md mt-1"
           >
             <span className="text-[#3f131c] text-left font-['Inter',sans-serif] text-xs font-semibold relative flex items-center justify-start">
@@ -71,18 +71,16 @@ export default function Footer() {
             Services
           </div>
           {[
-            { name: "Land Sales & Acquisition", href: "/services/land-sales" },
-            { name: "Residential Property", href: "/services/purchase-assistance" },
-            { name: "Commercial Property", href: "/services/warehouse" },
-            { name: "Property Rental Services", href: "/services/rentals" },
+            { name: "Land Sales", href: "/services/land-sales" },
+            { name: "Land Purchase Assistance", href: "/services/purchase-assistance" },
+            { name: "Property Management", href: "/services/property-management" },
             { name: "NRI Property Management", href: "/services/nri-management" },
-            { name: "Land Approval Assistance", href: "/services/approvals" },
-            { name: "Land Conversion Assistance", href: "/services/conversion" },
-            { name: "Building Valuation Coordination", href: "/services/valuation" },
             { name: "Building Construction", href: "/services/construction" },
-            { name: "Structural Works", href: "/services/construction" },
-            { name: "Warehouse Solutions", href: "/services/warehouse" },
-            { name: "Real Estate Investment Assistance", href: "/services/purchase-assistance" },
+            { name: "Building Valuation", href: "/services/valuation" },
+            { name: "Land Approvals & Documentation", href: "/services/approvals" },
+            { name: "Land Conversion Services", href: "/services/conversion" },
+            { name: "Rental Services", href: "/services/rentals" },
+            { name: "Warehouse & Corporate Solutions", href: "/services/warehouse" },
           ].map((service) => (
             <Link
               key={service.name}
@@ -102,9 +100,27 @@ export default function Footer() {
           <a href={`mailto:${siteInfo.email}`} className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal break-all">
             {siteInfo.email}
           </a>
-          <a href={`tel:${siteInfo.phone1Raw}`} className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
-            +91 {siteInfo.phone1} / {siteInfo.phone2}
-          </a>
+          <div className="text-[#9b98a1] text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal flex flex-wrap items-center gap-1">
+            <a
+              href={`tel:+91${siteInfo.phone1Raw.replace(/^(\+91|91)/, '')}`}
+              className="hover:text-white transition-colors"
+              title={`Call +91 ${siteInfo.phone1}`}
+            >
+              +91 {siteInfo.phone1}
+            </a>
+            {siteInfo.phone2 && (
+              <>
+                <span className="text-stone-500">/</span>
+                <a
+                  href={`tel:+91${siteInfo.phone2Raw.replace(/^(\+91|91)/, '')}`}
+                  className="hover:text-white transition-colors"
+                  title={`Call +91 ${siteInfo.phone2}`}
+                >
+                  {siteInfo.phone2}
+                </a>
+              </>
+            )}
+          </div>
           <div className="text-[#9b98a1] text-left font-['Inter',sans-serif] text-xs leading-[18px] font-normal max-w-[220px]">
             {siteInfo.address}
           </div>

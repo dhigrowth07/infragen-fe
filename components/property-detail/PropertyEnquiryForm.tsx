@@ -11,6 +11,7 @@ import {
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa'
 import type { PublicProperty } from '@/lib/types/property.types'
 import { enquiryService } from '@/lib/services/enquiryService'
+import { useSiteSettings } from '@/lib/context/SiteSettingsContext'
 
 export interface PropertyEnquiryFormProps {
   property: PublicProperty
@@ -127,12 +128,16 @@ export default function PropertyEnquiryForm({
     }
   }
 
+  const { siteInfo } = useSiteSettings()
+
   // Pre-configured manager contacts or default corporate desk
-  const managerPhone = property.manager_phone || '+91 96888 89420'
+  const managerPhone = property.manager_phone || siteInfo?.phone1 || '+91 96888 89420'
   const rawManagerPhone = managerPhone.replace(/[^0-9]/g, '')
   const whatsappUrl = `https://wa.me/${rawManagerPhone || '919688889420'}?text=${encodeURIComponent(
     `Hello Vizhi Infragen, I am interested in ${property.name} (${property.pid || 'Property Reference'}). Could you share more details?`
   )}`
+  const instagramUrl =
+    siteInfo?.social?.instagram || 'https://www.instagram.com/vizhiinfragen_realestate'
 
   return (
     <div
@@ -279,7 +284,7 @@ export default function PropertyEnquiryForm({
 
         {/* Instagram Profile Button */}
         <a
-          href="https://www.instagram.com/vizhi_infragen/"
+          href={instagramUrl}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Follow us on Instagram"

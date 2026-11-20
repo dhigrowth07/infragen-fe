@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useCallback, useTransition } from 'react'
+import React, { useState, useEffect, useCallback, useRef, useTransition } from 'react'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import {
   BuildingHeroBanner,
@@ -43,6 +43,64 @@ const DEFAULT_PAGINATION: PaginationMeta = {
   totalPages: 1,
   hasNextPage: false,
   hasPrevPage: false,
+}
+
+function buildBuildingQuery(
+  currentFilters: BuildingFilterFormState,
+  currentPage: number
+): PublicPropertyListQuery {
+  const query: PublicPropertyListQuery = {
+    property_type: 'BUILDING',
+    page: currentPage,
+    limit: 6,
+    sort: currentFilters.sort,
+  }
+
+  if (currentFilters.propertyId.trim()) {
+    query.search = currentFilters.propertyId.trim()
+  }
+  if (currentFilters.propertyType) {
+    query.sub_type = currentFilters.propertyType
+  }
+  if (currentFilters.location) {
+    query.location = currentFilters.location
+  }
+  if (currentFilters.road) {
+    query.road_base = currentFilters.road
+  }
+  if (currentFilters.priceRange[0] > MIN_PRICE_LIMIT) {
+    query.min_price = currentFilters.priceRange[0]
+  }
+  if (currentFilters.priceRange[1] < MAX_PRICE_LIMIT) {
+    query.max_price = currentFilters.priceRange[1]
+  }
+  if (
+    currentFilters.minSize !== '' &&
+    !isNaN(Number(currentFilters.minSize)) &&
+    Number(currentFilters.minSize) >= 0
+  ) {
+    query.min_area = Number(currentFilters.minSize)
+  }
+
+  // Map toolbar size range presets
+  if (currentFilters.sizeRange === 'below_500') {
+    query.max_area = 500
+  } else if (currentFilters.sizeRange === '500_1000') {
+    query.min_area = 500
+    query.max_area = 1000
+  } else if (currentFilters.sizeRange === '1000_2000') {
+    query.min_area = 1000
+    query.max_area = 2000
+  } else if (currentFilters.sizeRange === 'above_2000') {
+    query.min_area = 2000
+  }
+
+  // Map toolbar status filter
+  if (currentFilters.status === 'featured') {
+    query.is_featured = true
+  }
+
+  return query
 }
 
 export default function BuildingCatalogClient() {
@@ -102,6 +160,49 @@ export default function BuildingCatalogClient() {
   const [pagination, setPagination] = useState<PaginationMeta>(DEFAULT_PAGINATION)
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
+  const lastSyncedQuery = useRef<string>('')
+  const requestIdRef = useRef<number>(0)
+
+  // Core building property loader
+  const loadProperties = useCallback(
+    async (currentFilters: BuildingFilterFormState, currentPage: number) => {
+      const currentRequestId = ++requestIdRef.current
+      const query = buildBuildingQuery(currentFilters, currentPage)
+
+      try {
+        const response = await propertyService.getProperties(query)
+        if (currentRequestId !== requestIdRef.current) return
+
+        let propertyList = response.data || []
+
+        if (currentFilters.status === 'negotiable') {
+          propertyList = propertyList.filter((p) => p.is_negotiable === true)
+        }
+
+        setProperties(propertyList)
+        const metaObj = response.pagination || response.meta
+        setPagination({
+          page: Number(metaObj?.page) || currentPage,
+          limit: Number(metaObj?.limit) || 6,
+          total: Number(metaObj?.total) || propertyList.length,
+          totalPages: Number(metaObj?.totalPages || metaObj?.total_pages) || 1,
+          hasNextPage: Boolean(metaObj?.hasNextPage ?? metaObj?.has_next_page),
+          hasPrevPage: Boolean(metaObj?.hasPrevPage ?? metaObj?.has_prev_page),
+        })
+      } catch (err) {
+        if (currentRequestId !== requestIdRef.current) return
+        console.error('Failed to load building properties:', err)
+        setProperties([])
+        setPagination(DEFAULT_PAGINATION)
+      } finally {
+        if (currentRequestId === requestIdRef.current) {
+          setIsLoading(false)
+        }
+      }
+    },
+    []
+  )
+
   // Sync state to browser URL search params
   const syncUrlParams = useCallback(
     (currentFilters: BuildingFilterFormState, currentPage: number) => {
@@ -129,6 +230,7 @@ export default function BuildingCatalogClient() {
         params.set('status', currentFilters.status)
 
       const qs = params.toString()
+      lastSyncedQuery.current = qs
       const newUrl = qs ? `${pathname}?${qs}` : pathname
       startTransition(() => {
         router.push(newUrl, { scroll: false })
@@ -137,104 +239,111 @@ export default function BuildingCatalogClient() {
     [pathname, router]
   )
 
-  // Load properties whenever filters or page changes
+  // Initial mount data load
   useEffect(() => {
     let ignore = false
+    const currentRequestId = ++requestIdRef.current
+    lastSyncedQuery.current = searchParams.toString()
 
-    async function loadProperties() {
-      const query: PublicPropertyListQuery = {
-        property_type: 'BUILDING',
-        page,
-        limit: 6,
-        sort: filters.sort,
-      }
-
-      if (filters.propertyId.trim()) {
-        query.search = filters.propertyId.trim()
-      }
-      if (filters.propertyType) {
-        query.sub_type = filters.propertyType
-      }
-      if (filters.location) {
-        query.location = filters.location
-      }
-      if (filters.road) {
-        query.road_base = filters.road
-      }
-      if (filters.priceRange[0] > MIN_PRICE_LIMIT) {
-        query.min_price = filters.priceRange[0]
-      }
-      if (filters.priceRange[1] < MAX_PRICE_LIMIT) {
-        query.max_price = filters.priceRange[1]
-      }
-      if (
-        filters.minSize !== '' &&
-        !isNaN(Number(filters.minSize)) &&
-        Number(filters.minSize) >= 0
-      ) {
-        query.min_area = Number(filters.minSize)
-      }
-
-      // Map toolbar size range presets
-      if (filters.sizeRange === 'below_500') {
-        query.max_area = 500
-      } else if (filters.sizeRange === '500_1000') {
-        query.min_area = 500
-        query.max_area = 1000
-      } else if (filters.sizeRange === '1000_2000') {
-        query.min_area = 1000
-        query.max_area = 2000
-      } else if (filters.sizeRange === 'above_2000') {
-        query.min_area = 2000
-      }
-
-      // Map toolbar status filter
-      if (filters.status === 'featured') {
-        query.is_featured = true
-      }
-
+    const fetchInitial = async () => {
+      const query = buildBuildingQuery(filters, page)
       try {
         const response = await propertyService.getProperties(query)
-        if (!ignore) {
-          let propertyList = response.data || []
+        if (ignore || currentRequestId !== requestIdRef.current) return
 
-          if (filters.status === 'negotiable') {
-            propertyList = propertyList.filter((p) => p.is_negotiable === true)
-          }
-
-          setProperties(propertyList)
-          const metaObj = response.pagination || response.meta
-          setPagination({
-            page: Number(metaObj?.page) || page,
-            limit: Number(metaObj?.limit) || 6,
-            total: Number(metaObj?.total) || propertyList.length,
-            totalPages: Number(metaObj?.totalPages || metaObj?.total_pages) || 1,
-            hasNextPage: Boolean(metaObj?.hasNextPage ?? metaObj?.has_next_page),
-            hasPrevPage: Boolean(metaObj?.hasPrevPage ?? metaObj?.has_prev_page),
-          })
-          setIsLoading(false)
+        let propertyList = response.data || []
+        if (filters.status === 'negotiable') {
+          propertyList = propertyList.filter((p) => p.is_negotiable === true)
         }
-      } catch {
-        if (!ignore) {
-          setProperties([])
-          setPagination(DEFAULT_PAGINATION)
+
+        setProperties(propertyList)
+        const metaObj = response.pagination || response.meta
+        setPagination({
+          page: Number(metaObj?.page) || page,
+          limit: Number(metaObj?.limit) || 6,
+          total: Number(metaObj?.total) || propertyList.length,
+          totalPages: Number(metaObj?.totalPages || metaObj?.total_pages) || 1,
+          hasNextPage: Boolean(metaObj?.hasNextPage ?? metaObj?.has_next_page),
+          hasPrevPage: Boolean(metaObj?.hasPrevPage ?? metaObj?.has_prev_page),
+        })
+      } catch (err) {
+        if (ignore || currentRequestId !== requestIdRef.current) return
+        console.error('Failed to load initial building properties:', err)
+        setProperties([])
+        setPagination(DEFAULT_PAGINATION)
+      } finally {
+        if (!ignore && currentRequestId === requestIdRef.current) {
           setIsLoading(false)
         }
       }
     }
 
-    loadProperties()
+    fetchInitial()
 
     return () => {
       ignore = true
     }
-  }, [filters, page])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Handle browser back/forward navigation
+  useEffect(() => {
+    const currentQuery = searchParams.toString()
+    if (currentQuery !== lastSyncedQuery.current) {
+      lastSyncedQuery.current = currentQuery
+      const propertyId = searchParams.get('propertyId') || ''
+      const propertyType = searchParams.get('propertyType') || ''
+      const location = searchParams.get('location') || ''
+      const road = searchParams.get('road') || ''
+      const minSize = searchParams.get('minSize') || ''
+      const minPrice = searchParams.get('minPrice')
+        ? Number(searchParams.get('minPrice'))
+        : MIN_PRICE_LIMIT
+      const maxPrice = searchParams.get('maxPrice')
+        ? Number(searchParams.get('maxPrice'))
+        : MAX_PRICE_LIMIT
+      const rawSort = searchParams.get('sort')
+      const validSorts: PublicPropertySort[] = [
+        'newest',
+        'oldest',
+        'price_asc',
+        'price_desc',
+        'area_desc',
+      ]
+      const sort: PublicPropertySort = validSorts.includes(
+        rawSort as PublicPropertySort
+      )
+        ? (rawSort as PublicPropertySort)
+        : 'newest'
+      const sizeRange = searchParams.get('sizeRange') || 'all'
+      const status = searchParams.get('status') || 'all'
+      const p = searchParams.get('page')
+      const targetPage = p ? Math.max(1, parseInt(p, 10)) : 1
+
+      const updatedFilters: BuildingFilterFormState = {
+        propertyId,
+        propertyType,
+        location,
+        road,
+        minSize,
+        priceRange: [minPrice, maxPrice],
+        sort,
+        sizeRange,
+        status,
+      }
+
+      setFilters(updatedFilters)
+      setPage(targetPage)
+      loadProperties(updatedFilters, targetPage)
+    }
+  }, [searchParams, loadProperties])
 
   // Handlers
   const handleSearch = () => {
     setIsLoading(true)
     setPage(1)
     syncUrlParams(filters, 1)
+    loadProperties(filters, 1)
   }
 
   const handleReset = () => {
@@ -242,42 +351,41 @@ export default function BuildingCatalogClient() {
     setFilters(DEFAULT_FILTERS)
     setPage(1)
     syncUrlParams(DEFAULT_FILTERS, 1)
+    loadProperties(DEFAULT_FILTERS, 1)
   }
 
   const handleSortChange = (newSort: PublicPropertySort) => {
     setIsLoading(true)
-    setFilters((prev) => {
-      const updated = { ...prev, sort: newSort }
-      syncUrlParams(updated, 1)
-      return updated
-    })
+    const updated = { ...filters, sort: newSort }
+    setFilters(updated)
     setPage(1)
+    syncUrlParams(updated, 1)
+    loadProperties(updated, 1)
   }
 
   const handleSizeRangeChange = (newSizeRange: string) => {
     setIsLoading(true)
-    setFilters((prev) => {
-      const updated = { ...prev, sizeRange: newSizeRange }
-      syncUrlParams(updated, 1)
-      return updated
-    })
+    const updated = { ...filters, sizeRange: newSizeRange }
+    setFilters(updated)
     setPage(1)
+    syncUrlParams(updated, 1)
+    loadProperties(updated, 1)
   }
 
   const handleStatusChange = (newStatus: string) => {
     setIsLoading(true)
-    setFilters((prev) => {
-      const updated = { ...prev, status: newStatus }
-      syncUrlParams(updated, 1)
-      return updated
-    })
+    const updated = { ...filters, status: newStatus }
+    setFilters(updated)
     setPage(1)
+    syncUrlParams(updated, 1)
+    loadProperties(updated, 1)
   }
 
   const handlePageChange = (newPage: number) => {
     setIsLoading(true)
     setPage(newPage)
     syncUrlParams(filters, newPage)
+    loadProperties(filters, newPage)
   }
 
   return (

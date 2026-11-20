@@ -78,7 +78,7 @@ export default function LandTypesGridSection({ data = landSalesDetailData }: Pro
                 {/* Footer Link */}
                 <div className="pt-3.5 border-t border-[#dfd4c4] flex items-center justify-between text-[#b09167] font-outfit text-[0.86rem] font-bold group-hover:text-[#381e23] transition-colors">
                   <span>{card.footerText}</span>
-                  <i className="fa-solid fa-arrow-right transition-transform duration-300 group-hover:translate-x-1.5" />
+                  {/* <i className="fa-solid fa-arrow-right transition-transform duration-300 group-hover:translate-x-1.5" /> */}
                 </div>
               </div>
             </article>

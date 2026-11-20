@@ -43,7 +43,8 @@ export default function OfficeMapSection() {
                   {siteInfo.address}
                 </p>
                 <p className="text-stone-500 text-xs font-['Inter',sans-serif]">
-                  Opening Hours: {siteInfo.officeHours} (Daily)
+                  Opening Hours: {siteInfo.officeHoursDays}: {siteInfo.officeHours}
+                  {siteInfo.isOpenEveryday ? ' (Daily)' : ''}
                 </p>
               </div>
 

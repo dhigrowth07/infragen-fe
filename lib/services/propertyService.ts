@@ -34,14 +34,21 @@ export const propertyService = {
   },
 
   /**
-   * Retrieves featured properties for homepage and showcase banners.
+   * Retrieves featured properties for homepage, showcase banners, or property type filters.
    * Calls GET /api/v1/public/properties?is_featured=true&limit=${limit}
    */
-  async getFeaturedProperties(limit = 6): Promise<PaginatedPropertiesResponse> {
-    return apiClient.get<PaginatedPropertiesResponse>('/public/properties', {
+  async getFeaturedProperties(
+    limit = 6,
+    propertyType?: PropertyType
+  ): Promise<PaginatedPropertiesResponse> {
+    const params: Record<string, unknown> = {
       is_featured: true,
       limit,
-    })
+    }
+    if (propertyType) {
+      params.property_type = propertyType
+    }
+    return apiClient.get<PaginatedPropertiesResponse>('/public/properties', params)
   },
 
   /**

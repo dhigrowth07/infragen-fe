@@ -6,6 +6,7 @@ import PropertyDetailHero from './PropertyDetailHero'
 import PropertyQuickMetrics from './PropertyQuickMetrics'
 import PropertyDescription from './PropertyDescription'
 import PropertySpecificationsTable from './PropertySpecificationsTable'
+import PropertyAmenities from './PropertyAmenities'
 import PropertyFloorPlanViewer from './PropertyFloorPlanViewer'
 import PropertyVideoPlayer from './PropertyVideoPlayer'
 import NearbyAmenitiesRadar from './NearbyAmenitiesRadar'
@@ -49,6 +50,9 @@ export default function PropertyDetailClient({
 
             {/* Dynamic Specifications Grid (Phase 5.5) */}
             <PropertySpecificationsTable property={property} />
+
+            {/* Community Amenities & Facilities (Pool, Gym, Lift, etc.) */}
+            <PropertyAmenities property={property} />
 
             {/* Architectural Floor Plans Section (Phase 5.6) */}
             <PropertyFloorPlanViewer property={property} />

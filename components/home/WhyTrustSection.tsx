@@ -148,12 +148,12 @@ export default function WhyTrustSection() {
                         </h3>
                       </div>
 
-                      <Link
+                      {/* <Link
                         href="#contact"
                         className="w-11 h-11 rounded-full bg-[#c5a880] hover:bg-white text-[#231518] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform shrink-0"
                       >
                         <i className="fa-solid fa-arrow-right text-sm"></i>
-                      </Link>
+                      </Link> */}
                     </div>
                   </div>
                 </div>

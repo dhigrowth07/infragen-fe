@@ -160,18 +160,35 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
                 <i className="fa-solid fa-envelope text-[#c5a880]"></i>
                 <span>{siteInfo.email}</span>
               </a>
-              <a
-                href={`tel:${siteInfo.phone1Raw}`}
-                className="flex items-center gap-2 text-[#612124] hover:text-[#c5a880] font-semibold transition-colors"
-              >
-                <i className="fa-solid fa-phone text-[#c5a880]"></i>
-                <span>+91 {siteInfo.phone1} / {siteInfo.phone2}</span>
-              </a>
+              <div className="flex items-center gap-2 text-[#612124] font-semibold text-xs sm:text-sm">
+                <i className="fa-solid fa-phone text-[#c5a880] shrink-0"></i>
+                <div className="flex flex-wrap items-center gap-1">
+                  <a
+                    href={`tel:+91${siteInfo.phone1Raw.replace(/^(\+91|91)/, '')}`}
+                    className="hover:text-[#c5a880] transition-colors"
+                    title={`Call +91 ${siteInfo.phone1}`}
+                  >
+                    +91 {siteInfo.phone1}
+                  </a>
+                  {siteInfo.phone2 && (
+                    <>
+                      <span className="text-stone-400">/</span>
+                      <a
+                        href={`tel:+91${siteInfo.phone2Raw.replace(/^(\+91|91)/, '')}`}
+                        className="hover:text-[#c5a880] transition-colors"
+                        title={`Call +91 ${siteInfo.phone2}`}
+                      >
+                        {siteInfo.phone2}
+                      </a>
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Social Icons */}
-          <div className="flex items-center justify-center gap-3 pt-4 border-t border-stone-100 w-full">
+          {/* Social Icons (Standardized: Facebook, Instagram, WhatsApp) */}
+          <div className="flex items-center justify-center gap-4 pt-4 border-t border-stone-100 w-full">
             <a
               href={siteInfo.social.facebook}
               target="_blank"
@@ -180,24 +197,6 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
               aria-label="Facebook"
             >
               <i className="fa-brands fa-facebook-f text-lg"></i>
-            </a>
-            <a
-              href={siteInfo.social.twitter}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-stone-100 text-[#1DA1F2] hover:scale-110 shadow-sm flex items-center justify-center transition-all"
-              aria-label="Twitter"
-            >
-              <i className="fa-brands fa-twitter text-lg"></i>
-            </a>
-            <a
-              href={siteInfo.social.youtube}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-stone-100 text-[#FF0000] hover:scale-110 shadow-sm flex items-center justify-center transition-all"
-              aria-label="YouTube"
-            >
-              <i className="fa-brands fa-youtube text-lg"></i>
             </a>
             <a
               href={siteInfo.social.instagram}

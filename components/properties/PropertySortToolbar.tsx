@@ -87,6 +87,41 @@ export default function PropertySortToolbar({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  // Smart boundary clamp to prevent dropdown menus from clipping viewport edges on mobile
+  useEffect(() => {
+    if (!openDropdown || !menuRef.current) return
+
+    const adjustPosition = () => {
+      const el = menuRef.current
+      if (!el) return
+
+      el.style.transform = ''
+
+      const rect = el.getBoundingClientRect()
+      const viewportWidth = window.innerWidth
+      const padding = 12
+
+      if (rect.left < padding) {
+        const shift = padding - rect.left
+        el.style.transform = `translateX(${shift}px)`
+      } else if (rect.right > viewportWidth - padding) {
+        const shift = rect.right - (viewportWidth - padding)
+        el.style.transform = `translateX(-${shift}px)`
+      }
+    }
+
+    adjustPosition()
+    const frameId = requestAnimationFrame(adjustPosition)
+
+    window.addEventListener('resize', adjustPosition)
+    return () => {
+      cancelAnimationFrame(frameId)
+      window.removeEventListener('resize', adjustPosition)
+    }
+  }, [openDropdown])
+
   const selectedSortOption =
     SORT_OPTIONS.find((opt) => opt.value === sort) || SORT_OPTIONS[0]
 
@@ -152,7 +187,10 @@ export default function PropertySortToolbar({
           </button>
 
           {openDropdown === 'sort' && (
-            <div className="absolute right-0 sm:left-0 top-full mt-1.5 w-52 bg-white rounded-xl shadow-xl border border-stone-200/90 py-1.5 z-40 animate-in fade-in zoom-in-95 duration-150">
+            <div
+              ref={menuRef}
+              className="absolute left-0 top-full mt-1.5 w-52 max-w-[calc(100vw-24px)] bg-white rounded-xl shadow-xl border border-stone-200/90 py-1.5 z-40 animate-in fade-in zoom-in-95 duration-150"
+            >
               {SORT_OPTIONS.map((opt) => {
                 const isSelected = opt.value === sort
                 return (
@@ -209,7 +247,10 @@ export default function PropertySortToolbar({
           </button>
 
           {openDropdown === 'size' && (
-            <div className="absolute right-0 sm:left-0 top-full mt-1.5 w-52 bg-white rounded-xl shadow-xl border border-stone-200/90 py-1.5 z-40 animate-in fade-in zoom-in-95 duration-150">
+            <div
+              ref={menuRef}
+              className="absolute right-0 sm:left-0 top-full mt-1.5 w-52 max-w-[calc(100vw-24px)] bg-white rounded-xl shadow-xl border border-stone-200/90 py-1.5 z-40 animate-in fade-in zoom-in-95 duration-150"
+            >
               {SIZE_OPTIONS.map((opt) => {
                 const isSelected = opt.value === sizeRange
                 return (
@@ -266,7 +307,10 @@ export default function PropertySortToolbar({
           </button>
 
           {openDropdown === 'status' && (
-            <div className="absolute right-0 top-full mt-1.5 w-48 bg-white rounded-xl shadow-xl border border-stone-200/90 py-1.5 z-40 animate-in fade-in zoom-in-95 duration-150">
+            <div
+              ref={menuRef}
+              className="absolute left-0 sm:right-0 top-full mt-1.5 w-48 max-w-[calc(100vw-24px)] bg-white rounded-xl shadow-xl border border-stone-200/90 py-1.5 z-40 animate-in fade-in zoom-in-95 duration-150"
+            >
               {STATUS_OPTIONS.map((opt) => {
                 const isSelected = opt.value === status
                 return (

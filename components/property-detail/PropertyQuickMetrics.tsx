@@ -103,7 +103,7 @@ export default function PropertyQuickMetrics({
               <div className="flex items-center gap-2.5">
                 <Bed className="w-5 h-5 text-[#20b2aa] shrink-0" />
                 <span className="text-lg sm:text-xl font-extrabold text-stone-900">
-                  {bedrooms !== null ? bedrooms : '—'}
+                  {bedrooms && bedrooms > 0 ? bedrooms : '—'}
                 </span>
               </div>
             </div>
@@ -116,7 +116,7 @@ export default function PropertyQuickMetrics({
               <div className="flex items-center gap-2.5">
                 <Bath className="w-5 h-5 text-[#20b2aa] shrink-0" />
                 <span className="text-lg sm:text-xl font-extrabold text-stone-900">
-                  {bathrooms !== null ? bathrooms : '—'}
+                  {bathrooms && bathrooms > 0 ? bathrooms : '—'}
                 </span>
               </div>
             </div>
