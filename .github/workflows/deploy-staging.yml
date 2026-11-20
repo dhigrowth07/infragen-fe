@@ -26,6 +26,10 @@ env:
   NEXT_PUBLIC_DEFAULT_CITY: "Coimbatore"
   NEXT_PUBLIC_DEFAULT_STATE: "Tamil Nadu"
 
+  VITE_PUBLIC_SITE_NAME: "InfraGen Admin Panel"
+  VITE_API_BASE_URL: "https://staging-api.vizhiinfragenrealtor.com/api/v1"
+  VITE_PUBLIC_WEBSITE_URL: "https://staging.vizhiinfragenrealtor.com"
+
 jobs:
   # ==========================================
   # Stage 1: Build & Push Docker Image to ECR
@@ -60,6 +64,9 @@ jobs:
             --build-arg NEXT_PUBLIC_DEFAULT_CURRENCY="${{ env.NEXT_PUBLIC_DEFAULT_CURRENCY }}" \
             --build-arg NEXT_PUBLIC_DEFAULT_CITY="${{ env.NEXT_PUBLIC_DEFAULT_CITY }}" \
             --build-arg NEXT_PUBLIC_DEFAULT_STATE="${{ env.NEXT_PUBLIC_DEFAULT_STATE }}" \
+            --build-arg VITE_PUBLIC_SITE_NAME="${{ env.VITE_PUBLIC_SITE_NAME }}" \
+            --build-arg VITE_API_BASE_URL="${{ env.VITE_API_BASE_URL }}" \
+            --build-arg VITE_PUBLIC_WEBSITE_URL="${{ env.VITE_PUBLIC_WEBSITE_URL }}" \
             -t ${{ env.ECR_REPOSITORY }}:latest \
             -t ${{ env.ECR_REPOSITORY }}:${{ github.sha }} .
 
