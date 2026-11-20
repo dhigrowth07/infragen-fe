@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useCallback, useTransition } from 'react'
+import React, { useState, useEffect, useCallback, useRef, useTransition } from 'react'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import type {
   LandFilterFormState,
@@ -8,10 +8,8 @@ import type {
   PublicProperty,
   PaginationMeta,
   PublicPropertySort,
-  AreaUnit,
 } from '@/lib/types/property.types'
 import { propertyService } from '@/lib/services/propertyService'
-import { extractLandApproval } from '@/lib/formatters'
 import {
   LandHeroBanner,
   LandFilterSidebar,
@@ -47,6 +45,64 @@ const DEFAULT_PAGINATION: PaginationMeta = {
   totalPages: 1,
   hasNextPage: false,
   hasPrevPage: false,
+}
+
+function buildLandQuery(
+  currentFilters: LandFilterFormState,
+  currentPage: number
+): PublicPropertyListQuery {
+  const query: PublicPropertyListQuery = {
+    property_type: 'LAND',
+    page: currentPage,
+    limit: 6,
+    sort: currentFilters.sort,
+  }
+
+  if (currentFilters.propertyId.trim()) {
+    query.search = currentFilters.propertyId.trim()
+  }
+  if (currentFilters.propertyType || currentFilters.category) {
+    query.sub_type = currentFilters.propertyType || currentFilters.category
+  }
+  if (currentFilters.location || currentFilters.city) {
+    query.location = currentFilters.location || currentFilters.city
+  }
+  if (currentFilters.road) {
+    query.road_base = currentFilters.road
+  }
+  if (currentFilters.priceRange[0] > MIN_PRICE_LIMIT) {
+    query.min_price = currentFilters.priceRange[0]
+  }
+  if (currentFilters.priceRange[1] < MAX_PRICE_LIMIT) {
+    query.max_price = currentFilters.priceRange[1]
+  }
+  if (
+    currentFilters.minSize !== '' &&
+    !isNaN(Number(currentFilters.minSize)) &&
+    Number(currentFilters.minSize) >= 0
+  ) {
+    query.min_area = Number(currentFilters.minSize)
+  }
+
+  // Map toolbar size range presets
+  if (currentFilters.sizeRange === 'below_500') {
+    query.max_area = 500
+  } else if (currentFilters.sizeRange === '500_1000') {
+    query.min_area = 500
+    query.max_area = 1000
+  } else if (currentFilters.sizeRange === '1000_2000') {
+    query.min_area = 1000
+    query.max_area = 2000
+  } else if (currentFilters.sizeRange === 'above_2000') {
+    query.min_area = 2000
+  }
+
+  // Map toolbar status filter
+  if (currentFilters.status === 'featured') {
+    query.is_featured = true
+  }
+
+  return query
 }
 
 export default function LandCatalogClient() {
@@ -112,6 +168,50 @@ export default function LandCatalogClient() {
   const [pagination, setPagination] = useState<PaginationMeta>(DEFAULT_PAGINATION)
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
+  const lastSyncedQuery = useRef<string>('')
+  const requestIdRef = useRef<number>(0)
+
+  // Core land property loader
+  const loadLandProperties = useCallback(
+    async (currentFilters: LandFilterFormState, currentPage: number) => {
+      const currentRequestId = ++requestIdRef.current
+      const query = buildLandQuery(currentFilters, currentPage)
+
+      try {
+        const response = await propertyService.getProperties(query)
+        if (currentRequestId !== requestIdRef.current) return
+
+        let propertyList = response.data || []
+
+        // Client-side status negotiation filter
+        if (currentFilters.status === 'negotiable') {
+          propertyList = propertyList.filter((p) => p.is_negotiable === true)
+        }
+
+        setProperties(propertyList)
+        const metaObj = response.pagination || response.meta
+        setPagination({
+          page: Number(metaObj?.page) || currentPage,
+          limit: Number(metaObj?.limit) || 6,
+          total: Number(metaObj?.total) || propertyList.length,
+          totalPages: Number(metaObj?.totalPages || metaObj?.total_pages) || 1,
+          hasNextPage: Boolean(metaObj?.hasNextPage ?? metaObj?.has_next_page),
+          hasPrevPage: Boolean(metaObj?.hasPrevPage ?? metaObj?.has_prev_page),
+        })
+      } catch (err) {
+        if (currentRequestId !== requestIdRef.current) return
+        console.error('Failed to load land properties:', err)
+        setProperties([])
+        setPagination(DEFAULT_PAGINATION)
+      } finally {
+        if (currentRequestId === requestIdRef.current) {
+          setIsLoading(false)
+        }
+      }
+    },
+    []
+  )
+
   // Sync state to browser URL search params
   const syncUrlParams = useCallback(
     (currentFilters: LandFilterFormState, currentPage: number) => {
@@ -138,6 +238,7 @@ export default function LandCatalogClient() {
         params.set('status', currentFilters.status)
 
       const qs = params.toString()
+      lastSyncedQuery.current = qs
       const newUrl = qs ? `${pathname}?${qs}` : pathname
       startTransition(() => {
         router.push(newUrl, { scroll: false })
@@ -146,107 +247,115 @@ export default function LandCatalogClient() {
     [pathname, router]
   )
 
-  // Load land properties whenever filters or page changes
+  // Initial mount data load
   useEffect(() => {
     let ignore = false
+    const currentRequestId = ++requestIdRef.current
+    lastSyncedQuery.current = searchParams.toString()
 
-    async function loadLandProperties() {
-      const query: PublicPropertyListQuery = {
-        property_type: 'LAND',
-        page,
-        limit: 6,
-        sort: filters.sort,
-      }
-
-      if (filters.propertyId.trim()) {
-        query.search = filters.propertyId.trim()
-      }
-      if (filters.propertyType || filters.category) {
-        query.sub_type = filters.propertyType || filters.category
-      }
-      if (filters.location || filters.city) {
-        query.location = filters.location || filters.city
-      }
-      if (filters.road) {
-        query.road_base = filters.road
-      }
-      if (filters.priceRange[0] > MIN_PRICE_LIMIT) {
-        query.min_price = filters.priceRange[0]
-      }
-      if (filters.priceRange[1] < MAX_PRICE_LIMIT) {
-        query.max_price = filters.priceRange[1]
-      }
-      if (
-        filters.minSize !== '' &&
-        !isNaN(Number(filters.minSize)) &&
-        Number(filters.minSize) >= 0
-      ) {
-        query.min_area = Number(filters.minSize)
-      }
-
-      // Map toolbar size range presets
-      if (filters.sizeRange === 'below_500') {
-        query.max_area = 500
-      } else if (filters.sizeRange === '500_1000') {
-        query.min_area = 500
-        query.max_area = 1000
-      } else if (filters.sizeRange === '1000_2000') {
-        query.min_area = 1000
-        query.max_area = 2000
-      } else if (filters.sizeRange === 'above_2000') {
-        query.min_area = 2000
-      }
-
-      // Map toolbar status filter
-      if (filters.status === 'featured') {
-        query.is_featured = true
-      }
-
+    const fetchInitial = async () => {
+      const query = buildLandQuery(filters, page)
       try {
         const response = await propertyService.getProperties(query)
-        if (!ignore) {
-          let propertyList = response.data || []
+        if (ignore || currentRequestId !== requestIdRef.current) return
 
-          // Client-side status negotiation filter
-          if (filters.status === 'negotiable') {
-            propertyList = propertyList.filter((p) => p.is_negotiable === true)
-          }
-
-          setProperties(propertyList)
-          const metaObj = response.pagination || response.meta
-          setPagination({
-            page: Number(metaObj?.page) || page,
-            limit: Number(metaObj?.limit) || 6,
-            total: Number(metaObj?.total) || propertyList.length,
-            totalPages: Number(metaObj?.totalPages || metaObj?.total_pages) || 1,
-            hasNextPage: Boolean(metaObj?.hasNextPage ?? metaObj?.has_next_page),
-            hasPrevPage: Boolean(metaObj?.hasPrevPage ?? metaObj?.has_prev_page),
-          })
+        let propertyList = response.data || []
+        if (filters.status === 'negotiable') {
+          propertyList = propertyList.filter((p) => p.is_negotiable === true)
         }
+
+        setProperties(propertyList)
+        const metaObj = response.pagination || response.meta
+        setPagination({
+          page: Number(metaObj?.page) || page,
+          limit: Number(metaObj?.limit) || 6,
+          total: Number(metaObj?.total) || propertyList.length,
+          totalPages: Number(metaObj?.totalPages || metaObj?.total_pages) || 1,
+          hasNextPage: Boolean(metaObj?.hasNextPage ?? metaObj?.has_next_page),
+          hasPrevPage: Boolean(metaObj?.hasPrevPage ?? metaObj?.has_prev_page),
+        })
       } catch (err) {
-        console.error('Failed to load land properties:', err)
-        if (!ignore) {
-          setProperties([])
-          setPagination(DEFAULT_PAGINATION)
-        }
+        if (ignore || currentRequestId !== requestIdRef.current) return
+        console.error('Failed to load initial land properties:', err)
+        setProperties([])
+        setPagination(DEFAULT_PAGINATION)
       } finally {
-        if (!ignore) {
+        if (!ignore && currentRequestId === requestIdRef.current) {
           setIsLoading(false)
         }
       }
     }
 
-    loadLandProperties()
+    fetchInitial()
 
     return () => {
       ignore = true
     }
-  }, [filters, page])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
+  // Handle browser back/forward navigation
+  useEffect(() => {
+    const currentQuery = searchParams.toString()
+    if (currentQuery !== lastSyncedQuery.current) {
+      lastSyncedQuery.current = currentQuery
+      const propertyId = searchParams.get('propertyId') || ''
+      const propertyType =
+        searchParams.get('propertyType') || searchParams.get('category') || ''
+      const location =
+        searchParams.get('location') || searchParams.get('city') || ''
+      const road = searchParams.get('road') || ''
+      const minSize = searchParams.get('minSize') || ''
+      const minPrice = searchParams.get('minPrice')
+        ? Number(searchParams.get('minPrice'))
+        : MIN_PRICE_LIMIT
+      const maxPrice = searchParams.get('maxPrice')
+        ? Number(searchParams.get('maxPrice'))
+        : MAX_PRICE_LIMIT
+      const rawSort = searchParams.get('sort')
+      const validSorts: PublicPropertySort[] = [
+        'newest',
+        'oldest',
+        'price_asc',
+        'price_desc',
+        'area_desc',
+      ]
+      const sort: PublicPropertySort = validSorts.includes(
+        rawSort as PublicPropertySort
+      )
+        ? (rawSort as PublicPropertySort)
+        : 'newest'
+      const sizeRange = searchParams.get('sizeRange') || 'all'
+      const status = searchParams.get('status') || 'all'
+      const p = searchParams.get('page')
+      const targetPage = p ? Math.max(1, parseInt(p, 10)) : 1
+
+      const updatedFilters: LandFilterFormState = {
+        propertyId,
+        propertyType,
+        category: propertyType,
+        location,
+        city: location,
+        road,
+        minSize,
+        priceRange: [minPrice, maxPrice],
+        sort,
+        sizeRange,
+        status,
+      }
+
+      setFilters(updatedFilters)
+      setPage(targetPage)
+      loadLandProperties(updatedFilters, targetPage)
+    }
+  }, [searchParams, loadLandProperties])
+
+  // Handlers
   const handleSearch = () => {
     setIsLoading(true)
     setPage(1)
     syncUrlParams(filters, 1)
+    loadLandProperties(filters, 1)
   }
 
   const handleReset = () => {
@@ -254,42 +363,41 @@ export default function LandCatalogClient() {
     setFilters(DEFAULT_LAND_FILTERS)
     setPage(1)
     syncUrlParams(DEFAULT_LAND_FILTERS, 1)
+    loadLandProperties(DEFAULT_LAND_FILTERS, 1)
   }
 
   const handleSortChange = (newSort: PublicPropertySort) => {
     setIsLoading(true)
-    setFilters((prev) => {
-      const updated = { ...prev, sort: newSort }
-      syncUrlParams(updated, 1)
-      return updated
-    })
+    const updated = { ...filters, sort: newSort }
+    setFilters(updated)
     setPage(1)
+    syncUrlParams(updated, 1)
+    loadLandProperties(updated, 1)
   }
 
   const handleSizeRangeChange = (newSizeRange: string) => {
     setIsLoading(true)
-    setFilters((prev) => {
-      const updated = { ...prev, sizeRange: newSizeRange }
-      syncUrlParams(updated, 1)
-      return updated
-    })
+    const updated = { ...filters, sizeRange: newSizeRange }
+    setFilters(updated)
     setPage(1)
+    syncUrlParams(updated, 1)
+    loadLandProperties(updated, 1)
   }
 
   const handleStatusChange = (newStatus: string) => {
     setIsLoading(true)
-    setFilters((prev) => {
-      const updated = { ...prev, status: newStatus }
-      syncUrlParams(updated, 1)
-      return updated
-    })
+    const updated = { ...filters, status: newStatus }
+    setFilters(updated)
     setPage(1)
+    syncUrlParams(updated, 1)
+    loadLandProperties(updated, 1)
   }
 
   const handlePageChange = (newPage: number) => {
     setIsLoading(true)
     setPage(newPage)
     syncUrlParams(filters, newPage)
+    loadLandProperties(filters, newPage)
   }
 
   return (

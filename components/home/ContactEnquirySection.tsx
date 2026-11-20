@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { useSiteSettings } from "@/lib/context/SiteSettingsContext";
+import Link from "next/link";
 import { enquiryService } from "@/lib/services/enquiryService";
 
 export default function ContactEnquirySection() {
-  const { siteInfo } = useSiteSettings();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -90,15 +89,15 @@ export default function ContactEnquirySection() {
             </p>
           </div>
 
-          <a
-            href={`tel:${siteInfo.phone1Raw}`}
+          <Link
+            href="/properties"
             className="bg-[#8A1F36] hover:bg-[#a22c46] rounded-md border-none pt-[15px] pr-[28px] pb-[15px] pl-[28px] flex flex-row gap-2.5 items-center justify-start shrink-0 relative hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group shadow-lg"
           >
             <i className="fa-solid fa-arrow-right text-white text-sm group-hover:translate-x-1 transition-transform"></i>
             <div className="text-white text-left font-['Inter',sans-serif] text-base leading-[26px] font-semibold relative flex items-center justify-start">
               Start Your Property Journey
             </div>
-          </a>
+          </Link>
         </div>
 
         {/* Right Column: Quick Enquiry Form */}

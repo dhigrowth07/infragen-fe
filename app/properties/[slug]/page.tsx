@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { propertyService } from '@/lib/services/propertyService'
 import { PropertyDetailClient } from '@/components/property-detail'
 import { getPrimaryPropertyImage } from '@/lib/formatters'
+import type { PublicProperty } from '@/lib/types/property.types'
 
 interface PageProps {
   params: Promise<{
@@ -70,7 +71,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function PropertyDetailPage({ params }: PageProps) {
   const { slug } = await params
 
-  let property
+  let property: PublicProperty | undefined = undefined
   let similar = [] as Awaited<ReturnType<typeof propertyService.getSimilarProperties>>
   let featured = [] as NonNullable<Awaited<ReturnType<typeof propertyService.getFeaturedProperties>>['data']>
 
@@ -79,14 +80,33 @@ export default async function PropertyDetailPage({ params }: PageProps) {
     property = response.data
 
     if (property) {
-      // Parallel fetch similar and featured properties with resilient fallbacks
+      const propType = property.property_type
+      // Parallel fetch similar and featured properties strictly scoped to the same property_type
       const [similarList, featuredRes] = await Promise.all([
-        propertyService.getSimilarProperties(property.property_type, slug, 3).catch(() => []),
-        propertyService.getFeaturedProperties(4).catch(() => ({ data: [] })),
+        propertyService.getSimilarProperties(propType, slug, 3).catch(() => []),
+        propertyService
+          .getFeaturedProperties(6, propType)
+          .catch(() => ({ data: [] })),
       ])
 
       similar = similarList
-      featured = (featuredRes?.data || []).filter((p) => p.slug !== slug).slice(0, 2)
+      featured = (featuredRes?.data || [])
+        .filter((p) => p.slug !== slug && p.property_type === propType)
+        .slice(0, 2)
+
+      // If fewer than 2 featured properties of this type exist, backfill with similar properties of the exact same type
+      if (featured.length < 2 && similarList.length > 0) {
+        for (const item of similarList) {
+          if (featured.length >= 2) break
+          if (
+            item.slug !== slug &&
+            item.property_type === propType &&
+            !featured.some((f) => f.slug === item.slug)
+          ) {
+            featured.push(item)
+          }
+        }
+      }
     }
   } catch (err: unknown) {
     console.error(`[PropertyDetailPage] Failed to load slug '${slug}':`, err)

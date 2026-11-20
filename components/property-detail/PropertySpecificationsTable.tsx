@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { MapPin, ExternalLink } from 'lucide-react'
 import type { PublicProperty } from '@/lib/types/property.types'
 import {
   extractLandApproval,
@@ -15,7 +16,7 @@ export interface PropertySpecificationsTableProps {
 
 interface SpecRow {
   label: string
-  value: string
+  value: React.ReactNode
 }
 
 /**
@@ -46,11 +47,33 @@ export default function PropertySpecificationsTable({
   // 2. Synthesize baseline domain specifications if relational array is small
   const existingLabels = new Set(specs.map((s) => s.label.toLowerCase()))
 
-  const addIfMissing = (label: string, value: string | number | null | undefined) => {
-    if (!value || value === '—' || String(value).trim() === '') return
+  const addIfMissing = (
+    label: string,
+    value: React.ReactNode,
+    options?: { href?: string }
+  ) => {
+    if (value === null || value === undefined || value === '—' || (typeof value === 'string' && value.trim() === '')) return
     const key = `${label}:`.toLowerCase()
     if (!existingLabels.has(key)) {
-      specs.push({ label: `${label}:`, value: String(value) })
+      if (options?.href) {
+        specs.push({
+          label: `${label}:`,
+          value: (
+            <a
+              href={options.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-stone-900 font-semibold hover:text-[#0d9488] transition-colors group underline underline-offset-4 decoration-stone-300 hover:decoration-[#0d9488]"
+            >
+              <MapPin className="w-3.5 h-3.5 text-[#0d9488] shrink-0" />
+              <span>{value}</span>
+              <ExternalLink className="w-3.5 h-3.5 text-stone-400 group-hover:text-[#0d9488] transition-colors shrink-0" />
+            </a>
+          ),
+        })
+      } else {
+        specs.push({ label: `${label}:`, value })
+      }
       existingLabels.add(key)
     }
   }
@@ -102,11 +125,20 @@ export default function PropertySpecificationsTable({
     addIfMissing('Revenue Survey No', property.survey_number)
   }
 
-  const locationText = [property.location, property.city, property.state]
-    .filter(Boolean)
-    .join(', ')
+  const locationParts: string[] = []
+  for (const part of [property.location, property.city, property.state].filter(Boolean) as string[]) {
+    const trimmed = part.trim()
+    if (trimmed && !locationParts.some((p) => p.toLowerCase() === trimmed.toLowerCase())) {
+      locationParts.push(trimmed)
+    }
+  }
+  const locationText = locationParts.join(', ')
   if (locationText) {
     addIfMissing('Location / Zone', locationText)
+  }
+
+  if (property.google_maps_url) {
+    addIfMissing('Google Maps', 'View on Google Maps', { href: property.google_maps_url })
   }
 
   if (property.is_verified) {

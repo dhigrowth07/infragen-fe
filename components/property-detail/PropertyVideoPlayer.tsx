@@ -23,18 +23,21 @@ export default function PropertyVideoPlayer({
   className = '',
 }: PropertyVideoPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false)
+  const [activeVideoIndex, setActiveVideoIndex] = useState(0)
 
-  // Find video in property.media
-  const videoMedia = property.media?.find(
-    (m) => m.media_type === 'VIDEO' && Boolean(m.file_url)
-  )
-  const videoUrl = videoMedia?.file_url
+  // Find all videos in property.media
+  const videoItems =
+    property.media?.filter(
+      (m) => m.media_type === 'VIDEO' && Boolean(m.file_url)
+    ) || []
 
   // Strictly show valid data only; if no video walkthrough is uploaded, hide section
-  if (!videoUrl) {
+  if (videoItems.length === 0) {
     return null
   }
 
+  const currentVideo = videoItems[activeVideoIndex] || videoItems[0]
+  const videoUrl = currentVideo.file_url
   const thumbnail = getPrimaryPropertyImage(property)
 
   return (
@@ -53,7 +56,9 @@ export default function PropertyVideoPlayer({
         {videoUrl ? (
           <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            HD Walkthrough Available
+            {videoItems.length > 1
+              ? `${videoItems.length} Walkthrough Videos Available`
+              : 'HD Walkthrough Available'}
           </span>
         ) : (
           <span className="inline-flex items-center gap-1 text-xs font-medium text-stone-400">
@@ -63,10 +68,41 @@ export default function PropertyVideoPlayer({
         )}
       </div>
 
+      {/* Multiple Videos Selector Tabs */}
+      {videoItems.length > 1 && (
+        <div className="mt-4 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+          {videoItems.map((v, idx) => {
+            const isActive = idx === activeVideoIndex
+            const label = v.file_name
+              ? v.file_name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ')
+              : `Video ${idx + 1}`
+            return (
+              <button
+                key={v.id || idx}
+                type="button"
+                onClick={() => {
+                  setActiveVideoIndex(idx)
+                  setIsPlaying(false)
+                }}
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
+                  isActive
+                    ? 'bg-[#2A0E18] text-white shadow-xs'
+                    : 'bg-stone-100 text-stone-600 hover:bg-stone-200 hover:text-stone-900'
+                }`}
+              >
+                <Video className="w-3.5 h-3.5 shrink-0" />
+                <span className="capitalize truncate max-w-[200px]">{label}</span>
+              </button>
+            )
+          })}
+        </div>
+      )}
+
       {/* Video Container with Play Button Overlay */}
       <div className="mt-6 relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-stone-900 shadow-md group">
         {isPlaying && videoUrl ? (
           <video
+            key={videoUrl}
             src={videoUrl}
             controls
             autoPlay
@@ -104,7 +140,11 @@ export default function PropertyVideoPlayer({
 
             {/* Video duration/info bar pill */}
             <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white/90 text-xs font-semibold backdrop-blur-sm bg-black/50 px-3.5 py-2 rounded-lg pointer-events-none">
-              <span className="truncate">{property.name} — Drone Cinematic Tour</span>
+              <span className="truncate">
+                {currentVideo.file_name
+                  ? currentVideo.file_name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ')
+                  : `${property.name} — Video ${activeVideoIndex + 1}`}
+              </span>
               <span className="shrink-0 text-white/70">1080p Full HD</span>
             </div>
           </div>

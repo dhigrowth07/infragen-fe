@@ -64,7 +64,11 @@ export default function OtherWaysToConnect() {
             <p className="text-stone-700 font-bold text-xs sm:text-sm font-['Inter',sans-serif] mb-1">
               {siteInfo.officeHoursDays}: {siteInfo.officeHours}
             </p>
-            <p className="text-stone-400 text-xs font-['Inter',sans-serif]">Open Everyday</p>
+            {siteInfo.isOpenEveryday ? (
+              <p className="text-stone-400 text-xs font-['Inter',sans-serif]">Open Everyday</p>
+            ) : siteInfo.officeHoursNote ? (
+              <p className="text-stone-400 text-xs font-['Inter',sans-serif]">{siteInfo.officeHoursNote}</p>
+            ) : null}
           </div>
 
         </div>

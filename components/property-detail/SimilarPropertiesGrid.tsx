@@ -7,7 +7,6 @@ import {
   Bed,
   Bath,
   Maximize2,
-  Heart,
   Camera,
   MapPin,
   Compass,
@@ -31,13 +30,12 @@ export interface SimilarPropertiesGridProps {
  * Strictly matching reference-ui/property - details - page.png (Slice 4):
  * - Image with hover scale transition
  * - Top-left: "Featured" badge (if is_featured)
- * - Bottom-right overlay on image: Interactive Favorite Heart button & Photo count
+ * - Bottom-right overlay on image: Photo count
  * - Title and location/description snippet
  * - Specs bar: Beds, Baths, Area (for Building) OR Lot size, Road width, Facing (for Land)
  * - Footer: "FOR SALE" / "FOR RENT" on left, Teal Price on right
  */
 function SimilarPropertyCard({ property }: { property: PublicProperty }) {
-  const [isFavorite, setIsFavorite] = useState(false)
   const [imageSrc, setImageSrc] = useState<string>(() =>
     getPrimaryPropertyImage(property)
   )
@@ -48,7 +46,10 @@ function SimilarPropertyCard({ property }: { property: PublicProperty }) {
   const builtUpArea =
     property.super_built_up_area || property.carpet_area || property.lot_size || null
 
-  const photoCount = property.media?.length || 1
+  // Count only real uploaded photos (exclude videos and architectural sketches)
+  const photoCount = (property.media || []).filter(
+    (m) => m.media_type === 'IMAGE' && Boolean(m.file_url)
+  ).length
 
   return (
     <div className="group flex flex-col h-full bg-white rounded-2xl border border-stone-200/90 shadow-sm hover:shadow-xl hover:border-stone-300 transition-all duration-300 overflow-hidden">
@@ -85,35 +86,13 @@ function SimilarPropertyCard({ property }: { property: PublicProperty }) {
           </div>
         )}
 
-        {/* Bottom-Right Overlay Icons on Image: Heart (favorite) & Camera photo count */}
-        <div className="absolute bottom-3 right-3 z-10 flex items-center gap-1.5">
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              setIsFavorite((prev) => !prev)
-            }}
-            aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-            className="w-8 h-8 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-xs flex items-center justify-center transition-all cursor-pointer shadow-md"
-            title={isFavorite ? 'Favorited' : 'Favorite'}
-          >
-            <Heart
-              className={`w-4 h-4 transition-colors ${
-                isFavorite
-                  ? 'fill-rose-500 text-rose-500 scale-110'
-                  : 'text-white hover:text-rose-400'
-              }`}
-            />
-          </button>
-
-          {photoCount > 0 && (
-            <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-black/60 backdrop-blur-xs text-white text-[11px] font-semibold shadow-md pointer-events-none">
-              <Camera className="w-3.5 h-3.5" />
-              <span>{photoCount}</span>
-            </div>
-          )}
-        </div>
+        {/* Bottom-Right Overlay on Image: Camera photo count */}
+        {photoCount > 0 && (
+          <div className="absolute bottom-3 right-3 z-10 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-black/60 backdrop-blur-xs text-white text-[11px] font-semibold shadow-md pointer-events-none">
+            <Camera className="w-3.5 h-3.5" />
+            <span>{photoCount}</span>
+          </div>
+        )}
       </div>
 
       {/* 2. Card Content Area */}
@@ -172,7 +151,7 @@ function SimilarPropertyCard({ property }: { property: PublicProperty }) {
               <div className="flex items-center gap-1.5 min-w-0">
                 <Bed className="w-4 h-4 text-stone-400 shrink-0" />
                 <span className="text-xs font-medium truncate">
-                  {bedrooms !== null
+                  {bedrooms && bedrooms > 0
                     ? `${bedrooms} ${bedrooms === 1 ? 'Bed' : 'Beds'}`
                     : '—'}
                 </span>
@@ -182,7 +161,7 @@ function SimilarPropertyCard({ property }: { property: PublicProperty }) {
               <div className="flex items-center gap-1.5 min-w-0">
                 <Bath className="w-4 h-4 text-stone-400 shrink-0" />
                 <span className="text-xs font-medium truncate">
-                  {bathrooms !== null
+                  {bathrooms && bathrooms > 0
                     ? `${bathrooms} ${bathrooms === 1 ? 'Bath' : 'Baths'}`
                     : '—'}
                 </span>

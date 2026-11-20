@@ -12,6 +12,7 @@ import {
   ExternalLink,
 } from 'lucide-react'
 import type { PublicProperty } from '@/lib/types/property.types'
+import { envConfig } from '@/lib/envConfig'
 
 export interface NearbyAmenitiesRadarProps {
   property: PublicProperty
@@ -119,6 +120,67 @@ function calculateGeodesicDestination(
 }
 
 /**
+ * Extracts GPS coordinates from Google Maps URLs or coordinate strings.
+ */
+function extractCoordinates(urlOrStr?: string | null): { lat: number; lng: number } | null {
+  if (!urlOrStr || typeof urlOrStr !== 'string') return null
+  const trimmed = urlOrStr.trim()
+  if (!trimmed) return null
+
+  // 1. Check for @lat,lng (e.g. /@11.0168445,76.9558321)
+  const atMatch = trimmed.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/)
+  if (atMatch) {
+    const lat = parseFloat(atMatch[1])
+    const lng = parseFloat(atMatch[2])
+    if (!isNaN(lat) && !isNaN(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+      return { lat, lng }
+    }
+  }
+
+  // 2. Check for /place/lat,lng (e.g. /place/11.010835,77.092446)
+  const placeMatch = trimmed.match(/\/place\/(-?\d+\.\d+),(-?\d+\.\d+)/i)
+  if (placeMatch) {
+    const lat = parseFloat(placeMatch[1])
+    const lng = parseFloat(placeMatch[2])
+    if (!isNaN(lat) && !isNaN(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+      return { lat, lng }
+    }
+  }
+
+  // 3. Check for !3dlat!4dlng (e.g. !3d11.0108348!4d77.0924458)
+  const dMatch = trimmed.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/i)
+  if (dMatch) {
+    const lat = parseFloat(dMatch[1])
+    const lng = parseFloat(dMatch[2])
+    if (!isNaN(lat) && !isNaN(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+      return { lat, lng }
+    }
+  }
+
+  // 4. Check for ?q=lat,lng or &ll=lat,lng or query=lat,lng
+  const qMatch = trimmed.match(/[?&](?:q|ll|query|center)=(-?\d+\.\d+),(-?\d+\.\d+)/i)
+  if (qMatch) {
+    const lat = parseFloat(qMatch[1])
+    const lng = parseFloat(qMatch[2])
+    if (!isNaN(lat) && !isNaN(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+      return { lat, lng }
+    }
+  }
+
+  // 3. Direct "lat, lng" coordinates
+  const directMatch = trimmed.match(/(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)/)
+  if (directMatch) {
+    const lat = parseFloat(directMatch[1])
+    const lng = parseFloat(directMatch[2])
+    if (!isNaN(lat) && !isNaN(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+      return { lat, lng }
+    }
+  }
+
+  return null
+}
+
+/**
  * Interactive 5KM Proximity Radar & Real Leaflet Map Component
  * Strictly matching reference-ui/property - details - page.png (Slice 3):
  * - Live Leaflet.js map engine with real street and satellite tile layers
@@ -140,33 +202,81 @@ export default function NearbyAmenitiesRadar({
   const [isSatelliteView, setIsSatelliteView] = useState(false)
 
   // Strictly filter for valid amenity items with real names
-  const rawAmenities = property.nearbyAmenities || []
+  const rawAmenities =
+    property.nearbyAmenities ||
+    (property as unknown as Record<string, unknown>).nearby_amenities as typeof property.nearbyAmenities ||
+    (property as unknown as Record<string, unknown>).landmarks as typeof property.nearbyAmenities ||
+    []
   const amenities = rawAmenities.filter(
     (item) => item && typeof item.name === 'string' && item.name.trim().length > 0
   )
 
-  // Validate coordinates & amenities presence without early return before hooks
-  const hasValidLat =
+  // Validate coordinates & fallback to Google Maps URL or city baseline
+  const rawLat =
     property.latitude != null &&
     String(property.latitude).trim() !== '' &&
     !isNaN(Number(property.latitude))
-  const hasValidLng =
+      ? Number(property.latitude)
+      : null
+  const rawLng =
     property.longitude != null &&
     String(property.longitude).trim() !== '' &&
     !isNaN(Number(property.longitude))
+      ? Number(property.longitude)
+      : null
 
-  const centerLat = hasValidLat ? Number(property.latitude) : 0
-  const centerLng = hasValidLng ? Number(property.longitude) : 0
+  const extractedCoords =
+    rawLat === null || rawLng === null
+      ? extractCoordinates(property.google_maps_url)
+      : null
 
-  const fullAddress = [
+  // Fallback to first landmark with valid coordinates, or environment default
+  const landmarkWithCoords = amenities.find(
+    (item) =>
+      item.latitude != null &&
+      item.longitude != null &&
+      !isNaN(Number(item.latitude)) &&
+      !isNaN(Number(item.longitude))
+  )
+
+  const centerLat =
+    rawLat ??
+    extractedCoords?.lat ??
+    (landmarkWithCoords ? Number(landmarkWithCoords.latitude) : envConfig.defaultLatitude)
+  const centerLng =
+    rawLng ??
+    extractedCoords?.lng ??
+    (landmarkWithCoords ? Number(landmarkWithCoords.longitude) : envConfig.defaultLongitude)
+
+  const googleMapsTargetUrl =
+    property.google_maps_url ||
+    (centerLat && centerLng
+      ? `https://www.google.com/maps/search/?api=1&query=${centerLat},${centerLng}`
+      : null)
+
+  // Deduplicate address parts to avoid repeating locality names
+  const addressParts: string[] = []
+  const rawParts = [
     property.street_address,
     property.location,
     property.city,
     property.state,
     property.pincode,
-  ]
-    .filter(Boolean)
-    .join(', ')
+  ].filter(Boolean) as string[]
+
+  for (const part of rawParts) {
+    const trimmed = part.trim()
+    if (!trimmed) continue
+    const isDuplicate = addressParts.some(
+      (existing) =>
+        existing.toLowerCase() === trimmed.toLowerCase() ||
+        existing.toLowerCase().includes(trimmed.toLowerCase())
+    )
+    if (!isDuplicate) {
+      addressParts.push(trimmed)
+    }
+  }
+  const fullAddress = addressParts.join(', ')
 
   // Dynamically resolve only the unique categories actually present in amenities
   const presentCategories = Array.from(
@@ -176,7 +286,6 @@ export default function NearbyAmenitiesRadar({
   // Initialize and mount Leaflet map on client-side
   useEffect(() => {
     if (typeof window === 'undefined' || !mapContainerRef.current) return
-    if (!hasValidLat || !hasValidLng || amenities.length === 0) return
     let isMounted = true
 
     async function initLeaflet() {
@@ -382,7 +491,9 @@ export default function NearbyAmenitiesRadar({
                   ${travelTimeText ? ` (${travelTimeText})` : ''}
                 </div>
               ` : ''}
-              <a href="https://www.google.com/maps/dir/?api=1&origin=${centerLat},${centerLng}&destination=${targetLat},${targetLng}" target="_blank" rel="noopener noreferrer" style="display:inline-block; margin-top:6px; font-size:11px; font-weight:700; color:#2563eb; text-decoration:none;">Get Directions &rarr;</a>
+              ${/* Get Directions link commented out per user request - do not delete:
+              `<a href="https://www.google.com/maps/dir/?api=1&origin=${centerLat},${centerLng}&destination=${targetLat},${targetLng}" target="_blank" rel="noopener noreferrer" style="display:inline-block; margin-top:6px; font-size:11px; font-weight:700; color:#2563eb; text-decoration:none;">Get Directions &rarr;</a>`
+              */ ''}
             </div>
           `)
         })
@@ -400,7 +511,7 @@ export default function NearbyAmenitiesRadar({
         mapInstanceRef.current = null
       }
     }
-  }, [centerLat, centerLng, amenities, property.name, fullAddress, hasValidLat, hasValidLng, isSatelliteView])
+  }, [centerLat, centerLng, amenities, property.name, fullAddress, isSatelliteView])
 
   // Handle Satellite / Street Layer Toggling Live
   useEffect(() => {
@@ -422,9 +533,16 @@ export default function NearbyAmenitiesRadar({
   const handleResetZoom = () =>
     mapInstanceRef.current?.setView([centerLat, centerLng], 14, { animate: true })
 
-  // Strictly show valid data only:
-  // If property has no valid coordinates OR has zero nearby amenities, do not render this section.
-  if (!hasValidLat || !hasValidLng || amenities.length === 0) {
+  // Show map whenever property has coordinates, google maps url, landmarks, or location text
+  const hasLocationData =
+    Boolean(property.google_maps_url) ||
+    rawLat !== null ||
+    rawLng !== null ||
+    amenities.length > 0 ||
+    Boolean(property.location) ||
+    Boolean(property.city)
+
+  if (!hasLocationData) {
     return null
   }
 
@@ -454,15 +572,28 @@ export default function NearbyAmenitiesRadar({
               {fullAddress}
             </p>
           )}
+          {googleMapsTargetUrl && (
+            <a
+              href={googleMapsTargetUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 mt-2 text-xs font-semibold text-[#0d9488] hover:text-[#0b7267] underline underline-offset-2 transition-colors"
+            >
+              <span>Open Google Maps</span>
+              <ExternalLink className="w-3 h-3" />
+            </a>
+          )}
         </div>
 
         {/* Top-Right Floating Controls (Landmark Count & Zoom Controls) */}
         <div className="absolute top-4 sm:top-6 right-4 sm:right-6 z-[400] flex flex-col items-end gap-2.5 pointer-events-auto">
-          {/* Landmark Count Badge */}
+          {/* Landmark Count Badge / Location Map Badge */}
           <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md text-stone-800 text-xs font-bold border border-stone-200/90 shadow-md">
             <Compass className="w-3.5 h-3.5 text-blue-600 shrink-0" />
             <span>
-              Showing {amenities.length} Prominent Landmark{amenities.length === 1 ? '' : 's'}
+              {amenities.length > 0
+                ? `Showing ${amenities.length} Prominent Landmark${amenities.length === 1 ? '' : 's'}`
+                : 'Property Location Map'}
             </span>
           </div>
 
@@ -520,13 +651,13 @@ export default function NearbyAmenitiesRadar({
             })}
           </div>
 
-          {/* Right Controls: Survey Number Pill & Satellite Toggle */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* Right Controls: Survey Number Pill, Satellite Toggle, Google Maps */}
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             {/* Survey Number Pill - Only show if real survey_number exists */}
             {property.survey_number && property.survey_number.trim().length > 0 && (
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-stone-50 text-stone-700 text-xs font-semibold border border-stone-200">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-stone-50 text-stone-700 text-xs font-semibold border border-stone-200 shrink-0">
                 <MapPin className="w-3.5 h-3.5 text-red-600 shrink-0" />
-                <span className="truncate max-w-[200px]">{property.survey_number}</span>
+                <span className="truncate max-w-[170px] sm:max-w-[200px]">{property.survey_number}</span>
               </div>
             )}
 
@@ -534,7 +665,7 @@ export default function NearbyAmenitiesRadar({
             <button
               type="button"
               onClick={() => setIsSatelliteView((prev) => !prev)}
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer border ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer border shrink-0 ${
                 isSatelliteView
                   ? 'bg-stone-900 text-white border-stone-800 shadow-sm'
                   : 'bg-white text-stone-700 hover:bg-stone-100 border-stone-200'
@@ -545,16 +676,16 @@ export default function NearbyAmenitiesRadar({
               <span>{isSatelliteView ? 'Street View' : 'Satellite View'}</span>
             </button>
 
-            {property.google_maps_url && (
+            {googleMapsTargetUrl && (
               <a
-                href={property.google_maps_url}
+                href={googleMapsTargetUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold text-stone-600 hover:text-stone-900 bg-stone-50 hover:bg-stone-100 border border-stone-200 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold text-stone-700 hover:text-stone-900 bg-stone-50 hover:bg-stone-100 border border-stone-200 transition-colors shrink-0"
                 title="Open in Google Maps"
               >
-                <span>Maps</span>
-                <ExternalLink className="w-3 h-3" />
+                <span>Google Maps</span>
+                <ExternalLink className="w-3.5 h-3.5 text-stone-500" />
               </a>
             )}
           </div>

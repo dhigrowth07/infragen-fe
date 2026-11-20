@@ -48,13 +48,18 @@ export function extractBedrooms(property: PublicProperty): number | null {
     const bedItem = property.roomLayouts.find((r) =>
       /bed|bedroom/i.test(r.space_name)
     )
-    if (bedItem && bedItem.quantity > 0) return bedItem.quantity
+    if (bedItem) {
+      return bedItem.quantity > 0 ? bedItem.quantity : null
+    }
   }
 
   if (property.typologies && property.typologies.length > 0) {
     for (const t of property.typologies) {
       const match = t.typology_name.match(/(\d+)\s*(?:bhk|bed)/i)
-      if (match) return parseInt(match[1], 10)
+      if (match) {
+        const val = parseInt(match[1], 10)
+        return val > 0 ? val : null
+      }
     }
   }
 
@@ -69,7 +74,9 @@ export function extractBathrooms(property: PublicProperty): number | null {
     const bathItem = property.roomLayouts.find((r) =>
       /bath|bathroom|toilet|washroom/i.test(r.space_name)
     )
-    if (bathItem && bathItem.quantity > 0) return bathItem.quantity
+    if (bathItem) {
+      return bathItem.quantity > 0 ? bathItem.quantity : null
+    }
   }
 
   // Fallback 1: check specifications
@@ -83,8 +90,11 @@ export function extractBathrooms(property: PublicProperty): number | null {
     }
   }
 
-  // Fallback 2: Estimate from residential bedroom count if applicable
-  if (property.property_type === 'BUILDING') {
+  // Fallback 2: Estimate from residential bedroom count if applicable (only when roomLayouts is undefined or empty)
+  if (
+    property.property_type === 'BUILDING' &&
+    (!property.roomLayouts || property.roomLayouts.length === 0)
+  ) {
     const beds = extractBedrooms(property)
     if (beds !== null && beds > 0) {
       return beds === 1 ? 1 : Math.max(2, beds <= 2 ? 2 : beds - 1)

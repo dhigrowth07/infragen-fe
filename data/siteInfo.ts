@@ -21,6 +21,8 @@ export const SITE_INFO = {
   // ── Business Hours ─────────────────────────────────────────────────────────
   officeHours: "09:00 AM – 09:00 PM",
   officeHoursDays: "Monday to Sunday",
+  isOpenEveryday: true,
+  officeHoursNote: undefined as string | undefined,
 
   // ── Social & Messaging Links ───────────────────────────────────────────────
   social: {

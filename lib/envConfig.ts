@@ -9,6 +9,12 @@ export const envConfig = {
   defaultCurrency: process.env.NEXT_PUBLIC_DEFAULT_CURRENCY || 'INR',
   defaultCity: process.env.NEXT_PUBLIC_DEFAULT_CITY || 'Coimbatore',
   defaultState: process.env.NEXT_PUBLIC_DEFAULT_STATE || 'Tamil Nadu',
+  defaultLatitude: process.env.NEXT_PUBLIC_DEFAULT_LATITUDE
+    ? parseFloat(process.env.NEXT_PUBLIC_DEFAULT_LATITUDE)
+    : 11.0168,
+  defaultLongitude: process.env.NEXT_PUBLIC_DEFAULT_LONGITUDE
+    ? parseFloat(process.env.NEXT_PUBLIC_DEFAULT_LONGITUDE)
+    : 76.9558,
 } as const
 
 export default envConfig
