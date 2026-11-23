@@ -44,10 +44,10 @@ export default function AboutSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
               </div>
 
-              {/* Overlapping Badge: "6+ YEARS OF LEGACY" */}
+              {/* Overlapping Badge: "7+ YEARS OF LEGACY" */}
               <div className="absolute -bottom-6 -right-3 sm:-right-8 bg-[#612124] text-white p-6 sm:p-7 shadow-2xl border border-white/20 z-20 min-w-[170px] sm:min-w-[190px] rounded-sm">
                 <span className="text-4xl sm:text-5xl font-black text-[#c5a880] font-['Outfit',sans-serif] leading-none block mb-1.5">
-                  6+
+                  7+
                 </span>
                 <span className="text-[10px] sm:text-xs font-bold tracking-[0.18em] text-stone-200 uppercase font-['Inter',sans-serif] block leading-tight">
                   YEARS OF LEGACY
