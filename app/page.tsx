@@ -5,10 +5,10 @@ import HeroSection from "@/components/home/HeroSection";
 import StatsCounterBar from "@/components/home/StatsCounterBar";
 import AboutSection from "@/components/home/AboutSection";
 import ProcessSection from "@/components/home/ProcessSection";
+import OurProjectsSection from "@/components/home/OurProjectsSection";
 import ProjectsSection from "@/components/home/ProjectsSection";
 import WhyTrustSection from "@/components/home/WhyTrustSection";
 import ServicesSection from "@/components/home/ServicesSection";
-import TrustExperienceSection from "@/components/home/TrustExperienceSection";
 import ContactEnquirySection from "@/components/home/ContactEnquirySection";
 
 export default function HomePage() {
@@ -41,12 +41,12 @@ export default function HomePage() {
     <>
       <HeroSection />
       <StatsCounterBar />
-      <AboutSection />
       <ProcessSection />
+      <OurProjectsSection />
       <ProjectsSection />
       <WhyTrustSection />
+      <AboutSection />
       <ServicesSection />
-      <TrustExperienceSection />
       <ContactEnquirySection />
     </>
   );

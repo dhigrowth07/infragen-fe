@@ -12,82 +12,100 @@ interface ProcessStep {
   left: string;
   top: string;
   isUp: boolean;
+  titleWidth?: string;
+  titleSize?: string;
 }
 
 const steps: ProcessStep[] = [
   {
     id: 1,
-    title: "1. Land Analysis",
+    title: "1. Land analysis",
     desc: "Feasibility study, soil testing & title verification",
     img: "/assets/images/about-property-management.jpg",
     left: "22%",
     top: "180px",
     isUp: true,
+    titleWidth: "200px",
+    titleSize: "text-base",
   },
   {
     id: 2,
-    title: "2. Land Purchase",
-    desc: "Price negotiation & registered deed transfer",
-    img: "/assets/images/handshake-deal.jpg",
+    title: "2. Legal verification & clear-title property selection",
+    desc: "Due diligence, document verification & clear-title screening",
+    img: "/assets/images/service-6.jpg",
     left: "42%",
     top: "180px",
     isUp: true,
+    titleWidth: "220px",
+    titleSize: "text-sm",
   },
   {
     id: 3,
-    title: "3. Land Conversion",
-    sub: "(DTCP / CMDA / RERA)",
-    desc: "Zoning conversion & RERA compliance",
-    img: "/assets/images/plot-layout-1.jpg",
+    title: "3. Land purchase",
+    desc: "Price negotiation, fair valuation & registered deed transfer",
+    img: "/assets/images/handshake-deal.jpg",
     left: "62%",
     top: "180px",
     isUp: true,
+    titleWidth: "200px",
+    titleSize: "text-base",
   },
   {
     id: 4,
-    title: "4. Architectural & Structural Design",
-    desc: "2D/3D floor plans & structural engineering",
-    img: "/assets/images/hero-3.jpg",
+    title: "4. Land conversion",
+    sub: "(DTCP / CMDA / RERA)",
+    desc: "Zoning conversion & DTCP/CMDA/RERA compliance",
+    img: "/assets/images/plot-layout-1.jpg",
     left: "82%",
     top: "180px",
     isUp: true,
+    titleWidth: "200px",
+    titleSize: "text-base",
   },
   {
     id: 5,
-    title: "5. Building Approvals",
-    sub: "(Corporation / Panchayat)",
-    desc: "Municipal blueprint sanction permits",
-    img: "/assets/images/hero-4.jpg",
+    title: "5. Architectural & structural Design",
+    desc: "2D/3D architectural floor plans & structural engineering",
+    img: "/assets/images/hero-3.jpg",
     left: "82%",
     top: "400px",
     isUp: false,
+    titleWidth: "220px",
+    titleSize: "text-sm sm:text-base",
   },
   {
     id: 6,
-    title: "6. Building Construction",
-    desc: "Foundation, RCC framing & site supervision",
-    img: "/assets/images/about-property-management.jpg",
+    title: "6. Building Approvals",
+    sub: "(Corporation / Panchayat)",
+    desc: "Corporation & Panchayat blueprint sanction permits",
+    img: "/assets/images/hero-4.jpg",
     left: "62%",
     top: "400px",
     isUp: false,
+    titleWidth: "200px",
+    titleSize: "text-base",
   },
   {
     id: 7,
-    title: "7. Quality Inspection & Final Finishing",
-    desc: "Quality audits, painting & utility testing",
+    title: "7. Building Construction & quality inspection",
+    desc: "Turnkey civil construction, quality inspection & site audits",
     img: "/assets/images/hero-1.jpg",
     left: "42%",
     top: "400px",
     isUp: false,
+    titleWidth: "220px",
+    titleSize: "text-sm sm:text-base",
   },
   {
     id: 8,
-    title: "8. Turnkey Key Handover",
-    desc: "Completion Certificate (CC) & key presentation",
+    title: "8. Turnkey Handover",
+    desc: "Completion Certificate (CC), final walk-through & key handover",
     img: "/assets/images/key-handover.jpg",
     left: "22%",
     top: "400px",
     isUp: false,
+    titleWidth: "200px",
+    titleSize: "text-base",
   },
 ];
 
@@ -296,9 +314,9 @@ export default function ProcessSection() {
                   {/* Bottom Title */}
                   <div
                     className="absolute text-center"
-                    style={{ top: "22px", left: "50%", transform: "translateX(-50%)", width: "220px" }}
+                    style={{ top: "22px", left: "50%", transform: "translateX(-50%)", width: step.titleWidth || "220px" }}
                   >
-                    <h3 className="text-base font-extrabold font-['Outfit',sans-serif] text-[#612124] leading-tight">
+                    <h3 className={`${step.titleSize || "text-base"} font-extrabold font-['Outfit',sans-serif] text-[#612124] leading-tight`}>
                       {step.title}
                     </h3>
                     {step.sub && (
@@ -313,9 +331,9 @@ export default function ProcessSection() {
                   {/* Top Title */}
                   <div
                     className="absolute text-center"
-                    style={{ bottom: "22px", left: "50%", transform: "translateX(-50%)", width: "220px" }}
+                    style={{ bottom: "22px", left: "50%", transform: "translateX(-50%)", width: step.titleWidth || "220px" }}
                   >
-                    <h3 className="text-base font-extrabold font-['Outfit',sans-serif] text-[#612124] leading-tight">
+                    <h3 className={`${step.titleSize || "text-base"} font-extrabold font-['Outfit',sans-serif] text-[#612124] leading-tight`}>
                       {step.title}
                     </h3>
                     {step.sub && (

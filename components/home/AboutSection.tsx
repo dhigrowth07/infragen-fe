@@ -21,7 +21,7 @@ export default function AboutSection() {
         </div>
 
         {/* Main 2-Column Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-20 xl:gap-24 items-center max-w-6xl mx-auto">
 
           {/* Left Column: Image with 3D Backside Layer & "6+ YEARS OF LEGACY" Badge */}
           <div className="lg:col-span-5 relative flex justify-center lg:justify-end reveal reveal-slide-right">
@@ -58,17 +58,21 @@ export default function AboutSection() {
           </div>
 
           {/* Right Column: Narrative Story & Button */}
-          <div className="lg:col-span-7 flex flex-col items-start justify-center gap-5 sm:gap-6 reveal reveal-slide-left pt-6 lg:pt-0">
+          <div className="lg:col-span-7 flex flex-col items-start justify-center gap-6 sm:gap-7 reveal reveal-slide-left pt-6 lg:pt-0">
             <p className="text-[#555555] font-['Outfit',sans-serif] text-base sm:text-lg leading-relaxed sm:leading-8 font-normal">
               <strong className="text-[#612124] font-semibold">Vizhi Infragen Realtors LLP</strong> is a trusted real estate and property management company in Coimbatore. Established in 1998, the company has built a strong reputation through decades of experience in the real estate industry. Today, the business is proudly carried forward by the second generation, combining traditional values with modern real estate expertise. We help individuals, investors, businesses, and NRI clients buy, sell, manage, and develop properties. Our deep local knowledge, transparent approach, and reliable guidance ensure every client makes confident and informed real estate decisions.
             </p>
 
+            <p className="text-[#555555] font-['Outfit',sans-serif] text-base sm:text-lg leading-relaxed sm:leading-8 font-normal">
+              From identifying legally verified properties and coordinating documentation to property transactions, development and ongoing management, we provide professional, end-to-end assistance with complete transparency and accountability.
+            </p>
+
             <div className="pt-2">
               <Link
-                href="/contact"
+                href="/about-us"
                 className="inline-block border-2 border-[#612124] text-[#612124] hover:bg-[#612124] hover:text-white px-8 py-3.5 rounded-none font-bold text-xs tracking-[0.2em] transition-all duration-300 uppercase shadow-sm hover:shadow-md hover:-translate-y-0.5 font-['Inter',sans-serif]"
               >
-                READ OUR STORY
+                READ MORE
               </Link>
             </div>
           </div>

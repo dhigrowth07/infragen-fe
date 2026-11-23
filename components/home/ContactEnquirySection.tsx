@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import { enquiryService } from "@/lib/services/enquiryService";
 
 export default function ContactEnquirySection() {
@@ -9,21 +8,142 @@ export default function ContactEnquirySection() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
+
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+
   const [showToast, setShowToast] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Real-time live validation handlers matching reference index.html / script.js
+  const handleNameChange = (val: string) => {
+    setName(val);
+    if (/\d/.test(val)) {
+      setNameError("Name does not contain number");
+    } else {
+      setNameError("");
+    }
+  };
+
+  const handleNameBlur = () => {
+    const trimmed = name.trim();
+    if (/\d/.test(name)) {
+      setNameError("Name does not contain number");
+    } else if (!trimmed) {
+      setNameError("Please enter your name.");
+    } else if (trimmed.length < 2) {
+      setNameError("Name must be at least 2 characters.");
+    } else {
+      setNameError("");
+    }
+  };
+
+  const handleEmailChange = (val: string) => {
+    setEmail(val);
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (emailError && emailRegex.test(val.trim())) {
+      setEmailError("");
+    }
+  };
+
+  const handleEmailBlur = () => {
+    const trimmed = email.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!trimmed) {
+      setEmailError("Please enter your email address.");
+    } else if (!emailRegex.test(trimmed)) {
+      setEmailError("Please enter a valid email address.");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const handlePhoneChange = (val: string) => {
+    setPhone(val);
+    // Instantly detect characters/letters typed into phone number (matches screenshot)
+    if (/[a-zA-Z]/.test(val)) {
+      setPhoneError("Phone number does not contain characters");
+    } else {
+      setPhoneError("");
+    }
+  };
+
+  const handlePhoneBlur = () => {
+    const trimmed = phone.trim();
+    if (/[a-zA-Z]/.test(phone)) {
+      setPhoneError("Phone number does not contain characters");
+      return;
+    }
+    if (!trimmed) {
+      setPhoneError("Please enter your phone number.");
+      return;
+    }
+    const phoneRegex = /^(\+91|0)?[6-9]\d{9}$/;
+    if (!phoneRegex.test(trimmed.replace(/[\s\-\(\)]/g, ""))) {
+      setPhoneError("Please enter a valid 10-digit mobile number.");
+    } else {
+      setPhoneError("");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
 
+    let hasError = false;
+
+    // Validate Name
+    const nameTrimmed = name.trim();
+    if (/\d/.test(name)) {
+      setNameError("Name does not contain number");
+      hasError = true;
+    } else if (!nameTrimmed) {
+      setNameError("Please enter your name.");
+      hasError = true;
+    } else if (nameTrimmed.length < 2) {
+      setNameError("Name must be at least 2 characters.");
+      hasError = true;
+    } else {
+      setNameError("");
+    }
+
+    // Validate Email
+    const emailTrimmed = email.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailTrimmed) {
+      setEmailError("Please enter your email address.");
+      hasError = true;
+    } else if (!emailRegex.test(emailTrimmed)) {
+      setEmailError("Please enter a valid email address.");
+      hasError = true;
+    } else {
+      setEmailError("");
+    }
+
+    // Validate Phone
+    const phoneTrimmed = phone.trim();
+    if (/[a-zA-Z]/.test(phone)) {
+      setPhoneError("Phone number does not contain characters");
+      hasError = true;
+    } else if (!phoneTrimmed) {
+      setPhoneError("Please enter your phone number.");
+      hasError = true;
+    } else {
+      const phoneRegex = /^(\+91|0)?[6-9]\d{9}$/;
+      if (!phoneRegex.test(phoneTrimmed.replace(/[\s\-\(\)]/g, ""))) {
+        setPhoneError("Please enter a valid 10-digit mobile number.");
+        hasError = true;
+      } else {
+        setPhoneError("");
+      }
+    }
+
+    if (hasError) return;
+
     const defaultMsg = "Hello, I am interested in property consulting and would like to know more details.";
     const finalMsg = message && message.trim() !== "" ? message.trim() : defaultMsg;
-
-    if (finalMsg.length < 10) {
-      setErrorMessage("Message must be at least 10 characters");
-      return;
-    }
 
     setIsSubmitting(true);
 
@@ -42,6 +162,9 @@ export default function ContactEnquirySection() {
       setEmail("");
       setPhone("");
       setMessage("");
+      setNameError("");
+      setEmailError("");
+      setPhoneError("");
 
       setTimeout(() => {
         setShowToast(false);
@@ -69,17 +192,17 @@ export default function ContactEnquirySection() {
         backgroundPosition: "center",
       }}
     >
-      <div className="w-full max-w-5xl px-5 sm:px-8 md:px-10 lg:px-12 flex flex-col lg:flex-row gap-10 lg:gap-[60px] items-start lg:items-center justify-between relative z-10 mx-auto">
+      <div className="w-full max-w-[1440px] px-6 sm:px-10 lg:px-16 flex flex-col lg:flex-row gap-10 lg:gap-[60px] items-start lg:items-center justify-between relative z-10 mx-auto">
         
-        {/* Left Column */}
+        {/* Left Column Text */}
         <div className="pt-[4.79px] flex flex-col gap-[16px] items-start justify-start flex-1 relative text-left">
           <div className="text-[#c5a880] text-left font-['Inter',sans-serif] text-sm leading-[22px] font-semibold uppercase relative flex items-center justify-start tracking-[1.75px]">
             LET&apos;S CONNECT
           </div>
           <div className="flex flex-col gap-0 items-start justify-start self-stretch shrink-0 relative">
-            <h2 className="text-[#ffffff] text-left font-['Outfit',sans-serif] text-3xl sm:text-4xl lg:text-[40px] leading-[1.2] font-bold relative self-stretch flex flex-col justify-start drop-shadow-md">
-              <span className="block">Talk to a Coimbatore Real Estate</span>
-              <span className="block">Expert Today</span>
+            <h2 className="text-white text-left font-['Outfit',sans-serif] text-2xl sm:text-3xl md:text-4xl lg:text-[38px] xl:text-[42px] leading-[1.2] font-extrabold relative self-stretch flex flex-col justify-start drop-shadow-md">
+              <span className="block sm:whitespace-nowrap">Talk to a Coimbatore Real Estate</span>
+              <span className="block text-white">Expert Today</span>
             </h2>
           </div>
           <div className="pt-[1.2px] flex flex-col gap-0 items-start justify-start self-stretch shrink-0 relative">
@@ -89,15 +212,16 @@ export default function ContactEnquirySection() {
             </p>
           </div>
 
-          <Link
-            href="/properties"
-            className="bg-[#8A1F36] hover:bg-[#a22c46] rounded-md border-none pt-[15px] pr-[28px] pb-[15px] pl-[28px] flex flex-row gap-2.5 items-center justify-start shrink-0 relative hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group shadow-lg"
+          <a
+            href="tel:9688889420"
+            className="bg-[#8A1F36] hover:bg-[#a22c46] rounded-md border-none pt-[15px] pr-[28px] pb-[15px] pl-[28px] flex flex-row gap-3 items-center justify-start shrink-0 relative hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group shadow-lg"
           >
-            <i className="fa-solid fa-arrow-right text-white text-sm group-hover:translate-x-1 transition-transform"></i>
-            <div className="text-white text-left font-['Inter',sans-serif] text-base leading-[26px] font-semibold relative flex items-center justify-start">
+            <i className="fa-solid fa-phone-volume text-[#c5a880] text-lg group-hover:rotate-12 transition-transform"></i>
+            <span className="text-white text-left font-['Inter',sans-serif] text-base leading-[26px] font-semibold relative flex items-center justify-start">
               Start Your Property Journey
-            </div>
-          </Link>
+            </span>
+            <i className="fa-solid fa-arrow-right text-white text-sm group-hover:translate-x-1 transition-transform"></i>
+          </a>
         </div>
 
         {/* Right Column: Quick Enquiry Form */}
@@ -106,53 +230,98 @@ export default function ContactEnquirySection() {
             QUICK ENQUIRY
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-start justify-start self-stretch shrink-0 relative w-full">
+          <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4 items-start justify-start self-stretch shrink-0 relative w-full">
             <div className="flex flex-col sm:flex-row gap-4 items-start justify-center self-stretch shrink-0 relative w-full">
-              <div className="bg-white/90 rounded-md border border-gray-300/80 px-4 py-3.5 flex flex-col gap-0 items-start justify-start flex-1 relative overflow-hidden focus-within:border-burgundy-600 focus-within:ring-2 focus-within:ring-burgundy-600/20 transition-all w-full">
-                <input
-                  type="text"
-                  required
-                  placeholder="Your Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-transparent border-none outline-none text-[#000000] text-[14px] font-['Inter',sans-serif] font-medium placeholder-[#666666] focus:ring-0 p-0"
-                />
+              {/* Your Name Input */}
+              <div className="flex flex-col flex-1 w-full text-left">
+                <div
+                  className={`bg-white/90 rounded-md border px-4 py-3.5 flex flex-col gap-0 items-start justify-start relative overflow-hidden transition-all w-full ${
+                    nameError
+                      ? "border-red-500 ring-2 ring-red-500/20"
+                      : "border-gray-300/80 focus-within:border-[#612124] focus-within:ring-2 focus-within:ring-[#612124]/20"
+                  }`}
+                >
+                  <input
+                    type="text"
+                    placeholder="Your Name"
+                    value={name}
+                    onChange={(e) => handleNameChange(e.target.value)}
+                    onBlur={handleNameBlur}
+                    className="w-full bg-transparent border-none outline-none text-[#000000] text-[14px] font-['Inter',sans-serif] font-medium placeholder-[#666666] focus:ring-0 p-0"
+                  />
+                </div>
+                {nameError && (
+                  <span className="text-xs text-red-500 font-medium mt-1 text-left font-['Inter',sans-serif]">
+                    {nameError}
+                  </span>
+                )}
               </div>
 
-              <div className="bg-white/90 rounded-md border border-gray-300/80 px-4 py-3.5 flex flex-col gap-0 items-start justify-start flex-1 relative overflow-hidden focus-within:border-burgundy-600 focus-within:ring-2 focus-within:ring-burgundy-600/20 transition-all w-full">
-                <input
-                  type="email"
-                  required
-                  placeholder="Email Address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-transparent border-none outline-none text-[#000000] text-[14px] font-['Inter',sans-serif] font-medium placeholder-[#666666] focus:ring-0 p-0"
-                />
+              {/* Email Address Input */}
+              <div className="flex flex-col flex-1 w-full text-left">
+                <div
+                  className={`bg-white/90 rounded-md border px-4 py-3.5 flex flex-col gap-0 items-start justify-start relative overflow-hidden transition-all w-full ${
+                    emailError
+                      ? "border-red-500 ring-2 ring-red-500/20"
+                      : "border-gray-300/80 focus-within:border-[#612124] focus-within:ring-2 focus-within:ring-[#612124]/20"
+                  }`}
+                >
+                  <input
+                    type="email"
+                    placeholder="Email Address"
+                    value={email}
+                    onChange={(e) => handleEmailChange(e.target.value)}
+                    onBlur={handleEmailBlur}
+                    className="w-full bg-transparent border-none outline-none text-[#000000] text-[14px] font-['Inter',sans-serif] font-medium placeholder-[#666666] focus:ring-0 p-0"
+                  />
+                </div>
+                {emailError && (
+                  <span className="text-xs text-red-500 font-medium mt-1 text-left font-['Inter',sans-serif]">
+                    {emailError}
+                  </span>
+                )}
               </div>
             </div>
 
-            <div className="bg-white/90 rounded-md border border-gray-300/80 px-4 py-3.5 flex flex-col gap-0 items-start justify-start self-stretch shrink-0 relative overflow-hidden w-full focus-within:border-burgundy-600 focus-within:ring-2 focus-within:ring-burgundy-600/20 transition-all">
-              <input
-                type="tel"
-                required
-                placeholder="Phone Number"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="w-full bg-transparent border-none outline-none text-[#000000] text-[14px] font-['Inter',sans-serif] font-medium placeholder-[#666666] focus:ring-0 p-0"
-              />
+            {/* Phone Number Input */}
+            <div className="flex flex-col w-full text-left">
+              <div
+                className={`bg-white/90 rounded-md border px-4 py-3.5 flex flex-col gap-0 items-start justify-start relative overflow-hidden w-full transition-all ${
+                  phoneError
+                    ? "border-red-500 ring-2 ring-red-500/20"
+                    : "border-gray-300/80 focus-within:border-[#612124] focus-within:ring-2 focus-within:ring-[#612124]/20"
+                }`}
+              >
+                <input
+                  type="tel"
+                  placeholder="Phone Number (10 digits)"
+                  value={phone}
+                  onChange={(e) => handlePhoneChange(e.target.value)}
+                  onBlur={handlePhoneBlur}
+                  className="w-full bg-transparent border-none outline-none text-[#000000] text-[14px] font-['Inter',sans-serif] font-medium placeholder-[#666666] focus:ring-0 p-0"
+                />
+              </div>
+              {phoneError && (
+                <span className="text-xs text-red-500 font-medium mt-1 text-left font-['Inter',sans-serif]">
+                  {phoneError}
+                </span>
+              )}
             </div>
 
-            <div className="bg-white/90 rounded-md border border-gray-300/80 px-4 py-3.5 flex flex-col gap-0 items-start justify-start self-stretch shrink-0 relative overflow-hidden w-full focus-within:border-burgundy-600 focus-within:ring-2 focus-within:ring-burgundy-600/20 transition-all">
-              <textarea
-                rows={3}
-                placeholder="How can we help you? (Min 10 characters)"
-                value={message}
-                onChange={(e) => {
-                  setMessage(e.target.value);
-                  if (errorMessage) setErrorMessage(null);
-                }}
-                className="w-full bg-transparent border-none outline-none text-[#000000] text-[14px] font-['Inter',sans-serif] font-medium placeholder-[#666666] focus:ring-0 resize-none p-0"
-              ></textarea>
+            {/* Message Textarea */}
+            <div className="flex flex-col w-full text-left">
+              <div className="bg-white/90 rounded-md border border-gray-300/80 px-4 py-3.5 flex flex-col gap-0 items-start justify-start relative overflow-hidden w-full focus-within:border-[#612124] focus-within:ring-2 focus-within:ring-[#612124]/20 transition-all">
+                <textarea
+                  rows={3}
+                  placeholder="How can we help you?"
+                  value={message}
+                  onChange={(e) => {
+                    setMessage(e.target.value);
+                    if (errorMessage) setErrorMessage(null);
+                  }}
+                  className="w-full bg-transparent border-none outline-none text-[#000000] text-[14px] font-['Inter',sans-serif] font-medium placeholder-[#666666] focus:ring-0 resize-none p-0"
+                ></textarea>
+              </div>
             </div>
 
             <button
@@ -164,7 +333,7 @@ export default function ContactEnquirySection() {
                 <span>Submitting...</span>
               ) : (
                 <>
-                  <span>Send Message</span>
+                  <span>SEND MESSAGE</span>
                   <i className="fa-solid fa-paper-plane text-xs text-[#612124]"></i>
                 </>
               )}

@@ -203,10 +203,10 @@ export default function PropertyQuickMetrics({
               </div>
             </div>
 
-            {/* 3. Road Base */}
+            {/* 3. Road Connectivity */}
             <div className="flex flex-col gap-1.5">
               <span className="text-[11px] sm:text-xs font-bold text-stone-400 uppercase tracking-wider">
-                ROAD BASE
+                ROAD CONNECTIVITY
               </span>
               <div className="flex items-center gap-2.5 min-w-0">
                 <Milestone className="w-5 h-5 text-[#20b2aa] shrink-0" />
@@ -219,7 +219,7 @@ export default function PropertyQuickMetrics({
             {/* 4. Survey Number */}
             <div className="flex flex-col gap-1.5">
               <span className="text-[11px] sm:text-xs font-bold text-stone-400 uppercase tracking-wider">
-                SURVEY NUMBER
+                LOT SIZE
               </span>
               <div className="flex items-center gap-2.5 min-w-0">
                 <FileText className="w-5 h-5 text-[#20b2aa] shrink-0" />

@@ -23,37 +23,16 @@ export default function ServiceIntroSection() {
         <span className="block w-[64px] h-[4px] bg-[#c5a880] mt-2.5 mb-5" />
 
         {/* Paragraph */}
-        <p className="text-[#4b5563] text-[1.02rem] leading-[1.85] mb-[28px] font-inter">
+        <p className="text-[#4b5563] text-[1.02rem] leading-[1.85] mb-4 font-inter">
           At Vizhi Infragen Realtors LLP, we offer a full range of real estate and property management services under one roof so you never have to coordinate multiple agencies, lawyers, or contractors on your own. From buying and selling land to managing assets for NRI owners and delivering turnkey construction, every service is handled with transparency, local market knowledge, and end to end support across Coimbatore and its fast-growing corridors.
         </p>
 
-        {/* Thin Stat Cards Row */}
-        <div className="flex gap-[10px] mt-6 flex-wrap sm:flex-nowrap">
-          <div className="bg-white border border-[#dfd4c4] py-1.5 px-[10px] min-w-[105px] text-center shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:-translate-y-1 hover:border-[#c5a880] transition-all duration-300">
-            <strong className="block font-outfit text-[0.95rem] text-[#381e23] font-extrabold whitespace-nowrap">
-              10 Services
+        {/* One Stop Solution Single Box */}
+        <div className="mt-1 w-fit max-w-fit inline-flex">
+          <div className="inline-flex items-center justify-center px-[18px] py-[7px] bg-[#c5a880]/15 border-[1.5px] border-[#c5a880]/50 rounded-[12px] shadow-[0_4px_14px_rgba(0,0,0,0.04)]">
+            <strong className="text-[1.12rem] font-outfit text-[#381e23] font-extrabold tracking-[-0.01em] m-0 leading-[1.2]">
+              One Stop Solution
             </strong>
-            <span className="text-[0.65rem] text-[#4b5563] font-semibold leading-[1.2] block mt-0.5 whitespace-nowrap">
-              Complete Desk
-            </span>
-          </div>
-
-          <div className="bg-white border border-[#dfd4c4] py-1.5 px-[10px] min-w-[105px] text-center shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:-translate-y-1 hover:border-[#c5a880] transition-all duration-300">
-            <strong className="block font-outfit text-[0.95rem] text-[#381e23] font-extrabold whitespace-nowrap">
-              100%
-            </strong>
-            <span className="text-[0.65rem] text-[#4b5563] font-semibold leading-[1.2] block mt-0.5 whitespace-nowrap">
-              Legal Title Check
-            </span>
-          </div>
-
-          <div className="bg-white border border-[#dfd4c4] py-1.5 px-[10px] min-w-[105px] text-center shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:-translate-y-1 hover:border-[#c5a880] transition-all duration-300">
-            <strong className="block font-outfit text-[0.95rem] text-[#381e23] font-extrabold whitespace-nowrap">
-              Coimbatore
-            </strong>
-            <span className="text-[0.65rem] text-[#4b5563] font-semibold leading-[1.2] block mt-0.5 whitespace-nowrap">
-              Local Market Experts
-            </span>
           </div>
         </div>
       </div>
@@ -78,16 +57,13 @@ export default function ServiceIntroSection() {
             />
           </div>
 
-          {/* Floating Badge */}
-          <div className="absolute -bottom-[20px] -left-[10px] sm:-left-[20px] bg-[#381e23] text-white p-3.5 sm:p-[16px_22px] z-20 shadow-[0_10px_30px_rgba(0,0,0,0.3)] flex items-center gap-3 border border-[#c5a880]">
-            <i className="fa-solid fa-building-circle-check text-[1.3rem] sm:text-[1.5rem] text-[#c5a880]"></i>
+          {/* Floating Badge: End-to-End Real Estate Support */}
+          <div className="absolute -bottom-[10px] -left-[10px] bg-[#2E1418] border-[1.5px] border-[#c5a880] py-2 px-3.5 sm:px-4 z-20 shadow-[0_10px_25px_rgba(0,0,0,0.35)] flex items-center gap-2.5 w-fit">
+            <i className="fa-solid fa-building-circle-check text-[1.2rem] sm:text-[1.25rem] text-[#c5a880] shrink-0"></i>
             <div>
-              <strong className="block font-outfit text-[0.95rem] sm:text-[1.05rem] leading-tight">
-                10 Complete Services
-              </strong>
-              <span className="text-[0.7rem] sm:text-[0.76rem] text-[#dfc7a4]">
+              <strong className="block font-outfit text-[0.85rem] sm:text-[0.88rem] font-bold text-white tracking-[0.01em] leading-[1.2] whitespace-nowrap">
                 End-to-End Real Estate Support
-              </span>
+              </strong>
             </div>
           </div>
         </div>

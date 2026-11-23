@@ -4,137 +4,106 @@ import React from "react";
 import Image from "next/image";
 
 export default function WhoWeAreSection() {
-  const targetClients = [
-    "Property Owners",
-    "Buyers",
-    "Investors",
-    "Corporate Clients",
-    "NRIs",
-  ];
-
   return (
-    <div className="relative bg-white pb-20 sm:pb-28 z-20">
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+    <div className="who-we-are-white-section py-16 sm:py-24 bg-white relative z-20">
+      <div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16">
+        {/* Grid: Left MD Card with Overlap + Right Text & MD Bio Card (Aligned straight at the bottom) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-stretch">
           
-          {/* Left Column: Overlapping Founder Image Card */}
-          <div className="lg:col-span-5 relative -mt-16 sm:-mt-20 z-30 reveal-slide-right">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-white group w-full">
-              <div className="relative h-[440px] sm:h-[540px] lg:h-[640px] xl:h-[700px] w-full">
+          {/* LEFT: Managing Director Frame Card */}
+          <div className="lg:col-span-5 relative z-20 reveal reveal-slide-up flex flex-col">
+            <div className="relative rounded-[28px] overflow-hidden shadow-2xl border-2 border-white/80 bg-black group w-full max-w-[460px] mx-auto h-full flex flex-col justify-between">
+              
+              {/* MD Photo */}
+              <div className="w-full h-[480px] sm:h-[520px] lg:h-full min-h-[480px] lg:min-h-[560px] relative overflow-hidden bg-black">
                 <Image
-                  src="/assets/images/about-founder.jpeg"
+                  src="/assets/images/managing-director-sekar.jpg"
                   alt="Sekar - Managing Director, Vizhi Infragen Realtors LLP"
                   fill
                   sizes="(max-width: 1024px) 100vw, 40vw"
-                  className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  priority
+                  className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
                 />
-              </div>
+                {/* Subtle dark gradient at bottom for floating card contrast */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent pointer-events-none"></div>
 
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none"></div>
-
-              {/* Top Role Tag */}
-              <div className="absolute top-5 left-5 bg-[#381e23]/90 backdrop-blur-sm px-3.5 py-1.5 rounded-full border border-[#c5a880]/40 shadow-lg">
-                <span className="text-[#c5a880] text-[10px] font-bold font-['Inter',sans-serif] tracking-wider uppercase">
-                  Managing Director
-                </span>
-              </div>
-
-              {/* Floating Badge */}
-              <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md p-4 rounded-xl border border-stone-200 shadow-2xl animate-bob">
-                <div className="flex items-center gap-4">
-                  <div className="w-13 h-13 rounded-full bg-[#4E1421] text-[#c5a880] flex items-center justify-center text-lg shrink-0 font-extrabold shadow-md font-['Outfit',sans-serif]">
-                    7+
-                  </div>
-                  <div className="min-w-0">
-                    <h4 className="font-bold text-sm text-[#1E293B] font-['Outfit',sans-serif] truncate">
-                      Sekar
-                    </h4>
-                    <p className="text-xs text-[#612124] font-semibold font-['Inter',sans-serif]">
-                      Managing Director
-                    </p>
-                    <p className="text-[11px] text-stone-500 font-['Inter',sans-serif]">
-                      7+ Years of Leadership &amp; Excellence
-                    </p>
+                {/* Bottom Floating White Card: Sekar Managing Director */}
+                <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md p-3.5 sm:p-4 rounded-2xl border border-stone-200 shadow-2xl z-20">
+                  <div className="flex items-center gap-3.5">
+                    {/* 7+ Circle Badge */}
+                    <div className="w-12 h-12 rounded-full bg-[#4E1421] text-[#c5a880] flex items-center justify-center text-base shrink-0 font-extrabold shadow-md font-['Outfit',sans-serif]">
+                      7+
+                    </div>
+                    {/* Details */}
+                    <div className="text-left">
+                      <h4 className="font-bold text-base text-[#1E293B] font-['Outfit',sans-serif] leading-tight">
+                        Mr. Sekar Balasubramaniam
+                      </h4>
+                      <p className="text-xs font-semibold text-[#612124] font-['Outfit',sans-serif] mt-0.5">
+                        Managing Director
+                      </p>
+                      <p className="text-[11px] text-stone-500 font-['Inter',sans-serif] mt-0.5">
+                        7+ Years of Leadership &amp; Excellence
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
 
-          {/* Right Column: Content Narrative */}
-          <div className="lg:col-span-7 pt-4 lg:pt-8 reveal-slide-left space-y-8">
+          {/* RIGHT: Content on Crisp White Background */}
+          <div className="lg:col-span-7 pt-2 sm:pt-4 space-y-6 text-left reveal reveal-slide-up flex flex-col justify-between h-full">
             
-            {/* Who We Are & Tagline */}
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#4E1421]/5 border border-[#c5a880]/30 mb-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#c5a880]"></span>
-                <span className="text-[#612124] font-['Inter',sans-serif] text-xs font-bold tracking-[0.25em] uppercase">
-                  Who We Are
+            {/* Top Content Block */}
+            <div className="space-y-4 sm:space-y-5">
+              {/* Pill Badge: • WHO WE ARE */}
+              <div className="inline-flex items-center gap-2 bg-[#F9F6F0] border border-[#EBE3D5] px-3.5 py-1.5 rounded-full w-fit">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#612124]"></span>
+                <span className="text-xs font-bold text-[#612124] uppercase tracking-[0.22em] font-['Inter',sans-serif]">
+                  WHO WE ARE
                 </span>
               </div>
 
-              <h2 className="font-extrabold font-['Outfit',sans-serif] text-[#612124] text-2xl sm:text-3xl lg:text-4xl leading-tight mb-3">
-                Your Property. Your Vision.<br className="hidden sm:inline" />{" "}
-                <span className="text-[#c5a880]">Our Commitment.</span>
+              {/* Main Heading: Your Property. Your Vision. Our Commitment. */}
+              <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold font-['Outfit',sans-serif] tracking-tight leading-[1.18]">
+                <span className="text-[#612124] block">Your Property. Your Vision.</span>
+                <span className="text-[#c5a880] block">Our Commitment.</span>
               </h2>
 
-              <div className="w-14 h-1 bg-[#c5a880] rounded-full mb-5"></div>
+              {/* Small accent line */}
+              <div className="w-12 h-[3px] bg-[#c5a880] rounded-full"></div>
 
-              <p className="font-['Inter',sans-serif] leading-[1.85] text-stone-600 text-sm sm:text-base">
-                Vizhi Infragen Realtors LLP provides comprehensive real estate solutions across Coimbatore and surrounding areas. We serve property owners, buyers, investors, corporate clients, and NRIs with professional property assistance and personalised service.
+              {/* Description Paragraph */}
+              <p className="font-normal text-stone-600 text-sm sm:text-base leading-relaxed font-['Inter',sans-serif] max-w-2xl">
+                Vizhi Infragen Realtors LLP provides comprehensive real estate solutions across Coimbatore and surrounding
+                areas. We serve property owners, buyers, investors, corporate clients, and NRIs with professional property
+                assistance and personalised service.
               </p>
-
-              {/* Target Clients Pills */}
-              <div className="flex flex-wrap gap-2 pt-4">
-                {targetClients.map((client) => (
-                  <span
-                    key={client}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-stone-100 text-stone-700 text-xs font-medium font-['Inter',sans-serif] border border-stone-200"
-                  >
-                    <i className="fa-solid fa-check text-[#c5a880] text-[10px]"></i>
-                    {client}
-                  </span>
-                ))}
-              </div>
             </div>
 
-            {/* About Our Managing Director Card */}
-            <div className="bg-[#FDFBF7] rounded-2xl p-6 sm:p-7 border border-[#c5a880]/30 shadow-sm relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#c5a880]/15 to-transparent rounded-bl-full pointer-events-none"></div>
+            {/* Bottom Card: ABOUT OUR MANAGING DIRECTOR (Last line content aligns straight with bottom of MD photo) */}
+            <div className="rounded-2xl p-6 sm:p-7 border border-[#EFE9DF] bg-gradient-to-br from-[#FAF8F5] via-[#FFFDFB] to-[#F5EFE6] shadow-sm relative overflow-hidden mt-6 lg:mt-auto">
+              {/* Subtle gold ambient glow in top-right of card */}
+              <div className="absolute -top-12 -right-12 w-36 h-36 bg-[#c5a880]/15 rounded-full blur-2xl pointer-events-none"></div>
 
-              <span className="text-[#c5a880] font-['Inter',sans-serif] text-xs font-bold tracking-[0.25em] uppercase block mb-1.5">
-                About Our Managing Director
+              <span className="text-[#c5a880] text-[11px] font-bold uppercase tracking-[0.25em] block mb-1.5 font-['Inter',sans-serif]">
+                ABOUT OUR MANAGING DIRECTOR
               </span>
 
-              <div className="flex flex-wrap items-baseline gap-2 mb-3">
-                <h3 className="font-bold font-['Outfit',sans-serif] text-[#612124] text-xl sm:text-2xl">
-                  Sekar
-                </h3>
-                <span className="text-stone-400 font-light">|</span>
-                <span className="text-stone-700 font-semibold font-['Inter',sans-serif] text-sm sm:text-base">
-                  Managing Director
-                </span>
-              </div>
+              <h3 className="text-lg sm:text-xl font-bold font-['Outfit',sans-serif] mb-3">
+                <span className="text-[#612124]">Mr. Sekar Balasubramaniam</span>
+                <span className="text-stone-400 font-normal mx-1.5">|</span>
+                <span className="text-stone-700 font-semibold text-base sm:text-lg">Managing Director</span>
+              </h3>
 
-              <p className="font-['Inter',sans-serif] leading-[1.8] text-stone-600 text-sm sm:text-base mb-5">
-                With 7 years of real estate experience, Sekar leads Vizhi Infragen Realtors LLP with a focus on trust, transparency, and client satisfaction. A BNI member, JCI Secretary, national champion shooter, and state-level karate champion, he brings leadership, discipline, and determination to the business.
+              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed font-['Inter',sans-serif]">
+                With 7 years of real estate experience, Mr. Sekar Balasubramaniam leads Vizhi Infragen Realtors LLP with a
+                focus on trust, transparency, and client satisfaction. A BNI member, JCI Secretary, national champion
+                shooter, and state-level karate champion, he brings leadership, discipline, and determination to the
+                business.
               </p>
-
-              {/* Highlights & Credentials
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-3 border-t border-stone-200/80">
-                {credentials.map((cred) => (
-                  <div
-                    key={cred.label}
-                    className="flex items-center gap-2.5 text-xs text-stone-700 font-['Inter',sans-serif]"
-                  >
-                    <span className="w-7 h-7 rounded-lg bg-[#4E1421] text-[#c5a880] flex items-center justify-center shrink-0">
-                      <i className={`${cred.icon} text-xs`}></i>
-                    </span>
-                    <span className="font-medium">{cred.label}</span>
-                  </div>
-                ))}
-              </div>
-              */}
             </div>
 
           </div>

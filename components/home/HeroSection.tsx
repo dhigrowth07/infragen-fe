@@ -79,16 +79,17 @@ export default function HeroSection({ onOpenVideoModal }: HeroSectionProps) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center my-auto">
             
             {/* Left Text */}
-            <div className="lg:col-span-8 space-y-4 sm:space-y-5 text-left">
+            <div className="lg:col-span-8 space-y-3 sm:space-y-5 text-left">
               <span className="text-[#c5a880] font-['Inter',sans-serif] text-xs sm:text-sm font-bold tracking-[0.25em] uppercase block animate-float-down">
                 Welcome to vizhi infragen
               </span>
 
-              <h1 className="text-[28px] sm:text-[36px] md:text-[40px] lg:text-[46px] xl:text-[50px] font-extrabold text-white leading-[36px] sm:leading-[46px] md:leading-[50px] lg:leading-[54px] xl:leading-[58px] font-['Outfit',sans-serif] tracking-tight max-w-3xl animate-float-down [animation-delay:200ms]">
-                Trusted Real Estate &amp; NRI Property Management Company
+              <h1 className="text-[24px] xs:text-[28px] sm:text-4xl md:text-[44px] lg:text-[46px] xl:text-[52px] font-extrabold text-white leading-tight sm:leading-[40px] md:leading-[42px] xl:leading-[42px] font-['Outfit',sans-serif] tracking-tight max-w-4xl animate-float-down [animation-delay:200ms]">
+                <span className="block whitespace-nowrap mb-1 sm:mb-1.5">Trusted Real Estate &amp; NRI</span>
+                <span className="block whitespace-nowrap">Property Management Company</span>
               </h1>
 
-              <p className="text-white/90 font-['Inter',sans-serif] text-base sm:text-lg font-normal max-w-2xl leading-relaxed animate-float-down [animation-delay:400ms]">
+              <p className="text-white/90 font-['Inter',sans-serif] text-base sm:text-lg font-normal max-w-3xl leading-relaxed animate-float-down [animation-delay:400ms]">
                 Your Reliable Partner for Land, Property &amp; Asset Management in Coimbatore
               </p>
 

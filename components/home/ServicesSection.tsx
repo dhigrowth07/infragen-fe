@@ -1,24 +1,103 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { servicesData } from "@/data/services";
 
 export default function ServicesSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [isAtStart, setIsAtStart] = useState(true);
+  const [isAtEnd, setIsAtEnd] = useState(false);
+  const isPausedRef = useRef(false);
+  const pauseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const updateArrows = useCallback(() => {
+    const track = scrollRef.current;
+    if (!track) return;
+    const tolerance = 8;
+    const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+    const currentScroll = track.scrollLeft;
+    setIsAtStart(currentScroll <= tolerance);
+    setIsAtEnd(currentScroll >= maxScroll - tolerance);
+  }, []);
+
+  const getStep = () => {
+    if (!scrollRef.current) return 390;
+    const firstCard = scrollRef.current.querySelector(".service-float-card") as HTMLElement | null;
+    return firstCard ? firstCard.offsetWidth + 24 : 390;
+  };
+
+  const pauseAutoRun = (duration = 5000) => {
+    isPausedRef.current = true;
+    if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current);
+    pauseTimeoutRef.current = setTimeout(() => {
+      isPausedRef.current = false;
+    }, duration);
+  };
 
   const scrollLeft = () => {
     if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: -390, behavior: "smooth" });
+      pauseAutoRun(6000);
+      scrollRef.current.style.scrollBehavior = "smooth";
+      scrollRef.current.scrollBy({ left: -getStep(), behavior: "smooth" });
+      setTimeout(updateArrows, 350);
     }
   };
 
   const scrollRight = () => {
     if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: 390, behavior: "smooth" });
+      pauseAutoRun(6000);
+      scrollRef.current.style.scrollBehavior = "smooth";
+      scrollRef.current.scrollBy({ left: getStep(), behavior: "smooth" });
+      setTimeout(updateArrows, 350);
     }
   };
+
+  useEffect(() => {
+    updateArrows();
+    const track = scrollRef.current;
+    if (!track) return;
+
+    let autoRunRAF: number;
+    const runSpeed = 0.85;
+
+    function autoRunStep() {
+      if (!isPausedRef.current && track) {
+        const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+        if (maxScroll > 10) {
+          if (track.scrollLeft >= maxScroll - 4) {
+            updateArrows();
+            isPausedRef.current = true;
+            setTimeout(() => {
+              if (track) {
+                track.style.scrollBehavior = "smooth";
+                track.scrollTo({ left: 0, behavior: "smooth" });
+                setTimeout(() => {
+                  isPausedRef.current = false;
+                  updateArrows();
+                }, 900);
+              }
+            }, 3000);
+          } else {
+            track.style.scrollBehavior = "auto";
+            track.scrollLeft += runSpeed;
+            updateArrows();
+          }
+        }
+      }
+      autoRunRAF = requestAnimationFrame(autoRunStep);
+    }
+
+    autoRunRAF = requestAnimationFrame(autoRunStep);
+    window.addEventListener("resize", updateArrows);
+
+    return () => {
+      cancelAnimationFrame(autoRunRAF);
+      window.removeEventListener("resize", updateArrows);
+      if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current);
+    };
+  }, [updateArrows]);
 
   return (
     <section id="services" className="py-24 overflow-hidden relative bg-[#fdfbf7]">
@@ -39,7 +118,10 @@ export default function ServicesSection() {
           {/* Scroll Buttons */}
           <button
             onClick={scrollLeft}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/95 backdrop-blur-md text-[#612124] border border-[#612124]/30 hover:bg-[#612124] hover:text-white shadow-2xl flex items-center justify-center transition-all cursor-pointer"
+            disabled={isAtStart}
+            className={`absolute left-2 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/95 backdrop-blur-md text-[#612124] border border-[#612124]/30 hover:bg-[#612124] hover:text-white shadow-2xl flex items-center justify-center transition-all ${
+              isAtStart ? "opacity-30 cursor-not-allowed pointer-events-none" : "cursor-pointer"
+            }`}
             aria-label="Previous Service"
           >
             <i className="fa-solid fa-chevron-left text-lg"></i>
@@ -47,23 +129,31 @@ export default function ServicesSection() {
 
           <button
             onClick={scrollRight}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/95 backdrop-blur-md text-[#612124] border border-[#612124]/30 hover:bg-[#612124] hover:text-white shadow-2xl flex items-center justify-center transition-all cursor-pointer"
+            disabled={isAtEnd}
+            className={`absolute right-2 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/95 backdrop-blur-md text-[#612124] border border-[#612124]/30 hover:bg-[#612124] hover:text-white shadow-2xl flex items-center justify-center transition-all ${
+              isAtEnd ? "opacity-30 cursor-not-allowed pointer-events-none" : "cursor-pointer"
+            }`}
             aria-label="Next Service"
           >
             <i className="fa-solid fa-chevron-right text-lg"></i>
           </button>
 
-          {/* Marquee Track */}
+          {/* Slider Track */}
           <div
             ref={scrollRef}
-            className="flex items-stretch overflow-hidden no-scrollbar px-0 py-6 min-h-[560px] relative scroll-smooth"
+            id="services-track"
+            onScroll={updateArrows}
+            onMouseEnter={() => { isPausedRef.current = true; }}
+            onMouseLeave={() => pauseAutoRun(1200)}
+            onTouchStart={() => { isPausedRef.current = true; }}
+            onTouchEnd={() => pauseAutoRun(2500)}
+            className="flex items-stretch overflow-x-auto scroll-smooth no-scrollbar px-2 sm:px-4 py-6 min-h-[560px] relative"
           >
-            <div className="infinite-marquee-track flex items-stretch space-x-6 sm:space-x-8 pr-6 sm:pr-8">
-              {/* Set 1 & Set 2 Duplicated for Seamless Infinite Loop */}
-              {[...servicesData, ...servicesData].map((service, idx) => (
+            <div className="flex items-stretch space-x-6 sm:space-x-8 pr-6 sm:pr-8">
+              {servicesData.map((service) => (
                 <div
-                  key={`${service.id}-${idx}`}
-                  className="min-w-[320px] sm:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80"
+                  key={service.id}
+                  className="snap-start min-w-[280px] sm:min-w-[350px] md:min-w-[370px] max-w-[380px] shrink-0 flex flex-col items-center text-center justify-between service-float-card floating-bob-card bg-white p-6 rounded-[22px] shadow-sm border border-stone-200/80 hover:shadow-xl hover:border-[#c5a880]/60 transition-all"
                   style={{ animationDelay: service.delay }}
                 >
                   <div className="w-full flex flex-col items-center">
@@ -109,7 +199,7 @@ export default function ServicesSection() {
         {/* Read More Button */}
         <div className="mt-4 text-center reveal reveal-slide-up">
           <Link
-            href="#contact"
+            href="/services"
             className="inline-block border-2 border-[#612124] text-[#612124] hover:bg-[#612124] hover:text-white px-9 py-4 rounded-none font-bold text-xs tracking-[0.25em] transition-all duration-300 uppercase shadow-sm hover:shadow-md hover:-translate-y-0.5 font-['Inter',sans-serif]"
           >
             READ MORE

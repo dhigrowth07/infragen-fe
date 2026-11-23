@@ -12,19 +12,261 @@ export default function ContactFormSection() {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [terms, setTerms] = useState(false);
+
+  // Field error states
+  const [firstNameError, setFirstNameError] = useState("");
+  const [lastNameError, setLastNameError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [subjectError, setSubjectError] = useState("");
+  const [messageError, setMessageError] = useState("");
+  const [termsError, setTermsError] = useState("");
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!terms) return;
-    setErrorMessage(null);
+  // Validation functions matching reference contact.html & script.js
+  const handleFirstNameChange = (val: string) => {
+    setFirstName(val);
+    if (/\d/.test(val)) {
+      setFirstNameError("Name does not contain number");
+    } else {
+      setFirstNameError("");
+    }
+  };
 
-    if (message.trim().length < 10) {
-      setErrorMessage("Message must be at least 10 characters");
+  const handleFirstNameBlur = () => {
+    const raw = firstName;
+    const val = raw.trim();
+    if (/\d/.test(raw)) {
+      setFirstNameError("Name does not contain number");
+    } else if (!val) {
+      setFirstNameError("Please enter your first name.");
+    } else if (val.length < 2) {
+      setFirstNameError("First name must be at least 2 characters.");
+    } else if (!/^[a-zA-Z\s\.\'-]{2,50}$/.test(val)) {
+      setFirstNameError("Name does not contain number");
+    } else {
+      setFirstNameError("");
+    }
+  };
+
+  const handleLastNameChange = (val: string) => {
+    setLastName(val);
+    if (/\d/.test(val)) {
+      setLastNameError("Name does not contain number");
+    } else {
+      setLastNameError("");
+    }
+  };
+
+  const handleLastNameBlur = () => {
+    const raw = lastName;
+    const val = raw.trim();
+    if (/\d/.test(raw)) {
+      setLastNameError("Name does not contain number");
+    } else if (!val) {
+      setLastNameError("Please enter your last name.");
+    } else if (val.length < 2) {
+      setLastNameError("Last name must be at least 2 characters.");
+    } else if (!/^[a-zA-Z\s\.\'-]{2,50}$/.test(val)) {
+      setLastNameError("Name does not contain number");
+    } else {
+      setLastNameError("");
+    }
+  };
+
+  const handlePhoneChange = (val: string) => {
+    setPhone(val);
+    if (/[a-zA-Z]/.test(val)) {
+      setPhoneError("Phone number does not contain characters");
+    } else {
+      setPhoneError("");
+    }
+  };
+
+  const handlePhoneBlur = () => {
+    const raw = phone;
+    const val = raw.trim();
+    if (/[a-zA-Z]/.test(raw)) {
+      setPhoneError("Phone number does not contain characters");
       return;
     }
+    if (!val) {
+      setPhoneError("Please enter your contact number.");
+      return;
+    }
+    const phoneRegex = /^(\+91|0)?[6-9]\d{9}$/;
+    if (!phoneRegex.test(val.replace(/[\s\-\(\)]/g, ""))) {
+      setPhoneError("Please enter a valid 10-digit mobile number.");
+    } else {
+      setPhoneError("");
+    }
+  };
+
+  const handleEmailChange = (val: string) => {
+    setEmail(val);
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (emailError && emailRegex.test(val.trim())) {
+      setEmailError("");
+    }
+  };
+
+  const handleEmailBlur = () => {
+    const val = email.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!val) {
+      setEmailError("Please enter your email address.");
+    } else if (!emailRegex.test(val)) {
+      setEmailError("Please enter a valid email address.");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const handleSubjectChange = (val: string) => {
+    setSubject(val);
+    if (subjectError && val.trim()) {
+      setSubjectError("");
+    }
+  };
+
+  const handleSubjectBlur = () => {
+    if (!subject.trim()) {
+      setSubjectError("Please enter a subject.");
+    } else {
+      setSubjectError("");
+    }
+  };
+
+  const handleMessageChange = (val: string) => {
+    setMessage(val);
+    if (messageError && val.trim().length >= 10) {
+      setMessageError("");
+    }
+  };
+
+  const handleMessageBlur = () => {
+    const val = message.trim();
+    if (!val) {
+      setMessageError("Please enter your message.");
+    } else if (val.length < 10) {
+      setMessageError("Message must be at least 10 characters.");
+    } else {
+      setMessageError("");
+    }
+  };
+
+  const handleTermsChange = (checked: boolean) => {
+    setTerms(checked);
+    if (checked) {
+      setTermsError("");
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage(null);
+
+    let hasError = false;
+
+    // Validate First Name
+    const fVal = firstName.trim();
+    if (/\d/.test(firstName)) {
+      setFirstNameError("Name does not contain number");
+      hasError = true;
+    } else if (!fVal) {
+      setFirstNameError("Please enter your first name.");
+      hasError = true;
+    } else if (fVal.length < 2) {
+      setFirstNameError("First name must be at least 2 characters.");
+      hasError = true;
+    } else if (!/^[a-zA-Z\s\.\'-]{2,50}$/.test(fVal)) {
+      setFirstNameError("Name does not contain number");
+      hasError = true;
+    } else {
+      setFirstNameError("");
+    }
+
+    // Validate Last Name
+    const lVal = lastName.trim();
+    if (/\d/.test(lastName)) {
+      setLastNameError("Name does not contain number");
+      hasError = true;
+    } else if (!lVal) {
+      setLastNameError("Please enter your last name.");
+      hasError = true;
+    } else if (lVal.length < 2) {
+      setLastNameError("Last name must be at least 2 characters.");
+      hasError = true;
+    } else if (!/^[a-zA-Z\s\.\'-]{2,50}$/.test(lVal)) {
+      setLastNameError("Name does not contain number");
+      hasError = true;
+    } else {
+      setLastNameError("");
+    }
+
+    // Validate Phone
+    const pVal = phone.trim();
+    if (/[a-zA-Z]/.test(phone)) {
+      setPhoneError("Phone number does not contain characters");
+      hasError = true;
+    } else if (!pVal) {
+      setPhoneError("Please enter your contact number.");
+      hasError = true;
+    } else {
+      const phoneRegex = /^(\+91|0)?[6-9]\d{9}$/;
+      if (!phoneRegex.test(pVal.replace(/[\s\-\(\)]/g, ""))) {
+        setPhoneError("Please enter a valid 10-digit mobile number.");
+        hasError = true;
+      } else {
+        setPhoneError("");
+      }
+    }
+
+    // Validate Email
+    const eVal = email.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!eVal) {
+      setEmailError("Please enter your email address.");
+      hasError = true;
+    } else if (!emailRegex.test(eVal)) {
+      setEmailError("Please enter a valid email address.");
+      hasError = true;
+    } else {
+      setEmailError("");
+    }
+
+    // Validate Subject
+    if (!subject.trim()) {
+      setSubjectError("Please enter a subject.");
+      hasError = true;
+    } else {
+      setSubjectError("");
+    }
+
+    // Validate Message
+    const mVal = message.trim();
+    if (!mVal) {
+      setMessageError("Please enter your message.");
+      hasError = true;
+    } else if (mVal.length < 10) {
+      setMessageError("Message must be at least 10 characters.");
+      hasError = true;
+    } else {
+      setMessageError("");
+    }
+
+    // Validate Terms
+    if (!terms) {
+      setTermsError("Please accept the Terms & Privacy Policy.");
+      hasError = true;
+    } else {
+      setTermsError("");
+    }
+
+    if (hasError) return;
 
     setIsSubmitting(true);
 
@@ -48,6 +290,15 @@ export default function ContactFormSection() {
       setMessage("");
       setTerms(false);
 
+      // Clear any remaining errors
+      setFirstNameError("");
+      setLastNameError("");
+      setPhoneError("");
+      setEmailError("");
+      setSubjectError("");
+      setMessageError("");
+      setTermsError("");
+
       setTimeout(() => {
         setShowToast(false);
       }, 5000);
@@ -64,7 +315,7 @@ export default function ContactFormSection() {
   };
 
   return (
-    <section className="py-16 sm:py-24 px-6 sm:px-10 lg:px-16 bg-[#FDFBF7]">
+    <section id="have-any-questions" className="py-16 sm:py-24 px-6 sm:px-10 lg:px-16 bg-[#FDFBF7]">
       <div className="max-w-[1440px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-stretch">
           
@@ -79,99 +330,172 @@ export default function ContactFormSection() {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4 pt-2">
+            <form onSubmit={handleSubmit} noValidate className="space-y-4 pt-2">
+              {/* Row 1: First Name & Last Name */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="First Name *"
+                      value={firstName}
+                      onChange={(e) => handleFirstNameChange(e.target.value)}
+                      onBlur={handleFirstNameBlur}
+                      className={`w-full bg-white border rounded-lg px-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none transition-all shadow-sm font-['Inter',sans-serif] ${
+                        firstNameError
+                          ? "border-red-500 ring-2 ring-red-500/20"
+                          : "border-stone-200 focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880]"
+                      }`}
+                    />
+                  </div>
+                  {firstNameError && (
+                    <span className="text-xs text-red-500 font-medium mt-1 text-left block font-['Inter',sans-serif]">
+                      {firstNameError}
+                    </span>
+                  )}
+                </div>
+
+                <div>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Last Name *"
+                      value={lastName}
+                      onChange={(e) => handleLastNameChange(e.target.value)}
+                      onBlur={handleLastNameBlur}
+                      className={`w-full bg-white border rounded-lg px-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none transition-all shadow-sm font-['Inter',sans-serif] ${
+                        lastNameError
+                          ? "border-red-500 ring-2 ring-red-500/20"
+                          : "border-stone-200 focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880]"
+                      }`}
+                    />
+                  </div>
+                  {lastNameError && (
+                    <span className="text-xs text-red-500 font-medium mt-1 text-left block font-['Inter',sans-serif]">
+                      {lastNameError}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Row 2: Contact Number & Your Email */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <div className="relative">
+                    <input
+                      type="tel"
+                      placeholder="Contact Number *"
+                      value={phone}
+                      onChange={(e) => handlePhoneChange(e.target.value)}
+                      onBlur={handlePhoneBlur}
+                      className={`w-full bg-white border rounded-lg pl-10 pr-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none transition-all shadow-sm font-['Inter',sans-serif] ${
+                        phoneError
+                          ? "border-red-500 ring-2 ring-red-500/20"
+                          : "border-stone-200 focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880]"
+                      }`}
+                    />
+                    <i className="fa-solid fa-phone absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
+                  </div>
+                  {phoneError && (
+                    <span className="text-xs text-red-500 font-medium mt-1 text-left block font-['Inter',sans-serif]">
+                      {phoneError}
+                    </span>
+                  )}
+                </div>
+
+                <div>
+                  <div className="relative">
+                    <input
+                      type="email"
+                      placeholder="Your Email *"
+                      value={email}
+                      onChange={(e) => handleEmailChange(e.target.value)}
+                      onBlur={handleEmailBlur}
+                      className={`w-full bg-white border rounded-lg pl-10 pr-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none transition-all shadow-sm font-['Inter',sans-serif] ${
+                        emailError
+                          ? "border-red-500 ring-2 ring-red-500/20"
+                          : "border-stone-200 focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880]"
+                      }`}
+                    />
+                    <i className="fa-solid fa-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
+                  </div>
+                  {emailError && (
+                    <span className="text-xs text-red-500 font-medium mt-1 text-left block font-['Inter',sans-serif]">
+                      {emailError}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Row 3: Subject */}
+              <div>
                 <div className="relative">
                   <input
                     type="text"
-                    required
-                    placeholder="First Name *"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    className="w-full bg-white border border-stone-200 rounded-lg pl-10 pr-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880] transition-all shadow-sm font-['Inter',sans-serif]"
+                    placeholder="Subject *"
+                    value={subject}
+                    onChange={(e) => handleSubjectChange(e.target.value)}
+                    onBlur={handleSubjectBlur}
+                    className={`w-full bg-white border rounded-lg px-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none transition-all shadow-sm font-['Inter',sans-serif] ${
+                      subjectError
+                        ? "border-red-500 ring-2 ring-red-500/20"
+                        : "border-stone-200 focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880]"
+                    }`}
                   />
-                  <i className="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
                 </div>
+                {subjectError && (
+                  <span className="text-xs text-red-500 font-medium mt-1 text-left block font-['Inter',sans-serif]">
+                    {subjectError}
+                  </span>
+                )}
+              </div>
+
+              {/* Row 4: Your Message */}
+              <div>
                 <div className="relative">
-                  <input
-                    type="text"
-                    required
-                    placeholder="Last Name *"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    className="w-full bg-white border border-stone-200 rounded-lg pl-10 pr-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880] transition-all shadow-sm font-['Inter',sans-serif]"
-                  />
-                  <i className="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
+                  <textarea
+                    rows={4}
+                    placeholder="Your Message * (Min 10 characters)"
+                    value={message}
+                    onChange={(e) => handleMessageChange(e.target.value)}
+                    onBlur={handleMessageBlur}
+                    className={`w-full bg-white border rounded-lg pl-10 pr-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none transition-all shadow-sm font-['Inter',sans-serif] resize-none ${
+                      messageError
+                        ? "border-red-500 ring-2 ring-red-500/20"
+                        : "border-stone-200 focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880]"
+                    }`}
+                  ></textarea>
+                  <i className="fa-solid fa-pen absolute left-3.5 top-4 text-stone-400 text-xs"></i>
                 </div>
+                {messageError && (
+                  <span className="text-xs text-red-500 font-medium mt-1 text-left block font-['Inter',sans-serif]">
+                    {messageError}
+                  </span>
+                )}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="relative">
+              {/* Checkbox Terms */}
+              <div className="flex flex-col pt-1">
+                <div className="flex items-start gap-3">
                   <input
-                    type="tel"
-                    required
-                    placeholder="Contact Number *"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full bg-white border border-stone-200 rounded-lg pl-10 pr-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880] transition-all shadow-sm font-['Inter',sans-serif]"
+                    type="checkbox"
+                    id="contact-terms"
+                    checked={terms}
+                    onChange={(e) => handleTermsChange(e.target.checked)}
+                    className="mt-1 w-4 h-4 rounded border-stone-300 text-[#4E1421] focus:ring-[#c5a880] cursor-pointer"
                   />
-                  <i className="fa-solid fa-phone absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
+                  <label
+                    htmlFor="contact-terms"
+                    className="text-[11px] sm:text-xs text-stone-500 font-['Inter',sans-serif] leading-relaxed cursor-pointer select-none"
+                  >
+                    By clicking submit, I agree to the Terms &amp; Conditions and Privacy Policy and I am giving my consent to receive updates through email/sms.
+                  </label>
                 </div>
-                <div className="relative">
-                  <input
-                    type="email"
-                    required
-                    placeholder="Your Email *"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-white border border-stone-200 rounded-lg pl-10 pr-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880] transition-all shadow-sm font-['Inter',sans-serif]"
-                  />
-                  <i className="fa-solid fa-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
-                </div>
-              </div>
-
-              <div className="relative">
-                <input
-                  type="text"
-                  required
-                  placeholder="Subject *"
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                  className="w-full bg-white border border-stone-200 rounded-lg pl-10 pr-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880] transition-all shadow-sm font-['Inter',sans-serif]"
-                />
-                <i className="fa-solid fa-tag absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
-              </div>
-
-              <div className="relative">
-                <textarea
-                  rows={4}
-                  required
-                  placeholder="Your Message * (Min 10 characters)"
-                  value={message}
-                  onChange={(e) => {
-                    setMessage(e.target.value);
-                    if (errorMessage) setErrorMessage(null);
-                  }}
-                  className="w-full bg-white border border-stone-200 rounded-lg pl-10 pr-4 py-3.5 text-sm text-[#1E293B] placeholder-stone-400 focus:outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880] transition-all shadow-sm font-['Inter',sans-serif] resize-none"
-                ></textarea>
-                <i className="fa-solid fa-pen absolute left-3.5 top-4 text-stone-400 text-xs"></i>
-              </div>
-
-              <div className="flex items-start gap-3 pt-1">
-                <input
-                  type="checkbox"
-                  id="contact-terms"
-                  checked={terms}
-                  onChange={(e) => setTerms(e.target.checked)}
-                  required
-                  className="mt-1 w-4 h-4 rounded border-stone-300 text-[#4E1421] focus:ring-[#c5a880] cursor-pointer"
-                />
-                <label
-                  htmlFor="contact-terms"
-                  className="text-[11px] sm:text-xs text-stone-500 font-['Inter',sans-serif] leading-relaxed cursor-pointer select-none"
-                >
-                  By clicking submit, I agree to the Terms &amp; Conditions and Privacy Policy and I am giving my consent to receive updates through email/sms.
-                </label>
+                {termsError && (
+                  <span className="text-xs text-red-500 font-medium mt-1 text-left block font-['Inter',sans-serif]">
+                    {termsError}
+                  </span>
+                )}
               </div>
 
               <div className="pt-2">

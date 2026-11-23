@@ -61,17 +61,17 @@ export default function StatsCounterBar() {
     <div
       ref={containerRef}
       id="stats-counter-bar"
-      className="w-full bg-[#c5a880] m-0 py-10 sm:py-12 border-t border-b border-[#b39569] shadow-inner"
+      className="w-full bg-[#C8AD7F] m-0 py-10 sm:py-14 border-t border-b border-[#B89C6E] shadow-sm"
     >
       <div className="max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x-0 md:divide-x divide-black/15">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x-0 md:divide-x divide-[#B5996B]">
           {statsList.map((stat, idx) => (
             <div key={idx} className="flex flex-col items-center p-2">
-              <span className="text-4xl sm:text-5xl lg:text-6xl font-normal text-black font-['Outfit',sans-serif] tracking-tight">
+              <span className="stat-counter text-4xl sm:text-5xl lg:text-6xl font-bold text-[#2E1418] font-['Outfit',sans-serif] tracking-tight">
                 {counts[idx]}
                 {stat.suffix}
               </span>
-              <span className="text-xs sm:text-sm font-semibold text-black uppercase tracking-[0.18em] mt-3 font-['Inter',sans-serif]">
+              <span className="text-xs sm:text-sm font-semibold text-[#3E1A22] uppercase tracking-[0.18em] mt-3 font-['Inter',sans-serif]">
                 {stat.label}
               </span>
             </div>

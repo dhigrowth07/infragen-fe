@@ -5,7 +5,6 @@ import ContactHero from "@/components/contact/ContactHero";
 import ContactFormSection from "@/components/contact/ContactFormSection";
 import OtherWaysToConnect from "@/components/contact/OtherWaysToConnect";
 import OfficeMapSection from "@/components/contact/OfficeMapSection";
-import ContactFaqSection from "@/components/contact/ContactFaqSection";
 import ContactCtaBanner from "@/components/contact/ContactCtaBanner";
 
 export default function ContactPage() {
@@ -40,7 +39,6 @@ export default function ContactPage() {
       <ContactFormSection />
       <OtherWaysToConnect />
       <OfficeMapSection />
-      <ContactFaqSection />
       <ContactCtaBanner />
     </div>
   );

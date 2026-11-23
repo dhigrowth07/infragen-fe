@@ -25,9 +25,9 @@ export default function ServicesPage() {
     <>
       <ServiceHero />
       <ServiceIntroSection />
-      <ServicesCategoriesCarousel />
       <ServicesFilterShowcase />
       <ServicesTrustSection />
+      <ServicesCategoriesCarousel />
       <ServicesCTASection />
     </>
   );
