@@ -7,170 +7,144 @@ import { useSiteSettings } from "@/lib/context/SiteSettingsContext";
 
 export default function Footer() {
   const { siteInfo } = useSiteSettings();
+
+
   return (
-    <footer className="bg-[#121212] pt-16 pb-8 px-6 sm:px-10 lg:px-16 flex flex-col items-center justify-start relative overflow-hidden">
-      <div className="pb-10 w-full shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 max-w-[1440px] px-6 sm:px-10 lg:px-16 relative z-10 mx-auto">
-        {/* Col 1: Brand & Tagline */}
-        <div className="flex flex-col gap-3 items-start justify-start relative text-left">
+    <footer className="bg-[#331C20] text-white pt-14 pb-8 px-6 sm:px-10 lg:px-16 flex flex-col items-center justify-start relative overflow-hidden text-left border-t border-white/10">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-12 gap-8 lg:gap-6 xl:gap-8 items-start max-w-[1440px] px-2 sm:px-6 lg:px-8 relative z-10 mx-auto">
+        
+        {/* Col 1: Brand Logo & Tagline */}
+        <div className="col-span-1 sm:col-span-2 md:col-span-1 lg:col-span-2 xl:col-span-2 flex flex-col gap-3.5 items-start justify-start lg:-ml-2 xl:-ml-4 -mt-2.5 sm:-mt-3.5 lg:-mt-4">
           <Link href="/" className="inline-block hover:scale-105 transition-transform duration-300">
             <Image
-              width={150}
-              height={80}
-              className="shrink-0 w-[130px] h-[72px] sm:w-[150px] sm:h-[80px] relative object-contain footer-logo-img"
               src="/vizhi-infragen-realtors-logo-white.png"
               alt="Vizhi Infragen Realtors Logo"
-              style={{ width: "auto", height: "auto" }}
+              width={155}
+              height={105}
+              className="w-[145px] sm:w-[155px] h-auto object-contain footer-logo-img"
             />
           </Link>
-          <div className="flex flex-col gap-0 items-start justify-start shrink-0 max-w-[260px] relative text-left">
-            <p className="text-[#9b98a1] text-left font-['Inter',sans-serif] text-xs leading-[18px] font-normal relative block">
-              Building the future with geometric<br />
-              precision and organic harmony.<br />
-              Elevating real estate standards.
-            </p>
-          </div>
-          <Link
-            href="/properties"
-            className="bg-[#c99b4a] hover:bg-[#b98c3b] hover:scale-[1.02] active:scale-[0.98] rounded-full border-none py-1.5 px-3.5 flex flex-row gap-2 items-center justify-start shrink-0 relative transition-all duration-300 group shadow-md mt-1"
-          >
-            <span className="text-[#3f131c] text-left font-['Inter',sans-serif] text-xs font-semibold relative flex items-center justify-start">
-              Start Property Journey
-            </span>
-            <i className="fa-solid fa-arrow-right text-[#3f131c] text-[10px] group-hover:translate-x-1 transition-transform"></i>
-          </Link>
+          <p className="text-stone-300 font-['Inter',sans-serif] text-xs sm:text-[13px] leading-relaxed max-w-[260px]">
+            Building the future with geometric<br />
+            precision and organic harmony.<br />
+            Elevating real estate standards.
+          </p>
         </div>
 
-        {/* Col 2: Company Links */}
-        <div className="flex flex-col gap-2 items-start justify-start relative">
-          <div className="text-[#ffffff] text-left font-['Inter',sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
-            Company
-          </div>
-          <Link href="/about-us" className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
-            About Us
-          </Link>
-          <Link href="/services" className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
-            Our Services
-          </Link>
-          <Link href="/properties/land" className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
-            Land Sales &amp; Plots
-          </Link>
-          <Link href="/properties/building" className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
-            Villas &amp; Buildings
-          </Link>
-          <Link href="/#projects" className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
-            Projects
-          </Link>
-          <Link href="/contact" className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal">
-            Contact
-          </Link>
+        {/* Col 2: Company */}
+        <div className="col-span-1 sm:col-span-1 md:col-span-1 lg:col-span-2 xl:col-span-2 flex flex-col gap-2 items-start justify-start">
+          <h4 className="text-white font-['Outfit',sans-serif] text-base font-bold mb-1 tracking-wide leading-6">Company</h4>
+          <Link href="/about-us" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">About us</Link>
+          <Link href="/properties/building" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Residential Property</Link>
+          <Link href="/services" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Commercial property</Link>
+          <Link href="/services" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Services</Link>
+          <Link href="/contact" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Contact</Link>
         </div>
 
-        {/* Col 3: Services Links */}
-        <div className="flex flex-col gap-1.5 items-start justify-start relative">
-          <div className="text-[#ffffff] text-left font-['Inter',sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
-            Services
+        {/* Col 3: Services (2 Equal Sub-columns of 5 & 5) */}
+        <div className="col-span-1 sm:col-span-2 md:col-span-1 lg:col-span-4 xl:col-span-4 flex flex-col gap-2 items-start sm:items-center justify-start w-full">
+          <h4 className="text-white font-['Outfit',sans-serif] text-base font-bold mb-1 tracking-wide leading-6 text-left sm:text-center sm:-translate-x-10 w-full">Services</h4>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 sm:gap-x-8 gap-y-2 items-start w-full">
+            {/* Sub-column 1 */}
+            <div className="flex flex-col gap-2 items-start justify-start">
+              <Link href="/services/land-sales" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Land sales</Link>
+              <Link href="/services/property-management" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Property Management</Link>
+              <Link href="/services/construction" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Building Construction</Link>
+              <Link href="/services/conversion" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Land conversion services</Link>
+              <Link href="/services/approvals" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">land approvals and documentation</Link>
+            </div>
+            {/* Sub-column 2 */}
+            <div className="flex flex-col gap-2 items-start justify-start">
+              <Link href="/services/purchase-assistance" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">land purchase Assistance</Link>
+              <Link href="/services/nri-management" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">NRI property Management</Link>
+              <Link href="/services/valuation" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Building Valuation</Link>
+              <Link href="/services/rentals" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Rental services</Link>
+              <Link href="/services/warehouse" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">warehouse and corporate solutions</Link>
+            </div>
           </div>
-          {[
-            { name: "Land Sales", href: "/services/land-sales" },
-            { name: "Land Purchase Assistance", href: "/services/purchase-assistance" },
-            { name: "Property Management", href: "/services/property-management" },
-            { name: "NRI Property Management", href: "/services/nri-management" },
-            { name: "Building Construction", href: "/services/construction" },
-            { name: "Building Valuation", href: "/services/valuation" },
-            { name: "Land Approvals & Documentation", href: "/services/approvals" },
-            { name: "Land Conversion Services", href: "/services/conversion" },
-            { name: "Rental Services", href: "/services/rentals" },
-            { name: "Warehouse & Corporate Solutions", href: "/services/warehouse" },
-          ].map((service) => (
-            <Link
-              key={service.name}
-              href={service.href}
-              className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[18px] font-normal"
-            >
-              {service.name}
-            </Link>
-          ))}
         </div>
 
-        {/* Col 4: Contact Info */}
-        <div className="flex flex-col gap-2 items-start justify-start relative">
-          <div className="text-[#ffffff] text-left font-['Inter',sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
-            Contact Us
-          </div>
-          <a href={`mailto:${siteInfo.email}`} className="text-[#9b98a1] hover:text-white transition-colors text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal break-all">
+        {/* Col 4: Contact Us */}
+        <div className="col-span-1 sm:col-span-1 md:col-span-1 lg:col-span-2 xl:col-span-2 flex flex-col gap-2 items-start justify-start min-w-[210px]">
+          <h4 className="text-white font-['Outfit',sans-serif] text-base font-bold mb-1 tracking-wide leading-6">Contact Us</h4>
+          <a href={`mailto:${siteInfo.email}`} className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium whitespace-nowrap block">
             {siteInfo.email}
           </a>
-          <div className="text-[#9b98a1] text-left font-['Inter',sans-serif] text-xs leading-[20px] font-normal flex flex-wrap items-center gap-1">
+          <div className="text-stone-300 font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium whitespace-nowrap flex items-center gap-1.5 flex-wrap">
             <a
-              href={`tel:+91${siteInfo.phone1Raw.replace(/^(\+91|91)/, '')}`}
-              className="hover:text-white transition-colors"
+              href={`tel:+91${(siteInfo.phone1Raw || siteInfo.phone1 || "").replace(/^(\+91|91)/, "").replace(/\D/g, "")}`}
+              className="text-stone-300 hover:text-[#c5a880] transition-colors"
               title={`Call +91 ${siteInfo.phone1}`}
             >
-              +91 {siteInfo.phone1}
+              +91 {siteInfo.phone1.replace(/^\+91\s*/, "")}
             </a>
             {siteInfo.phone2 && (
               <>
-                <span className="text-stone-500">/</span>
+                <span className="text-stone-400">/</span>
                 <a
-                  href={`tel:+91${siteInfo.phone2Raw.replace(/^(\+91|91)/, '')}`}
-                  className="hover:text-white transition-colors"
+                  href={`tel:+91${(siteInfo.phone2Raw || siteInfo.phone2 || "").replace(/^(\+91|91)/, "").replace(/\D/g, "")}`}
+                  className="text-stone-300 hover:text-[#c5a880] transition-colors"
                   title={`Call +91 ${siteInfo.phone2}`}
                 >
-                  {siteInfo.phone2}
+                  {siteInfo.phone2.replace(/^\+91\s*/, "")}
                 </a>
               </>
             )}
           </div>
-          <div className="text-[#9b98a1] text-left font-['Inter',sans-serif] text-xs leading-[18px] font-normal max-w-[220px]">
+          <div className="text-stone-300 font-['Inter',sans-serif] text-xs leading-relaxed max-w-[260px] pt-0.5">
             {siteInfo.address}
+          </div>
+
+          {/* Social Media Icons */}
+          <div className="flex items-center space-x-3 pt-2">
+            <a href={siteInfo.social.instagram} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-[#833AB4] hover:scale-110 transition-all duration-300 shadow-sm" aria-label="Instagram">
+              <i className="fa-brands fa-instagram text-sm"></i>
+            </a>
+            <a href={siteInfo.social.whatsapp} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-[#25D366] hover:scale-110 transition-all duration-300 shadow-sm" aria-label="WhatsApp">
+              <i className="fa-brands fa-whatsapp text-sm"></i>
+            </a>
+            <a href={siteInfo.social.facebook} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-[#1877F2] hover:scale-110 transition-all duration-300 shadow-sm" aria-label="Facebook">
+              <i className="fa-brands fa-facebook-f text-xs"></i>
+            </a>
           </div>
         </div>
 
-        {/* Col 5: Find Us Google Map */}
-        <div className="flex flex-col gap-2 items-start justify-start relative w-full">
-          <div className="text-[#ffffff] text-left font-[#Inter',sans-serif] text-base leading-5 font-bold relative self-stretch flex items-center justify-start mb-0.5">
-            Find Us
-          </div>
-          <div className="rounded-xl border-solid border-[rgba(255,255,255,0.12)] border flex flex-col gap-0 items-start justify-center w-full max-w-[200px] shrink-0 h-[120px] relative overflow-hidden shadow-md">
-            <div className="bg-[rgba(255,255,255,0.20)] w-full h-full relative overflow-hidden">
-              <iframe
-                src={siteInfo.mapsEmbed}
-                className="absolute inset-0 w-full h-full border-0 grayscale opacity-80 hover:opacity-100 hover:grayscale-0 transition-all duration-500"
-                allowFullScreen={false}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
-              <div className="bg-white rounded-sm px-2 py-1 flex items-center justify-start shrink-0 absolute left-2 top-2 z-10 shadow-md">
-                <a
-                  href={siteInfo.mapsLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex flex-row gap-1 items-center justify-start cursor-pointer group"
-                >
-                  <span className="text-[#1a73e8] text-[10px] font-medium group-hover:underline">Maps</span>
-                  <i className="fa-solid fa-location-dot text-[#1a73e8] text-[9px]"></i>
-                </a>
-              </div>
+        {/* Col 5: Find Us (Satellite Google Map Card) */}
+        <div className="col-span-1 sm:col-span-2 md:col-span-1 lg:col-span-2 xl:col-span-2 flex flex-col gap-2.5 items-start justify-start w-full lg:pl-4 xl:pl-6 lg:translate-x-2 xl:translate-x-3">
+          <h4 className="text-white font-['Outfit',sans-serif] text-base font-bold mb-1 tracking-wide leading-6">Find Us</h4>
+          <a
+            href={siteInfo.mapsLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-2xl border border-white/20 w-full max-w-[260px] h-[155px] relative overflow-hidden shadow-lg group block cursor-pointer transition-transform hover:scale-[1.02]"
+            aria-label="Open location in Google Maps"
+          >
+            <iframe
+              src={siteInfo.mapsEmbed}
+              className="absolute inset-0 w-full h-full border-0 opacity-90 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+              allowFullScreen={false}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <div className="bg-white/95 backdrop-blur-sm rounded-md px-2.5 py-1 flex items-center gap-1.5 absolute left-2.5 top-2.5 z-10 shadow-md">
+              <span className="flex items-center gap-1 text-[#1a73e8] text-[11px] font-semibold">
+                <span>Maps</span>
+                <i className="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+              </span>
             </div>
-          </div>
+            <div className="absolute bottom-2 left-2 right-2 bg-black/75 backdrop-blur-sm rounded px-2 py-1 z-10 text-[10px] text-white truncate font-medium flex items-center justify-between">
+              <span className="truncate">📍 Vizhi Infragen Realtors LLP</span>
+              <i className="fa-solid fa-arrow-up-right-from-square text-[8px] text-[#c5a880] ml-1 shrink-0"></i>
+            </div>
+          </a>
         </div>
+
       </div>
 
       {/* Bottom Copyright Bar */}
-      <div className="border-solid border-[rgba(255,255,255,0.1)] border-t py-6 px-6 sm:px-10 lg:px-16 flex flex-col sm:flex-row items-center justify-between w-full max-w-[1440px] gap-4 relative z-10 mx-auto">
-        <div className="text-[#888888] text-center sm:text-left font-['Inter',sans-serif] text-xs font-normal">
-          © {siteInfo.copyrightYear} {siteInfo.name}. All rights reserved.
-        </div>
-        <div className="flex flex-row gap-7 sm:gap-8 items-center justify-start shrink-0">
-          <a href={siteInfo.social.instagram} target="_blank" rel="noopener noreferrer" className="text-[#E4405F] hover:scale-125 transition-transform duration-300" aria-label="Instagram">
-            <i className="fa-brands fa-instagram text-xl"></i>
-          </a>
-          <a href={siteInfo.social.whatsapp} target="_blank" rel="noopener noreferrer" className="text-[#25D366] hover:scale-125 transition-transform duration-300" aria-label="WhatsApp">
-            <i className="fa-brands fa-whatsapp text-xl"></i>
-          </a>
-          <a href={siteInfo.social.facebook} target="_blank" rel="noopener noreferrer" className="text-[#1877F2] hover:scale-125 transition-transform duration-300" aria-label="Facebook">
-            <i className="fa-brands fa-facebook-f text-xl"></i>
-          </a>
+      <div className="border-t border-white/10 pt-6 pb-2 px-2 sm:px-6 lg:px-8 flex items-center justify-center w-full max-w-[1440px] relative z-10 mx-auto mt-10">
+        <div className="text-stone-400 text-center font-['Inter',sans-serif] text-xs font-medium">
+          &copy; {siteInfo.copyrightYear} {siteInfo.name}. All rights reserved.
         </div>
       </div>
     </footer>

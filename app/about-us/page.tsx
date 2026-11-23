@@ -3,6 +3,7 @@
 import React, { useEffect } from "react";
 import AboutHero from "@/components/about/AboutHero";
 import WhoWeAreSection from "@/components/about/WhoWeAreSection";
+import DistinguishedClienteleSection from "@/components/about/DistinguishedClienteleSection";
 import OurStorySection from "@/components/about/OurStorySection";
 import VisionMissionSection from "@/components/about/VisionMissionSection";
 import WhatWeDoSection from "@/components/about/WhatWeDoSection";
@@ -39,6 +40,7 @@ export default function AboutPage() {
     <div className="min-h-screen bg-[#FDFBF7] text-[#1E293B]">
       <AboutHero />
       <WhoWeAreSection />
+      <DistinguishedClienteleSection />
       <OurStorySection />
       <VisionMissionSection />
       <WhatWeDoSection />

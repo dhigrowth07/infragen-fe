@@ -1,7 +1,6 @@
 'use client'
 
-import React from 'react'
-import { MapPin, ExternalLink } from 'lucide-react'
+import { MapPin, ExternalLink, Phone, Mail, User } from 'lucide-react'
 import type { PublicProperty } from '@/lib/types/property.types'
 import {
   extractLandApproval,
@@ -150,6 +149,41 @@ export default function PropertySpecificationsTable({
     addIfMissing('Ownership Status', property.status)
   }
   addIfMissing('Postal Code', property.pincode)
+
+  // Asset Manager / Owner Contact Details from Admin Panel
+  const managerName = property.manager_name?.trim() || 'Vizhi Infragen Asset Desk'
+  const managerPhone = property.manager_phone?.trim() || '+91 96888 89420'
+  const managerEmail = property.manager_email?.trim() || 'admin@vizhiinfragenrealtors.com'
+
+  addIfMissing(
+    'Asset Manager',
+    <div className="flex items-center gap-2">
+      <User className="w-3.5 h-3.5 text-[#0d9488] shrink-0" />
+      <span className="font-semibold text-stone-900">{managerName}</span>
+    </div>
+  )
+
+  addIfMissing(
+    'Manager Contact',
+    <a
+      href={`tel:${managerPhone}`}
+      className="inline-flex items-center gap-1.5 text-stone-900 font-semibold hover:text-[#0d9488] transition-colors group underline underline-offset-4 decoration-stone-300 hover:decoration-[#0d9488]"
+    >
+      <Phone className="w-3.5 h-3.5 text-[#0d9488] shrink-0" />
+      <span>{managerPhone}</span>
+    </a>
+  )
+
+  addIfMissing(
+    'Manager Email',
+    <a
+      href={`mailto:${managerEmail}`}
+      className="inline-flex items-center gap-1.5 text-stone-900 font-semibold hover:text-[#0d9488] transition-colors group underline underline-offset-4 decoration-stone-300 hover:decoration-[#0d9488]"
+    >
+      <Mail className="w-3.5 h-3.5 text-[#0d9488] shrink-0" />
+      <span>{managerEmail}</span>
+    </a>
+  )
 
   if (specs.length === 0) {
     return null

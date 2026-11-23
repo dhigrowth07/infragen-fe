@@ -21,10 +21,10 @@ export const ragKnowledge: KnowledgeChunk[] = [
     id: "home_banner",
     category: "company",
     title: "About Vizhi Infragen Realtors LLP — Trusted Real Estate Company in Coimbatore",
-    content: `Vizhi Infragen Realtors LLP is a trusted real estate and property management company in Coimbatore. With over 6 years of experience, we help individuals, investors, businesses, and NRI clients buy, sell, manage, and develop properties. Our local expertise, transparent approach, and reliable guidance ensure confident real estate decisions.
+    content: `Vizhi Infragen Realtors LLP is a trusted real estate and property management company in Coimbatore. With over 7 years of experience, we help individuals, investors, businesses, and NRI clients buy, sell, manage, and develop properties. Our local expertise, transparent approach, and reliable guidance ensure confident real estate decisions.
 
 Your Reliable Partner for Land, Property & Asset Management in Coimbatore.`,
-    keywords: ["about", "who are you", "vizhi infragen", "company", "coimbatore", "real estate company", "overview", "6 years", "trusted", "property management company"],
+    keywords: ["about", "who are you", "vizhi infragen", "company", "coimbatore", "real estate company", "overview", "7 years", "trusted", "property management company"],
   },
   {
     id: "home_why_choose",
