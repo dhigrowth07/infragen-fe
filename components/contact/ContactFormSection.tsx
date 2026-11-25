@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { enquiryService } from "@/lib/services/enquiryService";
 
+const MAX_MESSAGE_LENGTH = 1000;
+
 export default function ContactFormSection() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -31,6 +33,10 @@ export default function ContactFormSection() {
     setFirstName(val);
     if (/\d/.test(val)) {
       setFirstNameError("Name does not contain number");
+    } else if (/[^a-zA-Z\s\.\'-]/.test(val)) {
+      setFirstNameError("First name cannot contain special characters.");
+    } else if (val.length > 50) {
+      setFirstNameError("First name cannot exceed 50 characters.");
     } else {
       setFirstNameError("");
     }
@@ -41,12 +47,14 @@ export default function ContactFormSection() {
     const val = raw.trim();
     if (/\d/.test(raw)) {
       setFirstNameError("Name does not contain number");
+    } else if (/[^a-zA-Z\s\.\'-]/.test(val)) {
+      setFirstNameError("First name cannot contain special characters.");
     } else if (!val) {
       setFirstNameError("Please enter your first name.");
     } else if (val.length < 2) {
       setFirstNameError("First name must be at least 2 characters.");
-    } else if (!/^[a-zA-Z\s\.\'-]{2,50}$/.test(val)) {
-      setFirstNameError("Name does not contain number");
+    } else if (val.length > 50) {
+      setFirstNameError("First name cannot exceed 50 characters.");
     } else {
       setFirstNameError("");
     }
@@ -56,6 +64,10 @@ export default function ContactFormSection() {
     setLastName(val);
     if (/\d/.test(val)) {
       setLastNameError("Name does not contain number");
+    } else if (/[^a-zA-Z\s\.\'-]/.test(val)) {
+      setLastNameError("Last name cannot contain special characters.");
+    } else if (val.length > 50) {
+      setLastNameError("Last name cannot exceed 50 characters.");
     } else {
       setLastNameError("");
     }
@@ -66,12 +78,14 @@ export default function ContactFormSection() {
     const val = raw.trim();
     if (/\d/.test(raw)) {
       setLastNameError("Name does not contain number");
+    } else if (/[^a-zA-Z\s\.\'-]/.test(val)) {
+      setLastNameError("Last name cannot contain special characters.");
     } else if (!val) {
       setLastNameError("Please enter your last name.");
     } else if (val.length < 2) {
       setLastNameError("Last name must be at least 2 characters.");
-    } else if (!/^[a-zA-Z\s\.\'-]{2,50}$/.test(val)) {
-      setLastNameError("Name does not contain number");
+    } else if (val.length > 50) {
+      setLastNameError("Last name cannot exceed 50 characters.");
     } else {
       setLastNameError("");
     }
@@ -142,8 +156,12 @@ export default function ContactFormSection() {
 
   const handleMessageChange = (val: string) => {
     setMessage(val);
-    if (messageError && val.trim().length >= 10) {
-      setMessageError("");
+    if (val.length > MAX_MESSAGE_LENGTH) {
+      setMessageError(`Message cannot exceed ${MAX_MESSAGE_LENGTH} characters.`);
+    } else if (messageError) {
+      if (val.trim().length >= 10 && val.length <= MAX_MESSAGE_LENGTH) {
+        setMessageError("");
+      }
     }
   };
 
@@ -153,6 +171,8 @@ export default function ContactFormSection() {
       setMessageError("Please enter your message.");
     } else if (val.length < 10) {
       setMessageError("Message must be at least 10 characters.");
+    } else if (message.length > MAX_MESSAGE_LENGTH) {
+      setMessageError(`Message cannot exceed ${MAX_MESSAGE_LENGTH} characters.`);
     } else {
       setMessageError("");
     }
@@ -176,14 +196,17 @@ export default function ContactFormSection() {
     if (/\d/.test(firstName)) {
       setFirstNameError("Name does not contain number");
       hasError = true;
+    } else if (/[^a-zA-Z\s\.\'-]/.test(fVal)) {
+      setFirstNameError("First name cannot contain special characters.");
+      hasError = true;
     } else if (!fVal) {
       setFirstNameError("Please enter your first name.");
       hasError = true;
     } else if (fVal.length < 2) {
       setFirstNameError("First name must be at least 2 characters.");
       hasError = true;
-    } else if (!/^[a-zA-Z\s\.\'-]{2,50}$/.test(fVal)) {
-      setFirstNameError("Name does not contain number");
+    } else if (fVal.length > 50) {
+      setFirstNameError("First name cannot exceed 50 characters.");
       hasError = true;
     } else {
       setFirstNameError("");
@@ -194,14 +217,17 @@ export default function ContactFormSection() {
     if (/\d/.test(lastName)) {
       setLastNameError("Name does not contain number");
       hasError = true;
+    } else if (/[^a-zA-Z\s\.\'-]/.test(lVal)) {
+      setLastNameError("Last name cannot contain special characters.");
+      hasError = true;
     } else if (!lVal) {
       setLastNameError("Please enter your last name.");
       hasError = true;
     } else if (lVal.length < 2) {
       setLastNameError("Last name must be at least 2 characters.");
       hasError = true;
-    } else if (!/^[a-zA-Z\s\.\'-]{2,50}$/.test(lVal)) {
-      setLastNameError("Name does not contain number");
+    } else if (lVal.length > 50) {
+      setLastNameError("Last name cannot exceed 50 characters.");
       hasError = true;
     } else {
       setLastNameError("");
@@ -253,6 +279,9 @@ export default function ContactFormSection() {
       hasError = true;
     } else if (mVal.length < 10) {
       setMessageError("Message must be at least 10 characters.");
+      hasError = true;
+    } else if (message.length > MAX_MESSAGE_LENGTH) {
+      setMessageError(`Message cannot exceed ${MAX_MESSAGE_LENGTH} characters.`);
       hasError = true;
     } else {
       setMessageError("");
@@ -455,7 +484,7 @@ export default function ContactFormSection() {
                 <div className="relative">
                   <textarea
                     rows={4}
-                    placeholder="Your Message * (Min 10 characters)"
+                    placeholder={`Your Message * (Min 10, Max ${MAX_MESSAGE_LENGTH} characters)`}
                     value={message}
                     onChange={(e) => handleMessageChange(e.target.value)}
                     onBlur={handleMessageBlur}
@@ -467,11 +496,24 @@ export default function ContactFormSection() {
                   ></textarea>
                   <i className="fa-solid fa-pen absolute left-3.5 top-4 text-stone-400 text-xs"></i>
                 </div>
-                {messageError && (
-                  <span className="text-xs text-red-500 font-medium mt-1 text-left block font-['Inter',sans-serif]">
-                    {messageError}
+                <div className="flex justify-between items-center mt-1">
+                  {messageError ? (
+                    <span className="text-xs text-red-500 font-medium text-left block font-['Inter',sans-serif]">
+                      {messageError}
+                    </span>
+                  ) : (
+                    <span></span>
+                  )}
+                  <span
+                    className={`text-xs ml-auto font-['Inter',sans-serif] ${
+                      message.length > MAX_MESSAGE_LENGTH
+                        ? "text-red-500 font-semibold"
+                        : "text-stone-400"
+                    }`}
+                  >
+                    {message.length}/{MAX_MESSAGE_LENGTH}
                   </span>
-                )}
+                </div>
               </div>
 
               {/* Checkbox Terms */}

@@ -73,6 +73,30 @@ export default function PropertyEnquiryForm({
       return
     }
 
+    if (/\d/.test(fullName)) {
+      setToast({
+        type: 'error',
+        message: 'Name cannot contain numbers.',
+      })
+      return
+    }
+
+    if (/[^a-zA-Z\s\.\'-]/.test(fullName)) {
+      setToast({
+        type: 'error',
+        message: 'Name cannot contain special characters.',
+      })
+      return
+    }
+
+    if (firstName.trim().length > 50 || lastName.trim().length > 50) {
+      setToast({
+        type: 'error',
+        message: 'Name cannot exceed 50 characters.',
+      })
+      return
+    }
+
     if (!phone.trim()) {
       setToast({
         type: 'error',
@@ -85,6 +109,22 @@ export default function PropertyEnquiryForm({
       setToast({
         type: 'error',
         message: 'Please enter a valid email address.',
+      })
+      return
+    }
+
+    if (!message.trim() || message.trim().length < 10) {
+      setToast({
+        type: 'error',
+        message: 'Message must be at least 10 characters.',
+      })
+      return
+    }
+
+    if (message.length > 1000) {
+      setToast({
+        type: 'error',
+        message: 'Message cannot exceed 1000 characters.',
       })
       return
     }
@@ -225,14 +265,34 @@ export default function PropertyEnquiryForm({
         />
 
         {/* Row 5: Message Textarea */}
-        <textarea
-          rows={4}
-          required
-          placeholder={`Hello, I am interested in [${property.name}]`}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-stone-200/90 focus:outline-none focus:ring-2 focus:ring-[#169b91] focus:border-transparent transition-all placeholder:text-stone-400 text-stone-900 resize-none bg-white"
-        />
+        <div className="flex flex-col gap-1">
+          <textarea
+            rows={4}
+            required
+            placeholder={`Hello, I am interested in [${property.name}]`}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className={`w-full px-3.5 py-2.5 text-sm rounded-lg border transition-all placeholder:text-stone-400 text-stone-900 resize-none bg-white focus:outline-none focus:ring-2 ${
+              message.length > 1000
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-stone-200/90 focus:ring-[#169b91] focus:border-transparent'
+            }`}
+          />
+          <div className="flex justify-between items-center text-xs">
+            {message.length > 1000 ? (
+              <span className="text-red-500 font-medium">Message cannot exceed 1000 characters.</span>
+            ) : (
+              <span></span>
+            )}
+            <span
+              className={`ml-auto ${
+                message.length > 1000 ? 'text-red-500 font-semibold' : 'text-stone-400'
+              }`}
+            >
+              {message.length}/1000
+            </span>
+          </div>
+        </div>
 
         {/* Row 6: Consent Checkbox */}
         <label className="flex items-start gap-2.5 text-xs text-stone-500 cursor-pointer pt-0.5 select-none">

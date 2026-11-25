@@ -21,19 +21,35 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
   const isServices = pathname === "/services";
   const isContact = pathname === "/contact";
 
+  // Prevent background scrolling when menu drawer is open
+  React.useEffect(() => {
+    if (isOpen) {
+      const originalBodyOverflow = document.body.style.overflow;
+      const originalHtmlOverflow = document.documentElement.style.overflow;
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+
+      return () => {
+        document.body.style.overflow = originalBodyOverflow;
+        document.documentElement.style.overflow = originalHtmlOverflow;
+      };
+    }
+  }, [isOpen]);
+
   return (
     <>
       {/* Backdrop Overlay */}
       <div
         onClick={onClose}
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] transition-opacity duration-300 ${
+        onTouchMove={(e) => e.preventDefault()}
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-[10000] transition-opacity duration-300 touch-none ${
           isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       />
 
       {/* Off-canvas Drawer Panel */}
       <div
-        className={`fixed top-0 right-0 h-full w-[340px] sm:w-[400px] bg-white z-[101] shadow-2xl transition-transform duration-300 ease-out flex flex-col justify-between p-8 overflow-y-auto ${
+        className={`fixed top-0 right-0 h-full w-[340px] sm:w-[400px] bg-white z-[10001] shadow-2xl transition-transform duration-300 ease-out flex flex-col justify-between p-8 overflow-y-auto overscroll-contain ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >

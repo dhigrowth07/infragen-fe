@@ -3,11 +3,14 @@
 import React, { useState } from "react";
 import { enquiryService } from "@/lib/services/enquiryService";
 
+const DEFAULT_ENQUIRY_MESSAGE =
+  "Hello, I am interested in property consulting and would like to know more details.";
+
 export default function ContactEnquirySection() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(DEFAULT_ENQUIRY_MESSAGE);
 
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -22,6 +25,10 @@ export default function ContactEnquirySection() {
     setName(val);
     if (/\d/.test(val)) {
       setNameError("Name does not contain number");
+    } else if (/[^a-zA-Z\s\.\'-]/.test(val)) {
+      setNameError("Name cannot contain special characters.");
+    } else if (val.length > 50) {
+      setNameError("Name cannot exceed 50 characters.");
     } else {
       setNameError("");
     }
@@ -31,10 +38,14 @@ export default function ContactEnquirySection() {
     const trimmed = name.trim();
     if (/\d/.test(name)) {
       setNameError("Name does not contain number");
+    } else if (/[^a-zA-Z\s\.\'-]/.test(trimmed)) {
+      setNameError("Name cannot contain special characters.");
     } else if (!trimmed) {
       setNameError("Please enter your name.");
     } else if (trimmed.length < 2) {
       setNameError("Name must be at least 2 characters.");
+    } else if (trimmed.length > 50) {
+      setNameError("Name cannot exceed 50 characters.");
     } else {
       setNameError("");
     }
@@ -99,11 +110,17 @@ export default function ContactEnquirySection() {
     if (/\d/.test(name)) {
       setNameError("Name does not contain number");
       hasError = true;
+    } else if (/[^a-zA-Z\s\.\'-]/.test(nameTrimmed)) {
+      setNameError("Name cannot contain special characters.");
+      hasError = true;
     } else if (!nameTrimmed) {
       setNameError("Please enter your name.");
       hasError = true;
     } else if (nameTrimmed.length < 2) {
       setNameError("Name must be at least 2 characters.");
+      hasError = true;
+    } else if (nameTrimmed.length > 50) {
+      setNameError("Name cannot exceed 50 characters.");
       hasError = true;
     } else {
       setNameError("");
@@ -142,8 +159,13 @@ export default function ContactEnquirySection() {
 
     if (hasError) return;
 
-    const defaultMsg = "Hello, I am interested in property consulting and would like to know more details.";
-    const finalMsg = message && message.trim() !== "" ? message.trim() : defaultMsg;
+    if (message.length > 1000) {
+      setErrorMessage("Message cannot exceed 1000 characters.");
+      return;
+    }
+
+    const finalMsg =
+      message && message.trim() !== "" ? message.trim() : DEFAULT_ENQUIRY_MESSAGE;
 
     setIsSubmitting(true);
 
@@ -161,7 +183,7 @@ export default function ContactEnquirySection() {
       setName("");
       setEmail("");
       setPhone("");
-      setMessage("");
+      setMessage(DEFAULT_ENQUIRY_MESSAGE);
       setNameError("");
       setEmailError("");
       setPhoneError("");
@@ -310,10 +332,16 @@ export default function ContactEnquirySection() {
 
             {/* Message Textarea */}
             <div className="flex flex-col w-full text-left">
-              <div className="bg-white/90 rounded-md border border-gray-300/80 px-4 py-3.5 flex flex-col gap-0 items-start justify-start relative overflow-hidden w-full focus-within:border-[#612124] focus-within:ring-2 focus-within:ring-[#612124]/20 transition-all">
+              <div
+                className={`bg-white/90 rounded-md border px-4 py-3.5 flex flex-col gap-0 items-start justify-start relative overflow-hidden w-full transition-all ${
+                  message.length > 1000
+                    ? "border-red-500 ring-2 ring-red-500/20"
+                    : "border-gray-300/80 focus-within:border-[#612124] focus-within:ring-2 focus-within:ring-[#612124]/20"
+                }`}
+              >
                 <textarea
                   rows={3}
-                  placeholder="How can we help you?"
+                  placeholder="How can we help you? (Max 1000 characters)"
                   value={message}
                   onChange={(e) => {
                     setMessage(e.target.value);
@@ -321,6 +349,16 @@ export default function ContactEnquirySection() {
                   }}
                   className="w-full bg-transparent border-none outline-none text-[#000000] text-[14px] font-['Inter',sans-serif] font-medium placeholder-[#666666] focus:ring-0 resize-none p-0"
                 ></textarea>
+              </div>
+              <div className="flex justify-between items-center mt-1 text-xs font-['Inter',sans-serif]">
+                {message.length > 1000 ? (
+                  <span className="text-red-500 font-medium">Message cannot exceed 1000 characters.</span>
+                ) : (
+                  <span></span>
+                )}
+                <span className={`ml-auto ${message.length > 1000 ? "text-red-500 font-semibold" : "text-stone-500"}`}>
+                  {message.length}/1000
+                </span>
               </div>
             </div>
 

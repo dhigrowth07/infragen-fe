@@ -47,19 +47,19 @@ export default function Footer() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 sm:gap-x-8 gap-y-2 items-start w-full">
             {/* Sub-column 1 */}
             <div className="flex flex-col gap-2 items-start justify-start">
-              <Link href="/services/land-sales" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Land sales</Link>
+              <Link href="/services/land-sales" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Land Sales</Link>
               <Link href="/services/property-management" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Property Management</Link>
               <Link href="/services/construction" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Building Construction</Link>
-              <Link href="/services/conversion" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Land conversion services</Link>
-              <Link href="/services/approvals" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">land approvals and documentation</Link>
+              <Link href="/services/conversion" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Land Conversion Services</Link>
+              <Link href="/services/approvals" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">LandAapprovals and Documentation</Link>
             </div>
             {/* Sub-column 2 */}
             <div className="flex flex-col gap-2 items-start justify-start">
-              <Link href="/services/purchase-assistance" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">land purchase Assistance</Link>
+              <Link href="/services/purchase-assistance" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Land Purchase Assistance</Link>
               <Link href="/services/nri-management" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">NRI property Management</Link>
               <Link href="/services/valuation" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Building Valuation</Link>
               <Link href="/services/rentals" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Rental services</Link>
-              <Link href="/services/warehouse" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">warehouse and corporate solutions</Link>
+              <Link href="/services/warehouse" className="text-stone-300 hover:text-[#c5a880] transition-colors font-['Inter',sans-serif] text-xs sm:text-[13px] leading-5 font-medium">Warehouse and Corporate Solutions</Link>
             </div>
           </div>
         </div>

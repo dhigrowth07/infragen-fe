@@ -23,7 +23,7 @@ export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
       const playTimer = setTimeout(() => {
         if (videoRef.current) {
           videoRef.current.currentTime = 0;
-          videoRef.current.play().catch(() => {});
+          videoRef.current.play().catch(() => { });
         }
       }, 100);
       return () => {

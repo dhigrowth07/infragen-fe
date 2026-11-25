@@ -11,36 +11,38 @@ import type { LandFilterFormState } from '@/lib/types/property.types'
 import { formatPropertyPrice } from '@/lib/formatters'
 
 export const LAND_PROPERTY_TYPES = [
-  { label: 'Types', value: '' },
-  { label: 'Farmland', value: 'Farmland' },
-  { label: 'Agricultural Land', value: 'Agricultural Land' },
-  { label: 'Commercial Land', value: 'Commercial Land' },
-  { label: 'Industrial Land', value: 'Industrial Land' },
-  { label: 'Layout Plots', value: 'Layout Plots' },
+  { label: 'All Types', value: '' },
   { label: 'Residential', value: 'Residential' },
+  { label: 'Farmland', value: 'Farmland' },
+  { label: 'Agri Culture Land', value: 'Agri Culture Land' },
+  { label: 'Agri', value: 'Agri' },
+  { label: 'Dry-agri', value: 'Dry-agri' },
+  { label: 'DTCP', value: 'DTCP' },
+  { label: 'Layout', value: 'Layout' },
+  { label: 'Gated Community Plot', value: 'Gated Community Plot' },
+  { label: 'Commercial', value: 'Commercial' },
+  { label: 'Industrial/Warehouse', value: 'Industrial/Warehouse' },
+  { label: 'Investment', value: 'Investment' },
   { label: 'Rental Income', value: 'Rental Income' },
 ]
 
 export const LAND_LOCATIONS = [
-  { label: 'coimbatore', value: 'Coimbatore' },
   { label: 'All Locations', value: '' },
-  { label: 'sulur', value: 'Sulur' },
-  { label: 'kalapatti', value: 'Kalapatti' },
-  { label: 'neelambur', value: 'Neelambur' },
-  { label: 'saravanampatti', value: 'Saravanampatti' },
-  { label: 'pollachi', value: 'Pollachi' },
-  { label: 'tiruppur', value: 'Tiruppur' },
-  { label: 'bengaluru', value: 'Bengaluru' },
+  { label: 'Sulur', value: 'Sulur' },
+  { label: 'Karamadai', value: 'Karamadai' },
+  { label: 'Singanallur', value: 'Singanallur' },
+  { label: 'Tiruppur', value: 'tiruppur' },
+  { label: 'Coimbatore', value: 'Coimbatore' },
+  { label: 'Chennai', value: 'Chennai' },
 ]
 
 export const LAND_ROADS = [
-  { label: 'Trichy road', value: 'Trichy Road' },
   { label: 'All Roads', value: '' },
-  { label: 'Avinashi road', value: 'Avinashi Road' },
-  { label: 'Sathy road', value: 'Sathy Road' },
-  { label: 'Palladam road', value: 'Palladam Road' },
-  { label: 'Saravanampatti - IT Corridor', value: 'Saravanampatti - IT Corridor' },
-  { label: '60ft Tar / Bitumen Main Road', value: '60ft Tar / Bitumen Main Road' },
+  { label: 'Trichy - Cbe 6-Lane Expressway', value: 'Trichy - Cbe 6-Lane Expressway' },
+  { label: 'Mettupalayam Road NH-67', value: 'Mettupalayam Road NH-67' },
+  { label: 'Hosur Road Express Highway', value: 'Hosur Road Express Highway' },
+  { label: 'Avinashi Road', value: 'Avinashi Road' },
+  { label: 'Sathy Road', value: 'Sathy Road' },
 ]
 
 export const MIN_PRICE_LIMIT = 0
@@ -53,20 +55,14 @@ export interface LandFilterSidebarProps {
   onSearch: () => void
   onReset: () => void
   className?: string
+  propertyTypeOptions?: string[]
+  locationOptions?: string[]
+  roadOptions?: string[]
 }
 
 /**
  * Land Filter Sidebar Component
- * Strictly matching the UI design wireframe:
- * - Blue sliders icon + "Property Search" + "Clear Filters"
- * - Thin divider
- * - PROPERTY ID: Text input (placeholder: "Type ID")
- * - PROPERTY TYPE: Dropdown with "Types" default
- * - LOCATION: Dropdown with "coimbatore" default
- * - ROAD: Dropdown with "Trichy road" default
- * - MINIMUM SIZE: Number/text input (placeholder: "Min Size in Ft.")
- * - Price range: Dual interactive slider
- * - Search: Full-width vibrant blue button with search icon
+ * Dynamically populated from backend catalog with sensible fallback options.
  */
 export default function LandFilterSidebar({
   filters,
@@ -74,7 +70,40 @@ export default function LandFilterSidebar({
   onSearch,
   onReset,
   className = '',
+  propertyTypeOptions,
+  locationOptions,
+  roadOptions,
 }: LandFilterSidebarProps) {
+  const typeOptions = React.useMemo(() => {
+    if (propertyTypeOptions && propertyTypeOptions.length > 0) {
+      return [
+        { label: 'All Types', value: '' },
+        ...propertyTypeOptions.map((t) => ({ label: t, value: t })),
+      ]
+    }
+    return LAND_PROPERTY_TYPES
+  }, [propertyTypeOptions])
+
+  const locOptions = React.useMemo(() => {
+    if (locationOptions && locationOptions.length > 0) {
+      return [
+        { label: 'All Locations', value: '' },
+        ...locationOptions.map((loc) => ({ label: loc, value: loc })),
+      ]
+    }
+    return LAND_LOCATIONS
+  }, [locationOptions])
+
+  const rdOptions = React.useMemo(() => {
+    if (roadOptions && roadOptions.length > 0) {
+      return [
+        { label: 'All Roads', value: '' },
+        ...roadOptions.map((rd) => ({ label: rd, value: rd })),
+      ]
+    }
+    return LAND_ROADS
+  }, [roadOptions])
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     onSearch()
@@ -179,7 +208,7 @@ export default function LandFilterSidebar({
               }
               className="w-full appearance-none px-3.5 py-2.5 rounded-xl border border-stone-300 text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb]/20 focus:border-[#2563eb] transition-all bg-white pr-10 cursor-pointer"
             >
-              {LAND_PROPERTY_TYPES.map((t) => (
+              {typeOptions.map((t) => (
                 <option key={t.value} value={t.value}>
                   {t.label}
                 </option>
@@ -210,7 +239,7 @@ export default function LandFilterSidebar({
               }
               className="w-full appearance-none px-3.5 py-2.5 rounded-xl border border-stone-300 text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb]/20 focus:border-[#2563eb] transition-all bg-white pr-10 cursor-pointer"
             >
-              {LAND_LOCATIONS.map((loc) => (
+              {locOptions.map((loc) => (
                 <option key={loc.value} value={loc.value}>
                   {loc.label}
                 </option>
@@ -237,7 +266,7 @@ export default function LandFilterSidebar({
               }
               className="w-full appearance-none px-3.5 py-2.5 rounded-xl border border-stone-300 text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb]/20 focus:border-[#2563eb] transition-all bg-white pr-10 cursor-pointer"
             >
-              {LAND_ROADS.map((r) => (
+              {rdOptions.map((r) => (
                 <option key={r.value} value={r.value}>
                   {r.label}
                 </option>
