@@ -24,6 +24,41 @@ export interface ScheduleTourCardProps {
  * - CTA Button: `REQUEST A VIRTUAL TOUR`
  * - Submits to `POST /api/v1/public/enquiries` with `enquiry_type: 'VIRTUAL_TOUR_REQUEST'`
  */
+// Helpers for local date and time handling
+const getTodayDateString = () => {
+  const d = new Date()
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+const getCurrentTimeString = () => {
+  const d = new Date()
+  const hours = String(d.getHours()).padStart(2, '0')
+  const minutes = String(d.getMinutes()).padStart(2, '0')
+  return `${hours}:${minutes}`
+}
+
+const getTomorrowDateString = () => {
+  const d = new Date(Date.now() + 86400000)
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+const isPastDateTime = (dateStr: string, timeStr: string) => {
+  if (!dateStr || !timeStr) return false
+  const [year, month, day] = dateStr.split('-').map(Number)
+  const [hours, minutes] = timeStr.split(':').map(Number)
+  if (isNaN(year) || isNaN(month) || isNaN(day) || isNaN(hours) || isNaN(minutes)) {
+    return false
+  }
+  const target = new Date(year, month - 1, day, hours, minutes)
+  return target.getTime() <= Date.now()
+}
+
 export default function ScheduleTourCard({
   property,
   className = '',
@@ -33,16 +68,43 @@ export default function ScheduleTourCard({
   const [tourEmail, setTourEmail] = useState('')
 
   // Default to tomorrow's date using lazy state initialization
-  const [tourDate, setTourDate] = useState(() =>
-    new Date(Date.now() + 86400000).toISOString().split('T')[0]
-  )
+  const [tourDate, setTourDate] = useState(() => getTomorrowDateString())
   const [tourTime, setTourTime] = useState('11:00')
+  const [timeError, setTimeError] = useState<string | null>(null)
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [toast, setToast] = useState<{
     type: 'success' | 'error'
     message: string
   } | null>(null)
+
+  const todayStr = getTodayDateString()
+  const currentTimeStr = getCurrentTimeString()
+  const isToday = tourDate === todayStr
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newDate = e.target.value
+    setTourDate(newDate)
+    if (newDate < todayStr) {
+      setTimeError('Past date cannot be selected.')
+    } else if (isPastDateTime(newDate, tourTime)) {
+      setTimeError('Past time of the current date cannot be selected.')
+    } else {
+      setTimeError(null)
+    }
+  }
+
+  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTime = e.target.value
+    setTourTime(newTime)
+    if (tourDate < todayStr) {
+      setTimeError('Past date cannot be selected.')
+    } else if (isPastDateTime(tourDate, newTime)) {
+      setTimeError('Past time of the current date cannot be selected.')
+    } else {
+      setTimeError(null)
+    }
+  }
 
   const handleScheduleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -71,13 +133,27 @@ export default function ScheduleTourCard({
       return
     }
 
+    if (isPastDateTime(tourDate, tourTime)) {
+      const errorMsg =
+        tourDate < todayStr
+          ? 'Past date cannot be selected. Please choose a future date.'
+          : 'Past time of the current date cannot be selected. Please choose a future time.'
+      setTimeError(errorMsg)
+      setToast({
+        type: 'error',
+        message: errorMsg,
+      })
+      return
+    }
+
     setIsSubmitting(true)
     setToast(null)
 
     try {
-      const scheduledIso = tourDate
-        ? new Date(`${tourDate}T${tourTime}:00`).toISOString()
-        : new Date(Date.now() + 86400000).toISOString()
+      const [year, month, day] = tourDate.split('-').map(Number)
+      const [hours, minutes] = tourTime.split(':').map(Number)
+      const scheduledDate = new Date(year, month - 1, day, hours, minutes)
+      const scheduledIso = scheduledDate.toISOString()
 
       await enquiryService.scheduleTour({
         name: tourName.trim(),
@@ -99,6 +175,7 @@ export default function ScheduleTourCard({
       setTourName('')
       setTourPhone('')
       setTourEmail('')
+      setTimeError(null)
     } catch (err: unknown) {
       const errorMsg =
         err instanceof Error
@@ -181,32 +258,53 @@ export default function ScheduleTourCard({
         />
 
         {/* Date and Time Selector */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="relative">
-            <input
-              type="date"
-              required
-              min={new Date().toISOString().split('T')[0]}
-              value={tourDate}
-              onChange={(e) => setTourDate(e.target.value)}
-              className="w-full pl-3 pr-2 py-2 text-xs rounded-lg border border-stone-200/90 focus:outline-none focus:ring-2 focus:ring-[#169b91] focus:border-transparent text-stone-800 bg-white cursor-pointer"
-            />
+        <div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="relative">
+              <label htmlFor="tour-date-input" className="sr-only">Tour Date</label>
+              <input
+                id="tour-date-input"
+                type="date"
+                required
+                min={todayStr}
+                value={tourDate}
+                onChange={handleDateChange}
+                className={`w-full pl-3 pr-2 py-2 text-xs rounded-lg border transition-all text-stone-800 bg-white cursor-pointer ${
+                  timeError && tourDate <= todayStr
+                    ? 'border-rose-400 focus:ring-2 focus:ring-rose-400 focus:border-rose-400'
+                    : 'border-stone-200/90 focus:outline-none focus:ring-2 focus:ring-[#169b91] focus:border-transparent'
+                }`}
+              />
+            </div>
+            <div className="relative">
+              <label htmlFor="tour-time-input" className="sr-only">Tour Time</label>
+              <input
+                id="tour-time-input"
+                type="time"
+                required
+                min={isToday ? currentTimeStr : undefined}
+                value={tourTime}
+                onChange={handleTimeChange}
+                className={`w-full pl-3 pr-2 py-2 text-xs rounded-lg border transition-all text-stone-800 bg-white cursor-pointer ${
+                  timeError
+                    ? 'border-rose-400 focus:ring-2 focus:ring-rose-400 focus:border-rose-400 bg-rose-50/20'
+                    : 'border-stone-200/90 focus:outline-none focus:ring-2 focus:ring-[#169b91] focus:border-transparent'
+                }`}
+              />
+            </div>
           </div>
-          <div className="relative">
-            <input
-              type="time"
-              required
-              value={tourTime}
-              onChange={(e) => setTourTime(e.target.value)}
-              className="w-full pl-3 pr-2 py-2 text-xs rounded-lg border border-stone-200/90 focus:outline-none focus:ring-2 focus:ring-[#169b91] focus:border-transparent text-stone-800 bg-white cursor-pointer"
-            />
-          </div>
+          {timeError && (
+            <p className="text-xs text-rose-600 flex items-center gap-1.5 font-medium mt-1.5 animate-fadeIn" role="alert">
+              <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+              <span>{timeError}</span>
+            </p>
+          )}
         </div>
 
         {/* Teal CTA Button */}
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || !!timeError}
           className="w-full mt-2 py-3 rounded-lg bg-[#169b91] hover:bg-[#13857c] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.99] shadow-sm cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
         >
           <span>{isSubmitting ? 'PROCESSING...' : 'REQUEST A VIRTUAL TOUR'}</span>

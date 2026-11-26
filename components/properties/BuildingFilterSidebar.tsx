@@ -12,29 +12,31 @@ import { formatPropertyPrice } from '@/lib/formatters'
 
 export const BUILDING_PROPERTY_TYPES = [
   { label: 'All Types', value: '' },
-  { label: 'Villa', value: 'Villa' },
-  { label: 'Townhouse', value: 'Townhouse' },
-  { label: 'Apartment', value: 'Apartment' },
-  { label: 'Penthouse', value: 'Penthouse' },
-  { label: 'Commercial Office', value: 'Commercial Office' },
-  { label: 'Studio', value: 'Studio' },
+  { label: 'Gated Community', value: 'Gated Community' },
+  { label: 'Home/Villa/Apartment', value: 'Home/Villa/Apartment' },
+  { label: 'Residential Apartments', value: 'Residential Apartments' },
+  { label: 'Residential', value: 'Residential' },
+  { label: 'Commercial', value: 'Commercial' },
+  { label: 'Industrial/Warehouse', value: 'Industrial/Warehouse' },
+  { label: 'Dry-agri', value: 'Dry-agri' },
+  { label: 'Investment', value: 'Investment' },
+  { label: 'Rental Income', value: 'Rental Income' },
 ]
 
 export const BUILDING_LOCATIONS = [
   { label: 'All Locations', value: '' },
-  { label: 'Coimbatore', value: 'Coimbatore' },
+  { label: 'Vadavalli', value: 'Vadavalli' },
   { label: 'Sulur', value: 'Sulur' },
-  { label: 'Kalapatti', value: 'Kalapatti' },
-  { label: 'Neelambur', value: 'Neelambur' },
-  { label: 'Saravanampatti', value: 'Saravanampatti' },
+  { label: 'Race Course Road', value: 'Race Course Road' },
+  { label: 'Avinashi Road', value: 'Avinashi Road' },
+  { label: 'Coimbatore', value: 'Coimbatore' },
 ]
 
 export const BUILDING_ROADS = [
   { label: 'All Roads', value: '' },
-  { label: 'Trichy Road', value: 'Trichy Road' },
-  { label: 'Avinashi Road', value: 'Avinashi Road' },
-  { label: 'Sathy Road', value: 'Sathy Road' },
-  { label: 'Mettupalayam Road', value: 'Mettupalayam Road' },
+  { label: '30ft Residential Access Road', value: '30ft Residential Access Road' },
+  { label: '60ft Tar / Bitumen Main Road', value: '60ft Tar / Bitumen Main Road' },
+  { label: 'Trichy - Cbe 6-Lane Expressway', value: 'Trichy - Cbe 6-Lane Expressway' },
 ]
 
 export const MIN_PRICE_LIMIT = 0
@@ -47,19 +49,14 @@ export interface BuildingFilterSidebarProps {
   onSearch: () => void
   onReset: () => void
   className?: string
+  propertyTypeOptions?: string[]
+  locationOptions?: string[]
+  roadOptions?: string[]
 }
 
 /**
  * Building Filter Sidebar Component
- * Strictly matching reference-ui/property - building - page.png:
- * - Header: "Property Search" with icon + "Clear Filters" reset button
- * - PROPERTY ID: Text input (Type ID)
- * - PROPERTY TYPE: Select dropdown (Villa, Townhouse, Apartment, etc.)
- * - LOCATION: Select dropdown (Coimbatore, Sulur, etc.)
- * - ROAD: Select dropdown (Trichy Road, Avinashi Road, etc.)
- * - MINIMUM SIZE: Number input (Min Size in Ft.)
- * - Price range: Dual interactive range slider with formatted labels
- * - Search CTA: Full-width blue button with search icon
+ * Dynamically populated from backend catalog with sensible fallback options.
  */
 export default function BuildingFilterSidebar({
   filters,
@@ -67,7 +64,40 @@ export default function BuildingFilterSidebar({
   onSearch,
   onReset,
   className = '',
+  propertyTypeOptions,
+  locationOptions,
+  roadOptions,
 }: BuildingFilterSidebarProps) {
+  const typeOptions = React.useMemo(() => {
+    if (propertyTypeOptions && propertyTypeOptions.length > 0) {
+      return [
+        { label: 'All Types', value: '' },
+        ...propertyTypeOptions.map((t) => ({ label: t, value: t })),
+      ]
+    }
+    return BUILDING_PROPERTY_TYPES
+  }, [propertyTypeOptions])
+
+  const locOptions = React.useMemo(() => {
+    if (locationOptions && locationOptions.length > 0) {
+      return [
+        { label: 'All Locations', value: '' },
+        ...locationOptions.map((loc) => ({ label: loc, value: loc })),
+      ]
+    }
+    return BUILDING_LOCATIONS
+  }, [locationOptions])
+
+  const rdOptions = React.useMemo(() => {
+    if (roadOptions && roadOptions.length > 0) {
+      return [
+        { label: 'All Roads', value: '' },
+        ...roadOptions.map((rd) => ({ label: rd, value: rd })),
+      ]
+    }
+    return BUILDING_ROADS
+  }, [roadOptions])
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     onSearch()
@@ -168,7 +198,7 @@ export default function BuildingFilterSidebar({
               }
               className="w-full appearance-none px-3.5 py-2.5 rounded-xl border border-stone-300 text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb]/20 focus:border-[#2563eb] transition-all bg-stone-50/50 pr-10 cursor-pointer"
             >
-              {BUILDING_PROPERTY_TYPES.map((pt) => (
+              {typeOptions.map((pt) => (
                 <option key={pt.value} value={pt.value}>
                   {pt.label}
                 </option>
@@ -195,7 +225,7 @@ export default function BuildingFilterSidebar({
               }
               className="w-full appearance-none px-3.5 py-2.5 rounded-xl border border-stone-300 text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb]/20 focus:border-[#2563eb] transition-all bg-stone-50/50 pr-10 cursor-pointer"
             >
-              {BUILDING_LOCATIONS.map((loc) => (
+              {locOptions.map((loc) => (
                 <option key={loc.value} value={loc.value}>
                   {loc.label}
                 </option>
@@ -222,7 +252,7 @@ export default function BuildingFilterSidebar({
               }
               className="w-full appearance-none px-3.5 py-2.5 rounded-xl border border-stone-300 text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb]/20 focus:border-[#2563eb] transition-all bg-stone-50/50 pr-10 cursor-pointer"
             >
-              {BUILDING_ROADS.map((road) => (
+              {rdOptions.map((road) => (
                 <option key={road.value} value={road.value}>
                   {road.label}
                 </option>

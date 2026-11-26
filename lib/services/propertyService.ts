@@ -5,6 +5,8 @@ import type {
   PublicPropertyListQuery,
   PublicProperty,
   PropertyType,
+  PropertyFilterOptions,
+  FilterOptionsResponse,
 } from '@/lib/types/property.types'
 
 /**
@@ -70,6 +72,42 @@ export const propertyService = {
       return list.filter((p) => p.slug !== currentSlug).slice(0, limit)
     } catch {
       return []
+    }
+  },
+
+  /**
+   * Retrieves dynamic filter options (property sub-types, locations, roads)
+   * matching real property catalog in the database.
+   * Calls GET /api/v1/public/properties/filter-options
+   */
+  async getFilterOptions(
+    propertyType?: PropertyType
+  ): Promise<PropertyFilterOptions> {
+    try {
+      const params: Record<string, unknown> = {}
+      if (propertyType) {
+        params.property_type = propertyType
+      }
+      const response = await apiClient.get<FilterOptionsResponse>(
+        '/public/properties/filter-options',
+        params
+      )
+      return (
+        response.data || {
+          property_types: [],
+          propertyTypes: [],
+          locations: [],
+          roads: [],
+        }
+      )
+    } catch (err) {
+      console.error('Failed to load filter options:', err)
+      return {
+        property_types: [],
+        propertyTypes: [],
+        locations: [],
+        roads: [],
+      }
     }
   },
 }

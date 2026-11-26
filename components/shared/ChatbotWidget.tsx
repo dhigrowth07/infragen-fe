@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   FaMapLocationDot,
   FaBuilding,
@@ -642,10 +643,45 @@ const CHIP_ROUTES: Record<string, { display: string; prompt: string }> = {
 
 export default function ChatbotWidget() {
   const { siteInfo, whatsappLink } = useSiteSettings();
+  const pathname = usePathname();
+  const prevPathnameRef = useRef(pathname);
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [hasUnread, setHasUnread] = useState(true);
   const [visible, setVisible] = useState(false);
+
+  // Close chatbot when route changes (e.g. navigation to service or property page)
+  useEffect(() => {
+    if (prevPathnameRef.current !== pathname) {
+      prevPathnameRef.current = pathname;
+      setIsOpen(false);
+      setIsMinimized(false);
+    }
+  }, [pathname]);
+
+  // Prevent background scrolling when chatbot is open in mobile view
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const lockScroll = () => {
+      if (window.innerWidth < 768) {
+        document.body.style.overflow = "hidden";
+        document.documentElement.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
+      }
+    };
+
+    lockScroll();
+    window.addEventListener("resize", lockScroll);
+
+    return () => {
+      window.removeEventListener("resize", lockScroll);
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, [isOpen]);
   const [messages, setMessages] = useState<MessageItem[]>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -1128,15 +1164,27 @@ export default function ChatbotWidget() {
         </button>
       )}
 
+      {/* Mobile Backdrop Overlay for Chatbot */}
+      {isOpen && (
+        <div
+          onClick={() => {
+            setIsOpen(false);
+            setIsMinimized(false);
+          }}
+          onTouchMove={(e) => e.preventDefault()}
+          className="fixed inset-0 bg-black/40 backdrop-blur-xs z-[9996] sm:hidden transition-opacity duration-300 touch-none"
+        />
+      )}
+
       {/* Chat Window */}
       <div
-        className={`fixed bottom-20 sm:bottom-24 right-3 sm:right-6 z-[9998] w-[calc(100vw-24px)] sm:w-[420px] max-w-[420px] flex flex-col bg-white rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.22)] border border-stone-200/60 overflow-hidden transition-all duration-300 origin-bottom-right ${
+        className={`fixed bottom-20 sm:bottom-24 right-3 sm:right-6 z-[9998] w-[calc(100vw-24px)] sm:w-[420px] max-w-[420px] flex flex-col bg-white rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.22)] border border-stone-200/60 overflow-hidden transition-all duration-300 origin-bottom-right overscroll-contain ${
           isOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-90 pointer-events-none"
         }`}
         style={{ height: "min(650px, calc(100dvh - 96px))" }}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#1A0810] via-[#2D1015] to-[#3d1520] px-4 py-3 flex items-center justify-between shrink-0 shadow-lg border-b border-white/10">
+        <div className="bg-gradient-to-r from-[#1A0810] via-[#2D1015] to-[#3d1520] px-4 py-3 flex items-center justify-between shrink-0 shadow-lg border-b border-white/10 touch-none">
           <div className="flex items-center gap-2.5">
             <div className="relative shrink-0">
               <div className="w-10 h-10 rounded-full bg-[#c5a880]/15 border-2 border-[#c5a880]/70 flex items-center justify-center text-[#c5a880]">
@@ -1168,7 +1216,7 @@ export default function ChatbotWidget() {
         </div>
 
         {/* Quick Actions Scroll Bar */}
-        <div className="bg-[#1A0810] px-3 py-1.5 flex items-center gap-1.5 overflow-x-auto shrink-0 scrollbar-none border-b border-white/10">
+        <div className="bg-[#1A0810] px-3 py-1.5 flex items-center gap-1.5 overflow-x-auto overscroll-contain shrink-0 scrollbar-none border-b border-white/10">
           {[
             { label: "Search Property", action: "chip_search_prop" },
             { label: "Locations", action: "chip_locations" },
@@ -1187,7 +1235,7 @@ export default function ChatbotWidget() {
         </div>
 
         {/* Messages List */}
-        <div className="flex-1 overflow-y-auto p-3.5 bg-gradient-to-b from-[#faf7f4] to-[#f5f0ea] space-y-3.5 font-['Inter',sans-serif]">
+        <div className="flex-1 overflow-y-auto overscroll-contain p-3.5 bg-gradient-to-b from-[#faf7f4] to-[#f5f0ea] space-y-3.5 font-['Inter',sans-serif]">
           {messages.map((m) => (
             <div key={m.id} className={`flex items-end gap-2 ${m.sender === "user" ? "flex-row-reverse" : ""}`}>
               {m.sender === "bot" && (
@@ -1348,6 +1396,10 @@ export default function ChatbotWidget() {
                           <Link
                             key={i}
                             href={c.link}
+                            onClick={() => {
+                              setIsOpen(false);
+                              setIsMinimized(false);
+                            }}
                             className="group inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-[11px] font-bold border border-[#c5a880] bg-[#1F0A10] text-white hover:bg-[#c5a880] hover:text-[#1F0A10] hover:border-[#dfcaa7] shadow-sm transition-all duration-150 cursor-pointer"
                           >
                             {c.icon && <RenderIcon icon={c.icon} className="text-[#c5a880] group-hover:text-[#1F0A10] transition-colors text-xs" />}
@@ -1389,7 +1441,7 @@ export default function ChatbotWidget() {
 
         {/* Mention Autocomplete Popover */}
         {showMentionMenu && filteredMentions.length > 0 && (
-          <div className="bg-white border-t border-stone-200 max-h-36 overflow-y-auto p-1 text-[11px] shadow-lg shrink-0">
+          <div className="bg-white border-t border-stone-200 max-h-36 overflow-y-auto overscroll-contain p-1 text-[11px] shadow-lg shrink-0">
             <div className="px-2 py-1 text-[9px] font-bold text-stone-400 uppercase tracking-wider">Select Tag to Filter Knowledge:</div>
             {filteredMentions.map((opt) => (
               <button

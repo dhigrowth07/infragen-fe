@@ -387,3 +387,20 @@ export const LAND_APPROVAL_OPTIONS = [
   'Agricultural Conversion / NOC',
 ] as const
 
+export interface PropertyFilterOptions {
+  property_types?: string[]
+  propertyTypes?: string[]
+  locations: string[]
+  roads: string[]
+  price_range?: { min: number; max: number }
+  priceRange?: { min: number; max: number }
+}
+
+export interface FilterOptionsResponse {
+  success: boolean
+  status_code: number
+  message: string
+  data: PropertyFilterOptions
+}
+
+

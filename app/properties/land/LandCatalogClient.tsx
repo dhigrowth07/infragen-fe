@@ -8,6 +8,7 @@ import type {
   PublicProperty,
   PaginationMeta,
   PublicPropertySort,
+  PropertyFilterOptions,
 } from '@/lib/types/property.types'
 import { propertyService } from '@/lib/services/propertyService'
 import {
@@ -167,6 +168,20 @@ export default function LandCatalogClient() {
   const [properties, setProperties] = useState<PublicProperty[]>([])
   const [pagination, setPagination] = useState<PaginationMeta>(DEFAULT_PAGINATION)
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [filterOptions, setFilterOptions] = useState<PropertyFilterOptions | null>(null)
+
+  // Fetch dynamic filter options from backend
+  useEffect(() => {
+    let isMounted = true
+    propertyService.getFilterOptions('LAND').then((res) => {
+      if (isMounted && res) {
+        setFilterOptions(res)
+      }
+    })
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   const lastSyncedQuery = useRef<string>('')
   const requestIdRef = useRef<number>(0)
@@ -418,6 +433,9 @@ export default function LandCatalogClient() {
               onFilterChange={setFilters}
               onSearch={handleSearch}
               onReset={handleReset}
+              propertyTypeOptions={filterOptions?.property_types || filterOptions?.propertyTypes}
+              locationOptions={filterOptions?.locations}
+              roadOptions={filterOptions?.roads}
             />
           </aside>
 
