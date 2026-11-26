@@ -10,56 +10,56 @@ interface ProjectReelItem {
 
 const row1BaseItems: ProjectReelItem[] = [
   {
-    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/14+cents+Kovilpalayam.MOV",
+    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/01-property-2-70-acres-lt-bypass.webm",
+    alt: "2.70 Acres L&T Bypass",
+    isLong: false,
+  },
+  {
+    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/02-property-4-5-cents-kovilpalayam-sathy-road.webm",
+    alt: "4.5 Cents Kovilpalayam - Sathy Road",
+    isLong: true,
+  },
+  {
+    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/03-property-14-cents-kovilpalayam.webm",
     alt: "14 Cents Kovilpalayam",
     isLong: false,
   },
   {
-    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/2.70+acre+L%26T+.2.MOV",
-    alt: "2.70 Acre L&T Bypass",
+    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/04-property-20-acres-farmland-kannampalayam.webm",
+    alt: "20 Acres Farmland Kannampalayam",
     isLong: true,
   },
   {
-    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/20+Acre+FarmLand+Kannamapalayam.MOV",
-    alt: "20 Acre Farm Land Kannampalayam",
-    isLong: false,
-  },
-  {
-    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/33+Cents+Opp+To+Ocean.MOV",
-    alt: "33 Cents Opp To Ocean",
-    isLong: true,
-  },
-  {
-    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/4.5+Cents+Kovilpalayam+-+Sathy+Road.MOV",
-    alt: "4.5 Cents Kovilpalayam - Sathy Road",
+    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/05-property-33-cents-opp-ocean.webm",
+    alt: "33 Cents Opp Ocean",
     isLong: false,
   },
 ];
 
 const row2BaseItems: ProjectReelItem[] = [
   {
-    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/45+Cents+Chettipalayam.MOV",
+    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/06-property-45-cents-chettipalayam.webm",
     alt: "45 Cents Chettipalayam",
     isLong: true,
   },
   {
-    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/67+cents++L%26T+Bypass.MOV",
+    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/07-property-67-cents-lt-bypass.webm",
     alt: "67 Cents L&T Bypass",
     isLong: false,
   },
   {
-    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/73+cents+opposite+to+casa+grand.MOV",
-    alt: "73 Cents Opposite to Casagrand",
+    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/08-property-73-cents-opp-casagrand.webm",
+    alt: "73 Cents Opp Casagrand",
     isLong: true,
   },
   {
-    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/infragen+1.mp4",
-    alt: "Infragen Project Showcase 1",
+    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/09-property-farmland-gated-community.webm",
+    alt: "Farmland Gated Community",
     isLong: false,
   },
   {
-    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/infragen+2.mp4",
-    alt: "Infragen Project Showcase 2",
+    src: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/10-property-kurumbapalayam-main-road.webm",
+    alt: "Kurumbapalayam Main Road",
     isLong: true,
   },
 ];
