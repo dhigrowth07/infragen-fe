@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Maximize2, X, ZoomIn, ZoomOut, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Maximize2, X, ZoomIn, ZoomOut, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react'
 import type { PublicProperty } from '@/lib/types/property.types'
 
 export interface PropertyFloorPlanViewerProps {
@@ -70,6 +70,11 @@ export default function PropertyFloorPlanViewer({
 
   const currentSketch = sketchItems[activeSketchIndex] || sketchItems[0]
   const floorPlanUrl = currentSketch.file_url
+  const isPdf =
+    Boolean(floorPlanUrl) &&
+    (floorPlanUrl.toLowerCase().split('?')[0].endsWith('.pdf') ||
+      currentSketch.file_name?.toLowerCase().endsWith('.pdf') ||
+      currentSketch.mime_type === 'application/pdf')
 
   const handleOpen = () => {
     setZoomLevel(1)
@@ -156,22 +161,42 @@ export default function PropertyFloorPlanViewer({
           onClick={handleOpen}
           className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-lg overflow-hidden bg-white border border-stone-200/70 shadow-inner group cursor-pointer"
         >
-          <Image
-            key={floorPlanUrl}
-            src={floorPlanUrl}
-            alt={`${property.name} architectural floor plan ${activeSketchIndex + 1}`}
-            fill
-            sizes="(max-width: 1024px) 100vw, 800px"
-            className="object-contain p-2 sm:p-4 transition-transform duration-300 group-hover:scale-102"
-          />
+          {isPdf ? (
+            <div className="w-full h-full min-h-[300px] flex flex-col items-center justify-center bg-stone-100 relative">
+              <iframe
+                key={floorPlanUrl}
+                src={`${floorPlanUrl}#toolbar=0&navpanes=0`}
+                title={`${property.name} architectural floor plan ${activeSketchIndex + 1}`}
+                className="w-full h-full border-0 rounded-lg pointer-events-none"
+              />
+              {/* Hover Overlay Hint */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                <span className="opacity-90 group-hover:opacity-100 transition-opacity px-4 py-2 rounded-full text-xs font-bold bg-black/80 text-white backdrop-blur-sm flex items-center gap-2 shadow-lg">
+                  <Maximize2 className="w-3.5 h-3.5" />
+                  <span>Inspect Blueprint (PDF)</span>
+                </span>
+              </div>
+            </div>
+          ) : (
+            <>
+              <Image
+                key={floorPlanUrl}
+                src={floorPlanUrl}
+                alt={`${property.name} architectural floor plan ${activeSketchIndex + 1}`}
+                fill
+                sizes="(max-width: 1024px) 100vw, 800px"
+                className="object-contain p-2 sm:p-4 transition-transform duration-300 group-hover:scale-102"
+              />
 
-          {/* Hover Overlay Hint */}
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors flex items-center justify-center">
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity px-3.5 py-1.5 rounded-full text-xs font-bold bg-black/75 text-white backdrop-blur-sm flex items-center gap-1.5 shadow-lg">
-              <Maximize2 className="w-3.5 h-3.5" />
-              <span>Inspect Blueprint</span>
-            </span>
-          </div>
+              {/* Hover Overlay Hint */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors flex items-center justify-center">
+                <span className="opacity-0 group-hover:opacity-100 transition-opacity px-3.5 py-1.5 rounded-full text-xs font-bold bg-black/75 text-white backdrop-blur-sm flex items-center gap-1.5 shadow-lg">
+                  <Maximize2 className="w-3.5 h-3.5" />
+                  <span>Inspect Blueprint</span>
+                </span>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -204,35 +229,52 @@ export default function PropertyFloorPlanViewer({
             </div>
 
             <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-              {/* Zoom Controls */}
-              <div className="flex items-center bg-white/10 rounded-lg p-1 border border-white/10">
-                <button
-                  type="button"
-                  onClick={handleZoomOut}
-                  className="p-1.5 sm:p-2 rounded text-white/80 hover:text-white hover:bg-white/15 transition-colors cursor-pointer"
-                  title="Zoom Out (-)"
-                  aria-label="Zoom out"
+              {/* Open PDF in New Tab Link */}
+              {isPdf && (
+                <a
+                  href={floorPlanUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs sm:text-sm shadow-md transition-all active:scale-95 cursor-pointer"
+                  title="Open PDF in new window / tab"
                 >
-                  <ZoomOut className="w-4 h-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={handleResetZoom}
-                  className="text-xs font-mono text-white/90 px-2 select-none hover:text-[#20b2aa] cursor-pointer"
-                  title="Reset Zoom"
-                >
-                  {Math.round(zoomLevel * 100)}%
-                </button>
-                <button
-                  type="button"
-                  onClick={handleZoomIn}
-                  className="p-1.5 sm:p-2 rounded text-white/80 hover:text-white hover:bg-white/15 transition-colors cursor-pointer"
-                  title="Zoom In (+)"
-                  aria-label="Zoom in"
-                >
-                  <ZoomIn className="w-4 h-4" />
-                </button>
-              </div>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Open in New Tab</span>
+                  <span className="sm:hidden">Open</span>
+                </a>
+              )}
+
+              {/* Zoom Controls for standard images */}
+              {!isPdf && (
+                <div className="flex items-center bg-white/10 rounded-lg p-1 border border-white/10">
+                  <button
+                    type="button"
+                    onClick={handleZoomOut}
+                    className="p-1.5 sm:p-2 rounded text-white/80 hover:text-white hover:bg-white/15 transition-colors cursor-pointer"
+                    title="Zoom Out (-)"
+                    aria-label="Zoom out"
+                  >
+                    <ZoomOut className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleResetZoom}
+                    className="text-xs font-mono text-white/90 px-2 select-none hover:text-[#20b2aa] cursor-pointer"
+                    title="Reset Zoom"
+                  >
+                    {Math.round(zoomLevel * 100)}%
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleZoomIn}
+                    className="p-1.5 sm:p-2 rounded text-white/80 hover:text-white hover:bg-white/15 transition-colors cursor-pointer"
+                    title="Zoom In (+)"
+                    aria-label="Zoom in"
+                  >
+                    <ZoomIn className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
 
               {/* Close Button - Highly Visible Red Accent */}
               <button
@@ -268,21 +310,35 @@ export default function PropertyFloorPlanViewer({
               </button>
             )}
 
-            <div
-              className="relative max-w-5xl max-h-[80vh] w-full h-full flex items-center justify-center transition-transform duration-200"
-              style={{ transform: `scale(${zoomLevel})` }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Image
-                key={floorPlanUrl}
-                src={floorPlanUrl}
-                alt={`${property.name} floor plan enlarged`}
-                fill
-                sizes="90vw"
-                className="object-contain drop-shadow-2xl"
-                priority
-              />
-            </div>
+            {isPdf ? (
+              <div
+                className="relative max-w-5xl w-full h-[76vh] flex flex-col bg-white rounded-xl overflow-hidden shadow-2xl border border-white/20"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <iframe
+                  key={floorPlanUrl}
+                  src={floorPlanUrl}
+                  title={`${property.name} floor plan enlarged`}
+                  className="w-full h-full border-0"
+                />
+              </div>
+            ) : (
+              <div
+                className="relative max-w-5xl max-h-[80vh] w-full h-full flex items-center justify-center transition-transform duration-200"
+                style={{ transform: `scale(${zoomLevel})` }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Image
+                  key={floorPlanUrl}
+                  src={floorPlanUrl}
+                  alt={`${property.name} floor plan enlarged`}
+                  fill
+                  sizes="90vw"
+                  className="object-contain drop-shadow-2xl"
+                  priority
+                />
+              </div>
+            )}
 
             {/* Next Plan Arrow */}
             {sketchItems.length > 1 && (

@@ -13,7 +13,6 @@ export default function ContactFormSection() {
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
-  const [terms, setTerms] = useState(false);
 
   // Field error states
   const [firstNameError, setFirstNameError] = useState("");
@@ -22,7 +21,6 @@ export default function ContactFormSection() {
   const [emailError, setEmailError] = useState("");
   const [subjectError, setSubjectError] = useState("");
   const [messageError, setMessageError] = useState("");
-  const [termsError, setTermsError] = useState("");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -178,12 +176,6 @@ export default function ContactFormSection() {
     }
   };
 
-  const handleTermsChange = (checked: boolean) => {
-    setTerms(checked);
-    if (checked) {
-      setTermsError("");
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -287,13 +279,6 @@ export default function ContactFormSection() {
       setMessageError("");
     }
 
-    // Validate Terms
-    if (!terms) {
-      setTermsError("Please accept the Terms & Privacy Policy.");
-      hasError = true;
-    } else {
-      setTermsError("");
-    }
 
     if (hasError) return;
 
@@ -317,7 +302,6 @@ export default function ContactFormSection() {
       setEmail("");
       setSubject("");
       setMessage("");
-      setTerms(false);
 
       // Clear any remaining errors
       setFirstNameError("");
@@ -326,7 +310,6 @@ export default function ContactFormSection() {
       setEmailError("");
       setSubjectError("");
       setMessageError("");
-      setTermsError("");
 
       setTimeout(() => {
         setShowToast(false);
@@ -516,29 +499,6 @@ export default function ContactFormSection() {
                 </div>
               </div>
 
-              {/* Checkbox Terms */}
-              <div className="flex flex-col pt-1">
-                <div className="flex items-start gap-3">
-                  <input
-                    type="checkbox"
-                    id="contact-terms"
-                    checked={terms}
-                    onChange={(e) => handleTermsChange(e.target.checked)}
-                    className="mt-1 w-4 h-4 rounded border-stone-300 text-[#4E1421] focus:ring-[#c5a880] cursor-pointer"
-                  />
-                  <label
-                    htmlFor="contact-terms"
-                    className="text-[11px] sm:text-xs text-stone-500 font-['Inter',sans-serif] leading-relaxed cursor-pointer select-none"
-                  >
-                    By clicking submit, I agree to the Terms &amp; Conditions and Privacy Policy and I am giving my consent to receive updates through email/sms.
-                  </label>
-                </div>
-                {termsError && (
-                  <span className="text-xs text-red-500 font-medium mt-1 text-left block font-['Inter',sans-serif]">
-                    {termsError}
-                  </span>
-                )}
-              </div>
 
               <div className="pt-2">
                 <button
