@@ -71,7 +71,11 @@ export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
             preload="auto"
           >
             <source
-              src="/videos/watermark-removed-I_attached_photos_and_video.mp4"
+              src="/videos/watermark-removed-I_attached_photos_and_video.MOV"
+              type="video/quicktime"
+            />
+            <source
+              src="/videos/watermark-removed-I_attached_photos_and_video.MOV"
               type="video/mp4"
             />
             Your browser does not support the video tag.
