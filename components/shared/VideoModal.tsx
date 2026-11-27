@@ -10,38 +10,39 @@ interface VideoModalProps {
 export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Effect 1: Body overflow lock & Escape key handling
   useEffect(() => {
+    if (!isOpen) return;
+
+    document.body.style.overflow = "hidden";
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
       }
     };
 
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-      window.addEventListener("keydown", handleKeyDown);
-      const playTimer = setTimeout(() => {
-        if (videoRef.current) {
-          videoRef.current.currentTime = 0;
-          videoRef.current.play().catch(() => { });
-        }
-      }, 100);
-      return () => {
-        clearTimeout(playTimer);
-        window.removeEventListener("keydown", handleKeyDown);
-      };
-    } else {
-      document.body.style.overflow = "";
-      if (videoRef.current) {
-        videoRef.current.pause();
-      }
-    }
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose]);
+
+  // Effect 2: Video playback lifecycle strictly tied to isOpen
+  useEffect(() => {
+    if (isOpen) {
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play().catch(() => {});
+      }
+    } else {
+      if (videoRef.current) {
+        videoRef.current.pause();
+      }
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -69,14 +70,15 @@ export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
             autoPlay
             playsInline
             preload="auto"
+            poster="/videos/hero-corporate-video-poster.webp"
           >
             <source
-              src="/videos/watermark-removed-I_attached_photos_and_video.MOV"
-              type="video/quicktime"
+              src="/videos/hero-corporate-video.mp4"
+              type="video/mp4"
             />
             <source
               src="/videos/watermark-removed-I_attached_photos_and_video.MOV"
-              type="video/mp4"
+              type="video/quicktime"
             />
             Your browser does not support the video tag.
           </video>

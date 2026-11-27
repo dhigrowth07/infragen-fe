@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import VideoModal from "@/components/shared/VideoModal";
 import { useSiteSettings } from "@/lib/context/SiteSettingsContext";
@@ -37,12 +37,17 @@ export default function HeroSection({ onOpenVideoModal }: HeroSectionProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
+  const handleCloseVideoModal = useCallback(() => {
+    setIsVideoModalOpen(false);
+  }, []);
+
   useEffect(() => {
+    if (isVideoModalOpen) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 4500);
     return () => clearInterval(timer);
-  }, []);
+  }, [isVideoModalOpen]);
 
   return (
     <div className="relative bg-[#381e23] text-white overflow-hidden w-full m-0 p-0">
@@ -168,7 +173,7 @@ export default function HeroSection({ onOpenVideoModal }: HeroSectionProps) {
       {/* Video Modal Popup */}
       <VideoModal
         isOpen={isVideoModalOpen}
-        onClose={() => setIsVideoModalOpen(false)}
+        onClose={handleCloseVideoModal}
       />
     </div>
   );
