@@ -48,9 +48,9 @@ export default function Navbar({ onOpenDrawer }: NavbarProps) {
   }
 
   const isHome = pathname === "/";
-  const isAbout = pathname === "/about-us";
-  const isServices = pathname === "/services";
-  const isContact = pathname === "/contact";
+  const isAbout = pathname === "/about-us" || pathname?.startsWith("/about-us/");
+  const isServices = pathname?.startsWith("/services");
+  const isContact = pathname === "/contact" || pathname?.startsWith("/contact/");
   const isProperties = pathname?.startsWith("/properties");
 
   return (
