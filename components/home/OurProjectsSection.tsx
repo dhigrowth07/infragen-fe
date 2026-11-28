@@ -13,35 +13,35 @@ interface ProjectReelItem {
 const row1BaseItems: ProjectReelItem[] = [
   {
     mp4Src: "/videos/projects/01-property-2-70-acres-lt-bypass.mp4",
-    webmSrc: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/01-property-2-70-acres-lt-bypass.webm",
+    webmSrc: "https://d1pcf1j7ccms3v.cloudfront.net/videos/01-property-2-70-acres-lt-bypass.webm",
     poster: "/videos/posters/01-property-2-70-acres-lt-bypass.webp",
     alt: "2.70 Acres L&T Bypass",
     isLong: false,
   },
   {
     mp4Src: "/videos/projects/02-property-4-5-cents-kovilpalayam-sathy-road.mp4",
-    webmSrc: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/02-property-4-5-cents-kovilpalayam-sathy-road.webm",
+    webmSrc: "https://d1pcf1j7ccms3v.cloudfront.net/videos/02-property-4-5-cents-kovilpalayam-sathy-road.webm",
     poster: "/videos/posters/02-property-4-5-cents-kovilpalayam-sathy-road.webp",
     alt: "4.5 Cents Kovilpalayam - Sathy Road",
     isLong: true,
   },
   {
     mp4Src: "/videos/projects/03-property-14-cents-kovilpalayam.mp4",
-    webmSrc: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/03-property-14-cents-kovilpalayam.webm",
+    webmSrc: "https://d1pcf1j7ccms3v.cloudfront.net/videos/03-property-14-cents-kovilpalayam.webm",
     poster: "/videos/posters/03-property-14-cents-kovilpalayam.webp",
     alt: "14 Cents Kovilpalayam",
     isLong: false,
   },
   {
     mp4Src: "/videos/projects/04-property-20-acres-farmland-kannampalayam.mp4",
-    webmSrc: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/04-property-20-acres-farmland-kannampalayam.webm",
+    webmSrc: "https://d1pcf1j7ccms3v.cloudfront.net/videos/04-property-20-acres-farmland-kannampalayam.webm",
     poster: "/videos/posters/04-property-20-acres-farmland-kannampalayam.webp",
     alt: "20 Acres Farmland Kannampalayam",
     isLong: true,
   },
   {
     mp4Src: "/videos/projects/05-property-33-cents-opp-ocean.mp4",
-    webmSrc: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/05-property-33-cents-opp-ocean.webm",
+    webmSrc: "https://d1pcf1j7ccms3v.cloudfront.net/videos/05-property-33-cents-opp-ocean.webm",
     poster: "/videos/posters/05-property-33-cents-opp-ocean.webp",
     alt: "33 Cents Opp Ocean",
     isLong: false,
@@ -51,35 +51,35 @@ const row1BaseItems: ProjectReelItem[] = [
 const row2BaseItems: ProjectReelItem[] = [
   {
     mp4Src: "/videos/projects/06-property-45-cents-chettipalayam.mp4",
-    webmSrc: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/06-property-45-cents-chettipalayam.webm",
+    webmSrc: "https://d1pcf1j7ccms3v.cloudfront.net/videos/06-property-45-cents-chettipalayam.webm",
     poster: "/videos/posters/06-property-45-cents-chettipalayam.webp",
     alt: "45 Cents Chettipalayam",
     isLong: true,
   },
   {
     mp4Src: "/videos/projects/07-property-67-cents-lt-bypass.mp4",
-    webmSrc: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/07-property-67-cents-lt-bypass.webm",
+    webmSrc: "https://d1pcf1j7ccms3v.cloudfront.net/videos/07-property-67-cents-lt-bypass.webm",
     poster: "/videos/posters/07-property-67-cents-lt-bypass.webp",
     alt: "67 Cents L&T Bypass",
     isLong: false,
   },
   {
     mp4Src: "/videos/projects/08-property-73-cents-opp-casagrand.mp4",
-    webmSrc: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/08-property-73-cents-opp-casagrand.webm",
+    webmSrc: "https://d1pcf1j7ccms3v.cloudfront.net/videos/08-property-73-cents-opp-casagrand.webm",
     poster: "/videos/posters/08-property-73-cents-opp-casagrand.webp",
     alt: "73 Cents Opp Casagrand",
     isLong: true,
   },
   {
     mp4Src: "/videos/projects/09-property-farmland-gated-community.mp4",
-    webmSrc: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/09-property-farmland-gated-community.webm",
+    webmSrc: "https://d1pcf1j7ccms3v.cloudfront.net/videos/09-property-farmland-gated-community.webm",
     poster: "/videos/posters/09-property-farmland-gated-community.webp",
     alt: "Farmland Gated Community",
     isLong: false,
   },
   {
     mp4Src: "/videos/projects/10-property-kurumbapalayam-main-road.mp4",
-    webmSrc: "https://infragen-assets.s3.us-east-1.amazonaws.com/videos/10-property-kurumbapalayam-main-road.webm",
+    webmSrc: "https://d1pcf1j7ccms3v.cloudfront.net/videos/10-property-kurumbapalayam-main-road.webm",
     poster: "/videos/posters/10-property-kurumbapalayam-main-road.webp",
     alt: "Kurumbapalayam Main Road",
     isLong: true,
@@ -133,8 +133,8 @@ function ProjectCard({ item, inView }: { item: ProjectReelItem; inView: boolean 
             isPlaying ? "opacity-100" : "opacity-0"
           }`}
         >
-          <source src={item.mp4Src} type="video/mp4" />
           <source src={item.webmSrc} type="video/webm" />
+          <source src={item.mp4Src} type="video/mp4" />
         </video>
       )}
 
