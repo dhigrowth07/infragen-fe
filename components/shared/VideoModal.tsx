@@ -73,7 +73,7 @@ export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
             poster="/videos/hero-corporate-video-poster.webp"
           >
             <source
-              src="/videos/hero-corporate-video.mp4"
+              src="https://d1pcf1j7ccms3v.cloudfront.net/videos/hero-corporate-video.mp4"
               type="video/mp4"
             />
             <source
